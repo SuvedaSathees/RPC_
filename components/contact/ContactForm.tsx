@@ -37,7 +37,7 @@ const Field = ({ label, icon, children }: { label: string; icon: ReactNode; chil
 export function ContactForm() {
   const form = useRef<HTMLFormElement>(null);
   const [status, setStatus] = useState<Status>("idle");
-  const [type, setType] = useState<string>(services[0].title);
+  const [type, setType] = useState<string>(services[0]?.title ?? "Residential Construction");
   const [budget, setBudget] = useState<string>("₹50 L – ₹2 Cr");
   const [name, setName] = useState("");
 

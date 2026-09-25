@@ -295,11 +295,18 @@ export const founder = {
   ],
 } as const;
 
+export interface TeamMember {
+  name: string;
+  role: string;
+  bio: string;
+  qualifications?: string;
+}
+
 /** Leadership team. PLACEHOLDER — replace with the real team before launch. */
-export const team = [
-  { name: "[Name]", role: "Head of Engineering", bio: "Leads structural design review, drawings and quality control across all sites." },
-  { name: "[Name]", role: "Head of Projects", bio: "Runs site planning, programme and contractor coordination from start to handover." },
-  { name: "[Name]", role: "Head of Design", bio: "Guides architecture, interiors and material selection with every client." },
+export const team: readonly TeamMember[] = [
+  { name: "[Name]", role: "Head of Engineering", qualifications: "[B.E. Civil / M.E. Structural]", bio: "Leads structural design review, drawings and quality control across all sites." },
+  { name: "[Name]", role: "Head of Projects", qualifications: "[B.E. Civil]", bio: "Runs site planning, programme and contractor coordination from start to handover." },
+  { name: "[Name]", role: "Head of Design", qualifications: "[B.Arch]", bio: "Guides architecture, interiors and material selection with every client." },
 ] as const;
 
 /** Registrations. PLACEHOLDER — keep only the ones RPC actually holds. */
