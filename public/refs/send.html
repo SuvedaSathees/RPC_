@@ -1,0 +1,13 @@
+<!doctype html><meta charset="utf-8"><title>refs</title>
+<script>
+// TEMPORARY helper for film production — delete public/refs afterwards.
+(async () => {
+  const names = ["R01","R02","R03","R04","R05","R06","R07","R08","R09","R10"];
+  for (const n of names) {
+    const b = await (await fetch(n + ".jpg")).blob();
+    const d = await new Promise(r => { const f = new FileReader(); f.onload = () => r(f.result); f.readAsDataURL(b); });
+    parent.postMessage({ rpcRef: 1, name: n, b64: String(d).split(",")[1] }, "*");
+  }
+  parent.postMessage({ rpcRef: 1, done: true }, "*");
+})();
+</script>

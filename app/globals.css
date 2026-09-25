@@ -1,0 +1,305 @@
+@import "tailwindcss";
+
+/* ───────────────────────── RPC design tokens ───────────────────────── */
+@theme {
+  --color-paper: #eeeae3;
+  --color-paper-2: #e3ddd2;
+  --color-stone: #cfc7ba;
+  --color-ink: #111316;
+  --color-ink-2: #2a2d32;
+  --color-mute: #77746e;
+  --color-rpc: #27559e;
+  --color-rpc-deep: #0b2350;
+  --color-night: #0d1420;
+  --color-bronze: #8a6a4c;
+
+  --font-serif: var(--font-instrument), "Times New Roman", serif;
+  --font-sans: var(--font-inter-tight), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+
+  --ease-film: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-arch: cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+@layer base {
+  :root {
+    color-scheme: light;
+    --gutter: clamp(1rem, 3.2vw, 3rem);
+  }
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+  html.lenis,
+  html.lenis body {
+    height: auto;
+  }
+  .lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+  }
+  .lenis.lenis-stopped {
+    overflow: hidden;
+  }
+  body {
+    background: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-feature-settings: "ss01", "cv11";
+    overflow-x: clip;
+  }
+  ::selection {
+    background: var(--color-rpc);
+    color: #fff;
+  }
+  :focus-visible {
+    outline: 1px solid currentColor;
+    outline-offset: 4px;
+  }
+}
+
+@layer components {
+  .gutter {
+    padding-inline: var(--gutter);
+  }
+  .display {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    line-height: 0.9;
+    letter-spacing: -0.025em;
+  }
+  .display em {
+    font-style: italic;
+    letter-spacing: -0.035em;
+  }
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    line-height: 1.4;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+  }
+  .hairline {
+    height: 1px;
+    background: currentColor;
+    opacity: 0.18;
+  }
+  .link-u {
+    background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat;
+    transition: background-size 0.6s var(--ease-film);
+  }
+  .link-u:hover,
+  .link-u:focus-visible {
+    background-size: 100% 1px;
+  }
+
+  /* 3D labels (drei <Html>) */
+  .bp-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    color: #eaf0ff;
+    white-space: nowrap;
+    transition: none;
+  }
+  .anatomy-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #111316;
+    transform: translateY(-50%);
+  }
+  .anatomy-line {
+    display: block;
+    width: 56px;
+    height: 1px;
+    background: currentColor;
+    opacity: 0.6;
+    transition: width 0.5s var(--ease-film);
+  }
+  .anatomy-label.is-active {
+    color: var(--color-rpc);
+  }
+  .anatomy-label.is-active .anatomy-line {
+    width: 84px;
+    opacity: 1;
+  }
+  .anatomy-label.is-active span:last-child {
+    font-weight: 600;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.9rem;
+    height: 3.25rem;
+    padding: 0 1.4rem 0 1.6rem;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    transition: background-color 0.5s var(--ease-film), color 0.5s var(--ease-film), border-color 0.5s var(--ease-film);
+  }
+  .btn-solid {
+    background: var(--color-ink);
+    color: var(--color-paper);
+  }
+  .btn-solid:hover {
+    background: var(--color-rpc);
+  }
+  .btn-light {
+    background: var(--color-paper);
+    color: var(--color-ink);
+  }
+  .btn-light:hover {
+    background: #fff;
+  }
+  .btn-ghost {
+    border: 1px solid color-mix(in oklab, currentColor 35%, transparent);
+  }
+  .btn-ghost:hover {
+    border-color: currentColor;
+  }
+  .btn .btn-icon {
+    display: grid;
+    place-items: center;
+    width: 1.9rem;
+    height: 1.9rem;
+    border-radius: 999px;
+    background: color-mix(in oklab, currentColor 12%, transparent);
+    transition: transform 0.6s var(--ease-film);
+  }
+  .btn:hover .btn-icon {
+    transform: translateX(3px) rotate(-45deg);
+  }
+
+  /* ───────────── pointer-driven 3D tilt (components/ui/Tilt.tsx) ───────────── */
+  .tilt {
+    --rx: 0deg;
+    --ry: 0deg;
+    --mx: 50%;
+    --my: 50%;
+    --tz: 0;
+    --ts: 1;
+    perspective: 1100px;
+    transform-style: preserve-3d;
+  }
+  .tilt-inner {
+    position: relative;
+    height: 100%;
+    width: 100%;
+    transform: rotateX(var(--rx)) rotateY(var(--ry)) scale(var(--ts));
+    transform-style: preserve-3d;
+    transition: transform 0.9s var(--ease-film);
+    will-change: transform;
+  }
+  .tilt.is-tilting .tilt-inner {
+    transition: transform 0.12s linear;
+  }
+  .tilt-sheen {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: calc(var(--tz) * 1);
+    background: radial-gradient(circle at var(--mx) var(--my), rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0.05) 28%, transparent 52%);
+    mix-blend-mode: soft-light;
+    transition: opacity 0.6s var(--ease-film);
+  }
+  .tilt-sheen::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(115deg, transparent 30%, rgba(255, 255, 255, 0.16) 45%, transparent 60%);
+    transform: translateX(calc((var(--mx) - 50%) * 1.4));
+    mix-blend-mode: screen;
+  }
+
+
+
+  .grain::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.06;
+    mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@keyframes wheel {
+  0% { transform: translate(-50%, 0); opacity: 1; }
+  70% { transform: translate(-50%, 12px); opacity: 0; }
+  71% { transform: translate(-50%, 0); opacity: 0; }
+  100% { transform: translate(-50%, 0); opacity: 1; }
+}
+@keyframes cue {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(200%); }
+}
+
+/* ───────────── preloader: the cube mark floats and turns in space ───────────── */
+@keyframes pre-float {
+  0%, 100% { transform: translateY(-5px); }
+  50% { transform: translateY(6px); }
+}
+@keyframes pre-turn {
+  0%, 100% { transform: rotateY(-22deg) rotateX(6deg); }
+  50% { transform: rotateY(22deg) rotateX(-6deg); }
+}
+.pre-float {
+  animation: pre-float 3.2s ease-in-out infinite;
+  transform-style: preserve-3d;
+}
+.pre-turn {
+  animation: pre-turn 4.8s ease-in-out infinite;
+  transform-style: preserve-3d;
+  filter: drop-shadow(0 18px 24px rgba(17, 19, 22, 0.18));
+}
+
+/* realistic hero stage: the source frame (16:9) covering the viewport */
+.hero-stage {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: max(100vw, 177.78svh);
+  aspect-ratio: 16 / 9;
+  transform: translate(-50%, -50%);
+  container-type: size;
+}
+@media (max-width: 767px) {
+  .hero-stage {
+    width: 210vw;
+    top: auto;
+    bottom: 0;
+    transform: translateX(-50%);
+  }
+}
+.hero-stage { transform-style: preserve-3d; }
+
+/* ───────────── contact band on phones: the photo on top, words below ───────────── */
+@media (max-width: 767px) {
+  #contact-cta,
+  #contact-cta .cta-frame { min-height: 0; }
+  #contact-cta .cta-media { position: relative; inset: auto; height: 58svh; min-height: 360px; }
+  #contact-cta .cta-media img { object-position: 54% 50%; }
+  /* light shade at the top for the nav, a soft fade into the dark panel below */
+  #contact-cta .cta-fade { display: block; }
+  #contact-cta .cta-shade {
+    top: calc(58svh - 9rem); bottom: auto; height: 9rem;
+    background: linear-gradient(to bottom, transparent, var(--color-night));
+  }
+  #contact-cta .cta-content { min-height: 0; margin-top: -4.5rem; padding-top: 0; padding-bottom: 2.75rem; }
+  #contact-cta .cta-content h2 { font-size: 13vw; }
+}
