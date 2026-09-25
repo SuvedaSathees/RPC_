@@ -1,7 +1,7 @@
 "use client";
 
-import { ArrowUpRight, CheckCircle2, Loader2, MessageCircle } from "lucide-react";
-import { useEffect, useRef, useState, type FormEvent } from "react";
+import { Building2, CheckCircle2, ChevronDown, IndianRupee, Loader2, Lock, Mail, MapPin, MessageCircle, Phone, Send, User } from "lucide-react";
+import { useEffect, useRef, useState, type FormEvent, type ReactNode } from "react";
 import { contact, services } from "@/lib/content";
 
 const budgetRanges = ["Under ₹50 L", "₹50 L – ₹2 Cr", "₹2 Cr – ₹10 Cr", "₹10 Cr +", "Not sure yet"] as const;
@@ -16,6 +16,23 @@ const budgetRanges = ["Under ₹50 L", "₹50 L – ₹2 Cr", "₹2 Cr – ₹10
 const ENDPOINT = `https://formsubmit.co/ajax/${contact.email}`;
 
 type Status = "idle" | "sending" | "sent" | "error";
+
+/* form building blocks — defined outside the form so inputs keep focus between renders */
+const Step = ({ n, title }: { n: string; title: string }) => (
+  <p className="mb-3 flex items-center gap-2.5 text-[12px] font-semibold uppercase tracking-[0.14em] text-ink">
+    <span className="grid h-6 w-6 place-items-center rounded-full bg-rpc text-[11px] text-white">{n}</span>
+    {title}
+  </p>
+);
+const Field = ({ label, icon, children }: { label: string; icon: ReactNode; children: ReactNode }) => (
+  <label className="block">
+    <span className="mb-1.5 block text-[12.5px] font-medium text-ink-2">{label}</span>
+    <span className="relative block">
+      <span aria-hidden className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-mute">{icon}</span>
+      {children}
+    </span>
+  </label>
+);
 
 export function ContactForm() {
   const form = useRef<HTMLFormElement>(null);
@@ -101,93 +118,91 @@ export function ContactForm() {
     );
   }
 
-  const field =
-    "mt-1.5 w-full rounded-md border border-ink/15 bg-paper px-3.5 py-2.5 text-[15px] outline-none transition-colors placeholder:text-mute/70 focus:border-ink focus:bg-white";
-  const chip = (on: boolean) =>
-    `cursor-pointer rounded-full border px-3.5 py-1.5 text-[13px] transition-colors duration-200 ${
-      on ? "border-ink bg-ink text-paper" : "border-ink/15 bg-paper text-ink/80 hover:border-ink"
-    }`;
-
+  const input =
+    "h-12 w-full rounded-xl border border-ink/12 bg-white/80 pl-11 pr-3.5 text-[15px] text-ink outline-none transition-[border-color,box-shadow] placeholder:text-mute/60 focus:border-rpc focus:bg-white focus:shadow-[0_0_0_4px_rgba(39,85,158,0.12)]";
   return (
-    <form ref={form} onSubmit={onSubmit} className="flex flex-col gap-5">
+    <form ref={form} onSubmit={onSubmit} className="flex flex-col gap-7">
       {/* spam trap */}
       <input type="text" name="_honey" tabIndex={-1} autoComplete="off" className="hidden" aria-hidden />
 
-      <fieldset>
-        <legend className="text-[13px] font-medium text-ink-2">Project type</legend>
-        <div className="mt-2 flex flex-wrap gap-1.5">
-          {services.map((s) => (
-            <label key={s.id} className={chip(type === s.title)}>
-              <input type="radio" name="type" value={s.title} className="sr-only" checked={type === s.title} onChange={() => setType(s.title)} />
-              {s.title}
-            </label>
-          ))}
+      {/* 1 — the project */}
+      <div>
+        <Step n="1" title="Your project" />
+        {/* two single-line pickers — nothing cut off, easy to tap on a phone */}
+        <div className="grid gap-3.5 sm:grid-cols-2">
+          <Field label="What are you building?" icon={<Building2 size={16} />}>
+            <select name="type" value={type} onChange={(e) => setType(e.target.value)} className={`${input} appearance-none pr-10`}>
+              {services.map((sv) => (
+                <option key={sv.id} value={sv.title}>{sv.title}</option>
+              ))}
+            </select>
+            <ChevronDown aria-hidden size={16} className="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 text-mute" />
+          </Field>
+          <Field label="Estimated budget" icon={<IndianRupee size={16} />}>
+            <select name="budget" value={budget} onChange={(e) => setBudget(e.target.value)} className={`${input} appearance-none pr-10`}>
+              {budgetRanges.map((bd) => (
+                <option key={bd} value={bd}>{bd}</option>
+              ))}
+            </select>
+            <ChevronDown aria-hidden size={16} className="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 text-mute" />
+          </Field>
         </div>
-      </fieldset>
+      </div>
 
-      <fieldset>
-        <legend className="text-[13px] font-medium text-ink-2">Estimated budget</legend>
-        <div className="mt-2 flex flex-wrap gap-1.5">
-          {budgetRanges.map((b) => (
-            <label key={b} className={chip(budget === b)}>
-              <input type="radio" name="budget" value={b} className="sr-only" checked={budget === b} onChange={() => setBudget(b)} />
-              {b}
-            </label>
-          ))}
+      {/* 2 — the person */}
+      <div>
+        <Step n="2" title="Your details" />
+        <div className="grid gap-3.5 sm:grid-cols-2">
+          <Field label="Full name *" icon={<User size={16} />}>
+            <input required name="name" autoComplete="name" className={input} placeholder="Your name" />
+          </Field>
+          <Field label="Phone *" icon={<Phone size={16} />}>
+            <input required type="tel" name="phone" autoComplete="tel" inputMode="tel" pattern="[0-9+\s\-]{8,}" className={input} placeholder="+91 98765 43210" />
+          </Field>
+          <Field label="Email *" icon={<Mail size={16} />}>
+            <input required type="email" name="email" autoComplete="email" className={input} placeholder="you@example.com" />
+          </Field>
+          <Field label="Site location *" icon={<MapPin size={16} />}>
+            <input required name="location" className={input} placeholder="e.g. Perundurai Road, Erode" />
+          </Field>
         </div>
-      </fieldset>
-
-      <div className="grid gap-4 sm:grid-cols-2">
-        <label className="block text-[13px] font-medium text-ink-2">
-          Full name *
-          <input required name="name" autoComplete="name" className={field} placeholder="Your name" />
-        </label>
-        <label className="block text-[13px] font-medium text-ink-2">
-          Phone *
-          <input required type="tel" name="phone" autoComplete="tel" inputMode="tel" pattern="[0-9+\s\-]{8,}" className={field} placeholder="+91 98765 43210" />
-        </label>
-        <label className="block text-[13px] font-medium text-ink-2">
-          Email *
-          <input required type="email" name="email" autoComplete="email" className={field} placeholder="you@example.com" />
-        </label>
-        <label className="block text-[13px] font-medium text-ink-2">
-          Site location *
-          <input required name="location" className={field} placeholder="e.g. Perundurai Road, Erode" />
+        <label className="mt-3.5 block">
+          <span className="mb-1.5 block text-[12.5px] font-medium text-ink-2">About your project</span>
+          <textarea
+            name="message"
+            rows={3}
+            className="w-full resize-none rounded-xl border border-ink/12 bg-white/80 px-3.5 py-3 text-[15px] outline-none transition-[border-color,box-shadow] placeholder:text-mute/60 focus:border-rpc focus:bg-white focus:shadow-[0_0_0_4px_rgba(39,85,158,0.12)]"
+            placeholder="Plot size, number of floors, approval status, when you would like to start…"
+          />
         </label>
       </div>
 
-      <label className="block text-[13px] font-medium text-ink-2">
-        About your project
-        <textarea
-          name="message"
-          rows={3}
-          className={`${field} resize-none`}
-          placeholder="Plot size, number of floors, approval status, when you would like to start…"
-        />
-      </label>
-
       {status === "error" && (
-        <p role="alert" className="rounded-md bg-red-50 px-4 py-3 text-sm text-red-800">
+        <p role="alert" className="rounded-xl bg-red-50 px-4 py-3 text-sm text-red-800">
           We couldn’t send that just now. Please try again, send it on WhatsApp, or call {contact.phone}.
         </p>
       )}
 
-      <div className="flex flex-wrap items-center gap-3 pt-1">
-        <button type="submit" disabled={status === "sending"} className="btn btn-solid disabled:opacity-60">
-          <span>{status === "sending" ? "Sending…" : "Send enquiry"}</span>
-          <span className="btn-icon" aria-hidden>
-            {status === "sending" ? <Loader2 size={15} className="animate-spin" /> : <ArrowUpRight size={15} strokeWidth={1.5} />}
-          </span>
+      <div className="grid gap-2.5 sm:flex sm:items-center">
+        <button
+          type="submit"
+          disabled={status === "sending"}
+          className="inline-flex h-12 items-center justify-center gap-2 rounded-full bg-ink px-6 text-[14px] font-semibold text-paper transition-colors hover:bg-rpc disabled:opacity-60"
+        >
+          {status === "sending" ? <Loader2 size={16} className="animate-spin" /> : <Send size={15} />}
+          {status === "sending" ? "Sending…" : "Send enquiry"}
         </button>
         <button
           type="button"
           onClick={openWhatsApp}
-          className="inline-flex h-[3.25rem] items-center gap-2 rounded-full border border-ink/15 px-5 text-sm font-medium text-ink transition-colors hover:border-[#25D366] hover:bg-[#25D366] hover:text-white"
+          className="inline-flex h-12 items-center justify-center gap-2 rounded-full border border-[#25D366]/50 bg-[#25D366]/10 px-6 text-[14px] font-semibold text-[#128C4B] transition-colors hover:bg-[#25D366] hover:text-white"
         >
           <MessageCircle size={16} /> Send on WhatsApp
         </button>
       </div>
-      <p className="text-xs text-mute">We reply within one working day. Your details are used only to respond to this enquiry.</p>
+      <p className="-mt-3 flex items-center gap-1.5 text-[11.5px] text-mute">
+        <Lock size={12} /> We reply within one working day. Your details are only used to answer this enquiry.
+      </p>
     </form>
   );
 }

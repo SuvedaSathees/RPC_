@@ -28,13 +28,13 @@ export function CompanyStory({ index = "02" }: { index?: string }) {
           <ParallaxImage
             src="/stages/03-foundation.jpg"
             alt="Foundation footings and raft being cast on an RPC site"
-            className="mt-8 aspect-[3/4] w-full rounded-lg bg-stone md:mt-16 md:rounded-sm"
+            className="mt-8 aspect-[3/4] w-full rounded-lg border-2 border-ink bg-stone md:mt-16 md:rounded-sm"
             sizes="(min-width: 1024px) 28vw, 46vw"
           />
           <ParallaxImage
             src="/images/project-01.jpg"
             alt="Completed Kaveri Residences apartment building in Erode"
-            className="aspect-[3/4] w-full rounded-sm bg-stone"
+            className="aspect-[3/4] w-full rounded-lg border-2 border-ink bg-stone md:rounded-sm"
             sizes="(min-width: 1024px) 28vw, 46vw"
           />
         </div>

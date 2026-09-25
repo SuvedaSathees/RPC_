@@ -18,27 +18,26 @@ export function ProjectsDirectory() {
   return (
     <div className="gutter flex flex-col gap-12 pb-24 md:gap-16">
       {/* filters */}
-      <div className="relative z-10 mt-10 flex flex-wrap items-center justify-between gap-4">
-        <div className="flex max-w-full items-center gap-1 overflow-x-auto rounded-full bg-white/60 p-1.5 ring-1 ring-ink/10 [scrollbar-width:none] md:flex-wrap">
+      <div className="relative z-10 mt-6 flex flex-wrap items-center justify-between gap-4 md:mt-10">
+        <div className="grid w-full grid-cols-3 gap-1 rounded-2xl bg-white/60 p-1.5 ring-1 ring-ink/10 md:flex md:w-auto md:flex-wrap md:items-center md:rounded-full">
           {categories.map((c) => {
             const on = cat === c;
-            const n = c === "All" ? projects.length : projects.filter((p) => p.type === c).length;
             return (
               <button
                 key={c}
                 type="button"
                 onClick={() => setCat(c)}
                 aria-pressed={on}
-                className={`shrink-0 whitespace-nowrap rounded-full px-4 py-1.5 text-[13px] font-medium transition-all duration-300 ${
+                className={`whitespace-nowrap rounded-full px-2 py-2 text-[13px] font-medium md:px-4 md:py-1.5 transition-all duration-300 ${
                   on ? "bg-ink text-paper" : "text-ink/70 hover:bg-ink/[0.06] hover:text-ink"
                 }`}
               >
-                {c} <span className="ml-0.5 text-[11px] opacity-50">{n}</span>
+                {c}
               </button>
             );
           })}
         </div>
-        <p className="hidden text-[12px] text-mute sm:block">
+        <p className="hidden text-[12px] text-mute md:block">
           Showing {list.length} of {projects.length}
         </p>
       </div>
@@ -46,8 +45,8 @@ export function ProjectsDirectory() {
       {/* phones: two compact cards per row */}
       <ul className="-mt-4 grid grid-cols-2 gap-3 md:hidden">
         {list.map((p) => (
-          <li key={p.slug}>
-            <Link href={`/contact?project=${encodeURIComponent(p.name)}#enquiry`} className="block overflow-hidden rounded-xl bg-paper-2 ring-1 ring-ink/10">
+          <li key={p.slug} className="h-full">
+            <Link href={`/contact?project=${encodeURIComponent(p.name)}#enquiry`} className="flex h-full flex-col overflow-hidden rounded-xl bg-paper-2 ring-1 ring-ink/10">
               <div className="relative aspect-[4/5] bg-stone">
                 <Image src={p.image} alt={`${p.name}, ${p.location}`} fill sizes="46vw" className="object-cover" />
                 <span className="absolute left-2 top-2 inline-flex items-center gap-1.5 rounded-full bg-paper/90 px-2 py-0.5 text-[10px] text-ink">
@@ -55,9 +54,9 @@ export function ProjectsDirectory() {
                   {p.status}
                 </span>
               </div>
-              <div className="p-3">
-                <p className="text-[14px] font-medium leading-snug">{p.name}</p>
-                <p className="mt-1 text-[11.5px] text-mute">{p.location}</p>
+              <div className="flex flex-1 flex-col p-3">
+                <p className="line-clamp-2 text-[14px] font-medium leading-snug" style={{ minHeight: "2.6em" }}>{p.name}</p>
+                <p className="mt-1 truncate text-[11.5px] text-mute">{p.location}</p>
               </div>
             </Link>
           </li>

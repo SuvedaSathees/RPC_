@@ -28,16 +28,16 @@ export function ServicesDirectory() {
       {/* phones: two compact cards per row */}
       <ul className="gutter mt-6 grid grid-cols-2 gap-3 md:hidden">
         {services.map((s) => (
-          <li key={s.id} id={`m-${serviceSlug(s.title)}`}>
+          <li key={s.id} id={`m-${serviceSlug(s.title)}`} className="h-full">
             <Link href={`/contact?service=${encodeURIComponent(s.title)}#enquiry`} className="flex h-full flex-col overflow-hidden rounded-xl bg-paper-2 ring-1 ring-ink/10">
               <div className="relative aspect-square bg-stone">
                 <Image src={s.image} alt={`${s.title} by RPC Constructions`} fill sizes="46vw" className="object-cover" />
                 <span className="absolute left-2 top-2 rounded-full bg-paper/90 px-2 py-0.5 font-mono text-[10px] text-ink">{s.id}</span>
               </div>
               <div className="flex flex-1 flex-col p-3">
-                <p className="text-[14px] font-medium leading-snug">{s.title}</p>
-                <p className="mt-1 text-[11.5px] leading-snug text-mute">{s.timeline}</p>
-                <span className="mt-2.5 inline-flex items-center gap-1 text-[12px] font-medium text-rpc">
+                <p className="line-clamp-2 text-[14px] font-medium leading-snug" style={{ minHeight: "2.6em" }}>{s.title}</p>
+                <p className="mt-1 truncate text-[11.5px] leading-snug text-mute">{s.timeline}</p>
+                <span className="mt-auto inline-flex items-center gap-1 pt-2.5 text-[12px] font-medium text-rpc">
                   Enquire <ArrowUpRight size={12} />
                 </span>
               </div>
