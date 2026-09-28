@@ -303,3 +303,8 @@
   #contact-cta .cta-content { min-height: 0; margin-top: -4.5rem; padding-top: 0; padding-bottom: 2.75rem; }
   #contact-cta .cta-content h2 { font-size: 13vw; }
 }
+
+/* mobile hero: copy swaps as the video moves to the next stage */
+@keyframes hero-swap { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+.hero-swap { animation: hero-swap 0.45s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+@media (prefers-reduced-motion: reduce) { .hero-swap { animation: none; } }

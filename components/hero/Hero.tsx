@@ -324,26 +324,26 @@ function FilmHero({ ready, low, mobile }: { ready: boolean; low: boolean; mobile
 
 /**
  * Phone hero: the waterproofing film plays as a muted, inline, autoplaying video
- * (public/film/hero-wp-mobile.mp4 — 7 s total: 0.75 s intro + 7 clips sped up
- * to 0.875 s each, built from the same Flow clips; shown full-frame 16:9, no crop). The copy below follows the video's time; tapping a segment
+ * (public/film/hero-wp-mobile.mp4 — 10 s total: 8 steps of 1.25 s each,
+ * intro still + 7 sped-up clips, built from the same Flow clips; shown full-frame 16:9, no crop). The copy below follows the video's time; tapping a segment
  * jumps to that stage. It plays once and rests on the finale with the CTAs.
  */
 const MOBILE_VIDEO = "/film/hero-wp-mobile.mp4";
 const MOBILE_POSTER = "/film/hero-wp-mobile-poster.jpg";
 /** start time (s) of each of the 8 steps in the mobile video, and its length */
-const STEP_START = [0, 0.75, 1.625, 2.5, 3.375, 4.25, 5.125, 6];
-const VIDEO_END = 6.875;
+const STEP_START = [0, 1.25, 2.5, 3.75, 5, 6.25, 7.5, 8.75];
+const VIDEO_END = 10;
 
 /** Short copy for phones — the whole step has to fit on one screen */
-const MOBILE_COPY: Record<string, { chip?: string; line: string; title?: string }> = {
-  intro: { title: "Marking out the plot", line: "6 stages of protection, built in — not patched on." },
-  land: { chip: "Anti-termite + HDPE membrane", line: "Excavate → PCC base → anti-termite → sealed HDPE sheet" },
-  foundation: { chip: "Crystalline + PVC waterstops", line: "Waterstops at joints → crystalline concrete → slurry coat" },
-  plinth: { chip: "Damp Proof Course (DPC)", line: "40 mm DPC concrete → bitumen coat → full cure" },
-  structure: { chip: "Integral waterproof admixture", line: "Admixture in every pour → dense slabs → waterproof plaster" },
-  wet: { chip: "2-part coating + epoxy grout", line: "Seal pipes → 2 coats → 48 h pond test → epoxy-grouted tiles" },
-  roof: { chip: "PU membrane + elastomeric paint", line: "PU roof membrane → heat-reflective coat → façade paint" },
-  finale: { title: "Built to stay dry", line: "Get a stage-wise waterproofing plan for your site." },
+const MOBILE_COPY: Record<string, { chip?: string; line: string; title: string; em?: string }> = {
+  intro: { title: "From land to", em: "roof.", line: "Six stages of protection, built into the construction itself — soil to roof." },
+  land: { title: "Sealed from below", chip: "Anti-termite + HDPE membrane", line: "Excavate → anti-termite → sealed HDPE sheet" },
+  foundation: { title: "Groundwater blocked", chip: "Crystalline + PVC waterstops", line: "Waterstops → crystalline concrete → slurry coat" },
+  plinth: { title: "No rising damp", chip: "Damp Proof Course (DPC)", line: "40 mm DPC concrete → bitumen coat → full cure" },
+  structure: { title: "Built-in protection", chip: "Integral waterproof admixture", line: "Admixture in every pour → waterproof plaster" },
+  wet: { title: "Leak-free wet areas", chip: "2-part coating + epoxy grout", line: "Seal pipes → 2 coats → 48 h pond test → epoxy-grouted tiles" },
+  roof: { title: "Rain & sun shield", chip: "PU membrane + elastomeric paint", line: "PU roof membrane → heat-reflective coat → façade paint" },
+  finale: { title: "Built to stay", em: "dry.", line: "Get a stage-wise waterproofing plan for your site." },
 };
 
 function MobileVideoHero() {
@@ -407,12 +407,14 @@ function MobileVideoHero() {
   };
 
   const st = STEPS[step]!;
+  const mc = MOBILE_COPY[st.key] ?? { title: st.title, em: st.titleEm, line: st.body ?? "" };
   const no = step >= 1 && step <= 6 ? String(step).padStart(2, "0") : step === 0 ? "00" : "07";
 
   // same layout as the original phone hero: tall film on top, brand copy below
   return (
-    <section aria-label="RPC Constructions — waterproofing from land to roof" className="relative bg-night text-paper">
-      <div className="relative overflow-hidden" style={{ height: "64svh", minHeight: 420 }}>
+    <section aria-label="RPC Constructions — waterproofing from land to roof" className="relative flex min-h-[100svh] flex-col bg-night text-paper">
+      {/* film fills whatever the copy leaves, so the hero always covers the whole screen */}
+      <div className="relative min-h-[360px] flex-1 overflow-hidden">
         <video
           ref={video}
           className="absolute inset-0 h-full w-full object-cover"
@@ -441,14 +443,20 @@ function MobileVideoHero() {
           </button>
         )}
       </div>
-      <div className="gutter pb-12 pt-4">
-        <p className="eyebrow text-paper/70">Waterproofing · Land to Roof</p>
-        <h1 className="display mt-3 leading-[0.9]" style={{ fontSize: "12.5vw" }}>
-          Waterproofed from <em className="text-paper/90">land to roof.</em>
-        </h1>
-        <p className="mt-4 text-[15px] leading-relaxed text-paper/80">
-          Six stages of protection, built into the construction itself — from the soil under the raft to the roof above.
-        </p>
+      <div className="gutter pb-8 pt-4">
+        {/* copy follows the video: one stage per 1.25 s; buttons sit right under it */}
+        <div key={step} className="hero-swap">
+          <p className="eyebrow text-paper/70">{st.eyebrow}</p>
+          <h1 className="display mt-3 whitespace-nowrap leading-[0.95]" style={{ fontSize: "min(10vw, 44px)" }}>
+            {mc.title}
+            {mc.em && <> <em className="text-paper/90">{mc.em}</em></>}
+          </h1>
+          {/* always 2 lines tall (chip + line, or a 2-line intro) so the buttons never move */}
+          <p className="mt-3 min-h-[2lh] text-[14px] leading-relaxed text-paper/80">
+            {mc.chip && <span className="block text-[12px] uppercase tracking-[0.1em] text-[#8fc6e8]">{mc.chip}</span>}
+            {mc.line}
+          </p>
+        </div>
         <div className="mt-6 grid grid-cols-2 gap-2.5">
           <Link href="/contact" className="inline-flex h-12 items-center justify-between whitespace-nowrap rounded-full bg-paper pl-5 pr-1.5 text-[12px] font-medium uppercase tracking-[0.08em] text-ink">
             Free Inspection
