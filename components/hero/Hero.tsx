@@ -1,6 +1,7 @@
 "use client";
 import Image from "next/image";
-import { Droplet, Phone } from "lucide-react";
+import { ArrowUpRight, Droplet, Phone } from "lucide-react";
+import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useQualityContext } from "@/components/providers/QualityProvider";
 import { useLenis } from "@/components/providers/SmoothScroll";
@@ -405,101 +406,58 @@ function MobileVideoHero() {
     v.play().then(() => setBlocked(false)).catch(() => setBlocked(true));
   };
 
+  const st = STEPS[step]!;
+  const no = step >= 1 && step <= 6 ? String(step).padStart(2, "0") : step === 0 ? "00" : "07";
+
+  // same layout as the original phone hero: tall film on top, brand copy below
   return (
-    <section aria-label="RPC Constructions — waterproofing from land to roof" className="relative overflow-hidden bg-night text-paper">
-      {/* ambient glow: the film's poster, blurred, behind everything */}
-      <div aria-hidden className="pointer-events-none absolute inset-0">
-        <img src={MOBILE_POSTER} alt="" className="h-full w-full scale-125 object-cover opacity-40 blur-3xl" />
-        <div className="absolute inset-0 bg-gradient-to-b from-night/40 via-night/70 to-night" />
+    <section aria-label="RPC Constructions — waterproofing from land to roof" className="relative bg-night text-paper">
+      <div className="relative overflow-hidden" style={{ height: "64svh", minHeight: 420 }}>
+        <video
+          ref={video}
+          className="absolute inset-0 h-full w-full object-cover"
+          src={MOBILE_VIDEO}
+          poster={MOBILE_POSTER}
+          autoPlay
+          muted
+          playsInline
+          preload="auto"
+          aria-hidden
+        />
+        <div aria-hidden className="absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-black/55 to-transparent" />
+        <div aria-hidden className="absolute inset-x-0 bottom-0 h-40" style={{ background: "linear-gradient(to top, var(--color-night), transparent)" }} />
+        <p className="absolute bottom-5 left-4 flex items-center gap-2 rounded-full bg-black/40 px-3 py-1.5 text-[11px] uppercase tracking-[0.16em] backdrop-blur-md">
+          <span className="font-mono text-paper/60">{no}</span>
+          <span>{st.rail}</span>
+        </p>
+        {(blocked || ended) && (
+          <button
+            type="button"
+            onClick={replay}
+            className="absolute bottom-5 right-4 flex items-center gap-2 rounded-full bg-black/40 px-3 py-1.5 text-[11px] uppercase tracking-[0.16em] backdrop-blur-md"
+          >
+            <span aria-hidden>{ended ? "↺" : "▶"}</span>
+            {ended ? "Replay" : "Play"}
+          </button>
+        )}
       </div>
-
-      <div data-tone="dark" className="relative flex h-[100svh] min-h-[560px] flex-col justify-between pb-[max(1.25rem,env(safe-area-inset-bottom))] pt-[92px]">
-        {/* headline */}
-        <div className="gutter">
-          <p className="eyebrow mb-3 flex items-center gap-2.5 text-paper/70">
-            <Droplet size={12} aria-hidden style={{ color: WATER }} />
-            Waterproofing · Land to roof
-          </p>
-          <h1 className="display leading-[0.9]" style={{ fontSize: "clamp(2.3rem, 11vw, 3.2rem)" }}>
-            Waterproofed from <em style={{ color: WATER }}>land to roof.</em>
-          </h1>
-        </div>
-
-        {/* film — full 16:9 frame, edge to edge, nothing cropped */}
-        <div className="relative aspect-video w-full shrink-0 bg-black shadow-[0_30px_60px_-25px_rgba(0,0,0,0.9)]">
-          <video
-            ref={video}
-            className="absolute inset-0 h-full w-full object-contain"
-            src={MOBILE_VIDEO}
-            poster={MOBILE_POSTER}
-            autoPlay
-            muted
-            playsInline
-            preload="auto"
-            aria-label="Film: a building waterproofed stage by stage, from excavation to monsoon"
-          />
-          <div aria-hidden className="absolute inset-x-0 top-0 h-px bg-white/15" />
-          <div aria-hidden className="absolute inset-x-0 bottom-0 h-px bg-white/15" />
-          {(blocked || ended) && (
-            <button
-              type="button"
-              onClick={replay}
-              className="absolute bottom-3 right-3 flex items-center gap-2 rounded-full bg-black/60 px-3 py-1.5 text-[11px] uppercase tracking-[0.14em] backdrop-blur-md"
-            >
-              <span aria-hidden>{ended ? "↺" : "▶"}</span>
-              {ended ? "Replay" : "Play film"}
-            </button>
-          )}
-        </div>
-
-        {/* stage — follows the video */}
-        <div className="gutter">
-          <div className="relative h-[104px]">
-            {STEPS.map((st, i) => {
-              const on = i === step;
-              const m = MOBILE_COPY[st.key] ?? { line: "" };
-              const no = i >= 1 && i <= 6 ? String(i).padStart(2, "0") : i === 0 ? "00" : "✓";
-              return (
-                <div
-                  key={st.key}
-                  aria-hidden={!on}
-                  className={`absolute inset-0 flex gap-4 transition-[opacity,transform] duration-300 ${on ? "translate-y-0 opacity-100" : "pointer-events-none translate-y-1.5 opacity-0"}`}
-                >
-                  <div className="w-12 shrink-0 border-r border-white/15 pr-3">
-                    <p className="display text-[2.4rem] leading-none" style={{ color: WATER }}>{no}</p>
-                    {i >= 1 && i <= 6 && <p className="mt-1 font-mono text-[9px] tracking-[0.2em] text-paper/45">/ 06</p>}
-                  </div>
-                  <div className="min-w-0">
-                    <p className="eyebrow text-paper/60">{st.eyebrow}</p>
-                    <h2 className="display mt-1 text-[1.55rem] leading-[1.02]">{m.title ?? st.title}</h2>
-                    <p className="mt-1.5 text-[12.5px] leading-snug text-paper/70">
-                      {m.chip && <span style={{ color: WATER }}>{m.chip} · </span>}
-                      {m.line}
-                    </p>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-
-          {/* CTAs — one row */}
-          <div className="mt-5 flex items-center gap-2">
-            <div className="min-w-0 flex-1 [&>*]:!block [&_.btn]:w-full [&_.btn]:justify-between [&_.btn]:whitespace-nowrap [&_.btn]:!pl-5 [&_.btn]:!pr-1.5 [&_.btn]:text-[0.74rem]">
-              <ArrowLink href="/contact" variant="light">Free site inspection</ArrowLink>
-            </div>
-            <a href={`tel:${contact.phone.replace(/\s/g, "")}`} aria-label={`Call ${contact.phone}`} className="grid h-[3.25rem] w-[3.25rem] shrink-0 place-items-center rounded-full border border-white/30 bg-white/5 backdrop-blur-md">
-              <Phone size={17} strokeWidth={1.5} aria-hidden />
-            </a>
-            <a
-              href={`${contact.whatsapp}?text=${encodeURIComponent("Hi RPC, I'd like a waterproofing plan for my site.")}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="WhatsApp RPC"
-              className="grid h-[3.25rem] w-[3.25rem] shrink-0 place-items-center rounded-full border border-white/30 bg-white/5 backdrop-blur-md"
-            >
-              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.8 11.9 11.9 0 0 0 4.6 4c1.7.7 2.4.8 3.2.7.5-.1 1.5-.6 1.8-1.2.2-.6.2-1.1.1-1.2l-.4-.2Z"/></svg>
-            </a>
-          </div>
+      <div className="gutter pb-12 pt-4">
+        <p className="eyebrow text-paper/70">Waterproofing · Land to Roof</p>
+        <h1 className="display mt-3 leading-[0.9]" style={{ fontSize: "12.5vw" }}>
+          Waterproofed from <em className="text-paper/90">land to roof.</em>
+        </h1>
+        <p className="mt-4 text-[15px] leading-relaxed text-paper/80">
+          Six stages of protection, built into the construction itself — from the soil under the raft to the roof above.
+        </p>
+        <div className="mt-6 grid grid-cols-2 gap-2.5">
+          <Link href="/contact" className="inline-flex h-12 items-center justify-between whitespace-nowrap rounded-full bg-paper pl-5 pr-1.5 text-[12px] font-medium uppercase tracking-[0.08em] text-ink">
+            Free Inspection
+            <span className="grid h-9 w-9 place-items-center rounded-full bg-ink/10"><ArrowUpRight size={14} /></span>
+          </Link>
+          <a href={`tel:${contact.phone.replace(/\s/g, "")}`} className="inline-flex h-12 items-center justify-between rounded-full border border-white/40 bg-white/5 pl-5 pr-1.5 text-[12px] font-medium uppercase tracking-[0.08em] text-paper">
+            Call Us
+            <span className="grid h-9 w-9 place-items-center rounded-full bg-white/10"><Phone size={14} /></span>
+          </a>
         </div>
       </div>
     </section>
