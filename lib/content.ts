@@ -419,13 +419,14 @@ export const stats: { value: number | string; suffix: string; label: string }[] 
   { value: 14, suffix: "", label: "Cities" },
 ];
 
+/** Anatomy section: each system, the waterproofing technique used on it, and how it is done. */
 export const anatomy = [
-  { key: "roof", label: "Roof", note: "PU membrane + heat-reflective coat" },
-  { key: "windows", label: "Windows", note: "Sealed frames, drip grooves, silicone joints" },
-  { key: "walls", label: "Walls", note: "Waterproof plaster + elastomeric façade paint" },
-  { key: "interior", label: "Interior", note: "2-coat wet areas, pond-tested, epoxy grout" },
-  { key: "structure", label: "Structure", note: "Integral waterproofing admixture in every pour" },
-  { key: "foundation", label: "Foundation", note: "Anti-termite, HDPE membrane, crystalline + DPC" },
+  { key: "roof", label: "Roof", note: "PU membrane + heat-reflective coat", technique: "PU liquid membrane", steps: ["Slab cleaned & primed", "2 coats of PU, turned up the parapet", "White reflective coat keeps it cool"], image: "/images/anatomy-wp-roof.jpg", alt: "Worker rolling a PU waterproofing membrane on a terrace, with a white heat-reflective top coat" },
+  { key: "windows", label: "Windows", note: "Sealed frames, drip grooves, silicone joints", technique: "Sealed frames & drip grooves", steps: ["Gap round the frame sealed with silicone", "Sill sloped outward", "Drip groove under the sunshade"], image: "/images/anatomy-wp-windows.jpg", alt: "Worker sealing an aluminium window frame with silicone under a sunshade with a drip groove, above a sloped granite sill" },
+  { key: "walls", label: "Walls", note: "Waterproof plaster + elastomeric façade paint", technique: "Waterproof plaster + elastomeric paint", steps: ["Brick wall", "Plaster with waterproof admixture", "Elastomeric paint bridges hairline cracks"], image: "/images/anatomy-wp-walls.jpg", alt: "Cutaway of an external wall: brick, waterproof plaster and elastomeric paint being applied" },
+  { key: "interior", label: "Wet areas", note: "2-coat wet areas, pond-tested, epoxy grout", technique: "2-coat coating + pond test", steps: ["Pipe openings sealed with collars", "2 coats on floor & 300 mm up walls", "Flooded 48 h, then tiled with epoxy grout"], image: "/images/anatomy-wp-interior.jpg", alt: "Bathroom coated with grey waterproofing and flooded for a pond test, next to a finished tiled area" },
+  { key: "structure", label: "Structure", note: "Integral waterproofing admixture in every pour", technique: "Integral waterproofing admixture", steps: ["Admixture dosed into every batch", "Dense, low-permeability concrete", "Vibrated & cured — no path for water"], image: "/images/anatomy-wp-structure.jpg", alt: "Worker adding waterproofing admixture to the concrete mixer during a slab pour" },
+  { key: "foundation", label: "Foundation", note: "Anti-termite, HDPE membrane, crystalline + DPC", technique: "Anti-termite + HDPE membrane", steps: ["Soil treated with anti-termite", "HDPE sheet with welded laps under the raft", "Crystalline coat & waterstops at joints"], image: "/images/anatomy-wp-foundation.jpg", alt: "Anti-termite spraying and a black HDPE membrane laid under the raft reinforcement" },
 ] as const;
 
 export const manifesto =

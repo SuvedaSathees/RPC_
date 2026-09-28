@@ -122,6 +122,12 @@ export function ProjectsShowcase() {
                     <dd className="text-sm">{v}</dd>
                   </div>
                 ))}
+                {p.waterproofing && (
+                  <div className="border-t border-white/15 pt-3">
+                    <dt className="eyebrow mb-1.5 text-[#8fc6e8]">Waterproofing</dt>
+                    <dd className="text-sm leading-snug">{p.waterproofing}</dd>
+                  </div>
+                )}
               </motion.dl>
             </AnimatePresence>
           </div>
@@ -175,6 +181,12 @@ export function ProjectsShowcase() {
               <p className="eyebrow mt-5 text-paper/50">{String(i + 1).padStart(2, "0")} — {pr.type}</p>
               <h3 className="display mt-2 text-5xl">{pr.name}</h3>
               <p className="eyebrow mt-3 text-paper/60">{pr.location} · {pr.year} · {pr.status}</p>
+              {pr.waterproofing && (
+                <p className="mt-3 text-[13px] leading-relaxed text-paper/75">
+                  <span className="eyebrow mr-2 text-[#8fc6e8]">Waterproofing</span>
+                  {pr.waterproofing}
+                </p>
+              )}
             </article>
           ))}
         </div>

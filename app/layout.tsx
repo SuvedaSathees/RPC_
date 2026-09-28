@@ -29,7 +29,7 @@ const mono = localFont({
 });
 
 const description =
-  "RPC Constructions is a design-and-build construction company in Erode, Tamil Nadu — residential, commercial and industrial construction, renovation, interiors and project management since 2012.";
+  "RPC Constructions is a design-and-build construction and waterproofing company in Erode, Tamil Nadu — residential, commercial and industrial buildings waterproofed from land to roof, leak repair, interiors and project management since 2012.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -41,6 +41,10 @@ export const metadata: Metadata = {
   applicationName: brand.name,
   keywords: [
     "construction company in Erode",
+    "waterproofing contractors Erode",
+    "terrace waterproofing Tamil Nadu",
+    "basement waterproofing Coimbatore",
+    "bathroom leakage repair Erode",
     "building contractors Erode",
     "civil contractors Tamil Nadu",
     "turnkey house construction",
@@ -59,13 +63,13 @@ export const metadata: Metadata = {
     locale: "en_IN",
     url: "/",
     siteName: brand.name,
-    title: "RPC Constructions — Building what lasts",
+    title: "RPC Constructions — Waterproofed from land to roof",
     description,
     images: [{ url: "/images/og.jpg", width: 1200, height: 630, alt: "A completed RPC Constructions building at dusk" }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "RPC Constructions — Building what lasts",
+    title: "RPC Constructions — Waterproofed from land to roof",
     description,
     images: ["/images/og.jpg"],
   },

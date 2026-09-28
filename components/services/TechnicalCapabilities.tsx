@@ -18,7 +18,7 @@ export function TechnicalCapabilities({ index = "04" }: { index?: string }) {
             </h2>
           </div>
           <p className="hidden text-lg leading-relaxed text-paper/65 md:block lg:col-span-5">
-            Every project is designed, checked and tested by our own engineers — so problems are solved on paper, not on site.
+            Every project is designed, checked and tested by our own engineers — waterproofing included — so problems are solved on paper, not on site.
           </p>
         </div>
 

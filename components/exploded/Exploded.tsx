@@ -5,32 +5,29 @@ import { useLayoutEffect, useRef } from "react";
 import { SectionMarker } from "@/components/ui/Primitives";
 import { anatomy } from "@/lib/content";
 import { gsap, ScrollTrigger } from "@/lib/gsap";
+import { useLenis } from "@/components/providers/SmoothScroll";
 
 const useIso = typeof window !== "undefined" ? useLayoutEffect : () => {};
 
 /**
- * Anatomy of a building, told in photographs of the same building from the
- * same camera: finished → walls and envelope → bare frame → foundations. Scrolling
- * peels one layer away at a time; the six-system list follows the reveal
- * (roof and envelope first, the ground last).
+ * Anatomy of a building — one plate per system, top to bottom (roof → foundation).
+ * Each plate shows how that system is waterproofed, with the technique and its
+ * three steps written over the picture so it reads at a glance.
  */
-const PLATES = [
-  { src: "/images/anatomy-complete.jpg", alt: "The finished building: roof, glazing, walls and landscape", caption: "Assembled" },
-  { src: "/images/anatomy-cutaway.jpg", alt: "The building with its brick walls going up inside the concrete frame, before plaster and glazing", caption: "Envelope" },
-  { src: "/images/anatomy-frame.jpg", alt: "Reinforced concrete frame of the building under construction", caption: "Structure" },
-  { src: "/images/anatomy-foundation.jpg", alt: "Foundation footings and reinforcement in the excavated plot", caption: "Foundation" },
-];
-
-// which list item is "live" for each plate (anatomy order: roof, windows, walls, interior, structure, foundation)
-const LIVE: number[][] = [[0, 1, 2], [3], [4], [5]];
+const PLATES = anatomy;
+const N = PLATES.length;
 
 export function Exploded({ index = "03" }: { index?: string } = {}) {
   const root = useRef<HTMLElement>(null);
+  const lenis = useLenis();
+  const lenisRef = useRef(lenis);
+  lenisRef.current = lenis;
 
   useIso(() => {
     const el = root.current;
     if (!el) return;
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const cleanups: (() => void)[] = [];
     const ctx = gsap.context(() => {
       const plates = gsap.utils.toArray<HTMLElement>("[data-plate]");
       const items = gsap.utils.toArray<HTMLElement>("[data-sys]");
@@ -38,12 +35,12 @@ export function Exploded({ index = "03" }: { index?: string } = {}) {
       const bar = el.querySelector<HTMLElement>("[data-bar]");
       const setStage = (s: number) => {
         items.forEach((li, i) => {
-          const done = LIVE.slice(0, s + 1).flat().includes(i);
-          const now = LIVE[s]!.includes(i);
+          const done = i < s;
+          const now = i === s;
           li.toggleAttribute("data-active", now);
           li.toggleAttribute("data-done", done && !now);
         });
-        if (caption) caption.textContent = `${String(s + 1).padStart(2, "0")} / 04 · ${PLATES[s]!.caption}`;
+        if (caption) caption.textContent = `${String(s + 1).padStart(2, "0")} / ${String(N).padStart(2, "0")}`;
       };
       setStage(0);
       if (reduced) {
@@ -74,57 +71,95 @@ export function Exploded({ index = "03" }: { index?: string } = {}) {
           trigger: el,
           start: "top top",
           end: "bottom bottom",
-          scrub: 0.8,
+          scrub: 0.6,
           onUpdate: (st) => {
-            setStage(Math.min(3, Math.floor(st.progress * 3.999 + 0.08)));
+            setStage(Math.min(N - 1, Math.round(st.progress * (N - 1))));
             if (bar) bar.style.transform = `scaleY(${st.progress})`;
           },
         },
       });
+      // plate i is fully in place exactly at progress i/(N-1), so each snap point shows one whole picture
       plates.slice(1).forEach((plate, i) => {
-        const at = 0.35 + i;
+        const at = i + 0.15;
         const img = plate.querySelector("img");
-        // each layer is uncovered top-down, like a section being cut through the building
         tl.to(plate, { clipPath: "inset(0 0 0% 0)", duration: 0.7 }, at);
-        if (img) tl.fromTo(img, { scale: 1.08 }, { scale: 1, duration: 1, ease: "power2.out" }, at);
+        if (img) tl.fromTo(img, { scale: 1.08 }, { scale: 1, duration: 0.85, ease: "power2.out" }, at);
       });
-      tl.to({}, { duration: 0.35 });
+      tl.to({}, { duration: Math.max(0, N - 1 - tl.duration()) });
+
+      // one scroll = one picture. While the section is pinned, each wheel gesture moves
+      // exactly one plate; past the 6th (or above the 1st) the page scrolls on normally.
+      const st = tl.scrollTrigger!;
+      let busy = false;
+      let lastWheel = 0;
+      const onWheel = (e: WheelEvent) => {
+        if (Math.abs(e.deltaY) < 2 || e.ctrlKey) return;
+        const y = window.scrollY;
+        const start = st.start;
+        const span = st.end - st.start;
+        if (y < start - 4 || y > st.end + 4) return;
+        const now = performance.now();
+        const idle = now - lastWheel > 220;
+        lastWheel = now;
+        if (busy || !idle) {
+          // swallow the rest of this gesture (trackpad inertia) so it cannot skip plates
+          e.preventDefault();
+          e.stopImmediatePropagation();
+          return;
+        }
+        const cur = Math.round(((y - start) / span) * (N - 1));
+        const next = cur + (e.deltaY > 0 ? 1 : -1);
+        if (next < 0 || next > N - 1) return; // leave the section: normal scrolling
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        busy = true;
+        const target = start + (span * next) / (N - 1);
+        const done = () => { busy = false; lastWheel = performance.now(); };
+        const l = lenisRef.current;
+        if (l) l.scrollTo(target, { duration: 0.95, easing: (t: number) => 1 - Math.pow(1 - t, 3), lock: true, force: true, onComplete: done });
+        else { window.scrollTo({ top: target, behavior: "smooth" }); setTimeout(done, 900); }
+      };
+      window.addEventListener("wheel", onWheel, { passive: false, capture: true });
+      cleanups.push(() => window.removeEventListener("wheel", onWheel, { capture: true }));
       // slow push-in over the whole sequence
       tl.fromTo("[data-stage]", { scale: 1 }, { scale: 1.05, duration: tl.duration() }, 0);
     }, el);
-    return () => ctx.revert();
+    return () => {
+      cleanups.forEach((f) => f());
+      ctx.revert();
+    };
   }, []);
 
   return (
-    <section ref={root} id="anatomy" aria-label="Anatomy of a building" className="relative z-10 h-[220vh] bg-night text-paper">
+    <section ref={root} id="anatomy" aria-label="Anatomy of a building" className="relative z-10 h-[600vh] bg-night text-paper">
       <div className="sticky top-0 flex h-[100svh] flex-col overflow-hidden">
         <div aria-hidden className="pointer-events-none absolute -left-40 top-1/3 h-[30rem] w-[36rem] rounded-full bg-rpc/15 blur-[130px]" />
-        <div className="gutter relative flex h-full flex-col gap-5 pb-6 pt-24 md:grid md:grid-cols-12 md:gap-10 md:pb-14 md:pt-32">
+        <div className="gutter relative flex h-full min-h-0 flex-col gap-5 pb-6 pt-24 md:grid md:grid-cols-12 md:grid-rows-[minmax(0,1fr)] md:gap-10 md:pb-10 md:pt-28">
           {/* Copy + systems list */}
-          <div className="flex shrink-0 flex-col justify-between md:col-span-4">
+          <div className="flex min-h-0 shrink-0 flex-col justify-between md:col-span-4">
             <div>
               <SectionMarker index={index} label="Anatomy" className="text-paper/70" />
-              <h2 className="display mt-4 text-4xl leading-[0.95] md:mt-6 md:text-6xl lg:text-[4.4vw]">
+              <h2 className="display mt-4 text-4xl leading-[0.95] md:mt-5 md:text-5xl lg:text-[3.4vw]">
                 Six systems.
                 <br />
-                <em className="text-paper/80">Every one waterproofed.</em>
+                <em className="text-paper/80">All waterproofed.</em>
               </h2>
-              <p className="mt-3 max-w-sm text-[13px] leading-relaxed text-paper/65 md:mt-5 md:text-[15px]">
+              <p className="mt-3 max-w-sm text-[13px] leading-relaxed text-paper/65 md:mt-4 md:text-[14px]">
                 <span className="md:hidden">Each layer sealed against water — terrace to footings.</span>
-                <span className="hidden md:inline">Scroll to take a finished RPC building apart — layer by layer — and see how each one is sealed against water, down to the footings.</span>
+                <span className="hidden md:inline">Scroll through a finished RPC building — each layer sealed against water, down to the footings.</span>
               </p>
             </div>
-            <ol className="mt-4 flex flex-wrap gap-1.5 md:mt-6 md:block md:max-w-sm md:space-y-1">
+            <ol className="mt-4 flex flex-wrap gap-1.5 md:mt-4 md:block md:max-w-sm md:space-y-0.5">
               {anatomy.map((a, i) => (
                 <li
                   key={a.key}
                   data-sys
-                  className="group relative flex items-center gap-2 rounded-full border border-white/10 px-2.5 py-1 text-paper/40 md:gap-4 md:rounded-sm md:border-0 md:px-3 md:py-2.5 transition-all duration-500 data-[active]:bg-white/[0.07] data-[active]:text-paper data-[done]:text-paper/70"
+                  className="group relative flex items-center gap-2 rounded-full border border-white/10 px-2.5 py-1 text-paper/40 md:gap-4 md:rounded-sm md:border-0 md:px-3 md:py-1.5 transition-all duration-500 data-[active]:bg-white/[0.07] data-[active]:text-paper data-[done]:text-paper/70"
                 >
                   <span className="absolute inset-y-2 left-0 hidden w-0.5 scale-y-0 md:block bg-rpc transition-transform duration-500 group-data-[active]:scale-y-100" />
                   <span className="font-mono text-[10px] md:text-[11px]">0{i + 1}</span>
                   <span className="flex flex-col">
-                    <span className="text-[13px] font-medium md:text-[15px]">{a.label}</span>
+                    <span className="text-[13px] font-medium md:text-[14px]">{a.label}</span>
                     <span className="hidden text-[11px] text-paper/50 group-data-[active]:text-paper/70 md:inline">{a.note}</span>
                   </span>
                 </li>
@@ -133,30 +168,44 @@ export function Exploded({ index = "03" }: { index?: string } = {}) {
           </div>
 
           {/* Plates */}
-          <div className="relative min-h-0 flex-1 md:col-span-8">
+          <div className="relative min-h-0 flex-1 md:col-span-8 md:h-full">
             <div className="relative h-full overflow-hidden rounded-sm border border-white/10 bg-ink shadow-[0_40px_80px_-30px_rgba(0,0,0,0.8)]">
               <div data-stage className="absolute inset-0 origin-center will-change-transform">
                 {PLATES.map((p, i) => (
-                  <div key={p.src} data-plate className="absolute inset-0" style={{ zIndex: i }}>
+                  <div key={p.key} data-plate className="absolute inset-0" style={{ zIndex: i }}>
                     <Image
-                      src={p.src}
+                      src={p.image}
                       alt={p.alt}
                       fill
                       sizes="(min-width: 768px) 66vw, 92vw"
                       className="object-cover"
                       loading={i === 0 ? undefined : "eager"}
                     />
+                    <div aria-hidden className="absolute inset-x-0 bottom-0 h-3/5 bg-gradient-to-t from-black/85 via-black/45 to-transparent" />
+                    {/* how it is waterproofed — read straight off the picture */}
+                    <div className="absolute inset-x-4 bottom-4 md:inset-x-7 md:bottom-7">
+                      <p className="eyebrow !text-[9.5px] text-[#8fc6e8] md:!text-[11px]">
+                        {String(i + 1).padStart(2, "0")} · {p.label}
+                      </p>
+                      <p className="display mt-1 text-2xl leading-[1.02] text-white md:mt-2 md:text-[2.6vw]">{p.technique}</p>
+                      <ol className="mt-2.5 flex flex-wrap gap-1.5 md:mt-4 md:gap-2">
+                        {p.steps.map((step, k) => (
+                          <li key={step} className="flex items-center gap-1.5 rounded-full bg-white/12 py-1 pl-1 pr-2.5 text-[10.5px] leading-tight text-white/90 backdrop-blur-md md:gap-2 md:py-1.5 md:pl-1.5 md:pr-3.5 md:text-[13px]">
+                            <span className="grid h-4 w-4 shrink-0 place-items-center rounded-full bg-[#8fc6e8] font-mono text-[9px] text-ink md:h-5 md:w-5 md:text-[10px]">{k + 1}</span>
+                            {step}
+                          </li>
+                        ))}
+                      </ol>
+                    </div>
                   </div>
                 ))}
               </div>
-              <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-40 bg-gradient-to-t from-black/70 to-transparent" />
               <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 z-10 h-28 bg-gradient-to-b from-black/45 to-transparent" />
               <span className="eyebrow absolute left-4 top-4 z-20 !text-[9px] md:left-5 md:top-5 md:!text-[10.5px] rounded-full bg-black/40 px-3 py-1.5 text-paper/85 backdrop-blur-md">
-                Waterproofed section · RPC building
+                <span data-caption className="tabular-nums text-[#8fc6e8]">01 / 06</span>
+                <span className="mx-2 opacity-40">·</span>
+                Waterproofed section
               </span>
-              <p data-caption className="display absolute bottom-4 left-4 z-20 text-2xl text-white md:bottom-7 md:left-7 md:text-5xl">
-                01 / 04 · Assembled
-              </p>
               {/* scroll progress, like a section line being drawn down the sheet */}
               <div aria-hidden className="absolute inset-y-5 right-5 z-20 w-px bg-white/25 md:right-7">
                 <div data-bar className="h-full w-full origin-top scale-y-0 bg-white" />

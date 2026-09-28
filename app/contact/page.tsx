@@ -8,7 +8,7 @@ import { contact, departments, faqs } from "@/lib/content";
 export const metadata: Metadata = {
   title: "Contact — Construction Enquiries in Erode, Tamil Nadu",
   description:
-    "Contact RPC Constructions, 142 Perundurai Road, Erode. Call +91 94428 95907 or email contact@rpcconstructions.com to discuss your residential, commercial or industrial project.",
+    "Contact RPC Constructions, 142 Perundurai Road, Erode. Call +91 94428 95907 or email contact@rpcconstructions.com to discuss your project, waterproofing or leakage problem.",
   alternates: { canonical: "/contact" },
   openGraph: { url: "/contact" },
 };

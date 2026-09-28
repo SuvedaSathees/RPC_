@@ -9,7 +9,7 @@ import { ArrowLink } from "@/components/ui/Primitives";
 export const metadata: Metadata = {
   title: "About Us — Construction Company in Erode, Tamil Nadu",
   description:
-    "RPC Constructions is an Erode-based design-and-build construction company founded in 2012. Our story, vision, mission, founder and the values behind every project.",
+    "RPC Constructions is an Erode-based design-and-build construction and waterproofing company founded in 2012. Our story, vision, mission, founder and the values behind every project.",
   alternates: { canonical: "/about" },
   openGraph: { url: "/about" },
 };

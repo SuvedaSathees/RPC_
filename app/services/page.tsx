@@ -6,9 +6,9 @@ import { PageHeader } from "@/components/transitions/PageHeader";
 import { ArrowLink } from "@/components/ui/Primitives";
 
 export const metadata: Metadata = {
-  title: "Services — Residential, Commercial & Industrial Construction, Interiors",
+  title: "Services — Waterproofing, Residential, Commercial & Industrial Construction",
   description:
-    "Turnkey residential, commercial and industrial construction, renovation, interiors and project management in Erode, Coimbatore and across Tamil Nadu.",
+    "Land-to-roof waterproofing, leak repair and turnkey residential, commercial and industrial construction, interiors and project management in Erode, Coimbatore and across Tamil Nadu.",
   alternates: { canonical: "/services" },
   openGraph: { url: "/services" },
 };

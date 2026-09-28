@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { SectionMarker } from "@/components/ui/Primitives";
 import { stats } from "@/lib/content";
 
-const NOTES = ["Homes, commercial & industrial", "Building across Tamil Nadu", "Families & businesses served", "Towns and cities"];
+const NOTES = ["Built & waterproofed", "Building across Tamil Nadu", "Families & businesses served", "Towns and cities"];
 
 /**
  * Performance record — a compact band (about 40% of the viewport) with the

@@ -104,7 +104,7 @@ export function FinalCTA() {
           <div className="mt-10 grid items-end gap-8 md:mt-12 lg:grid-cols-12">
             <div className="lg:col-span-4">
               <p className="mb-6 max-w-sm text-base leading-relaxed text-paper/80">
-                Tell us about your site and brief — an engineer will call you back within one working day.
+                Tell us about your site, brief or leakage problem — an engineer will call you back within one working day.
               </p>
               <ArrowLink href="/contact#enquiry" variant="light">
                 Start a project

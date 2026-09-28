@@ -22,7 +22,7 @@ export function Footer() {
               <Wordmark size="sm" />
             </Link>
             <p className="mt-3 max-w-[16rem] text-[12.5px] leading-relaxed text-paper/60">
-              Design-and-build construction across Tamil Nadu.
+              Design-and-build construction and waterproofing across Tamil Nadu.
             </p>
           </div>
           <button type="button" onClick={toTop} aria-label="Back to top" className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-white/10 text-paper/80">

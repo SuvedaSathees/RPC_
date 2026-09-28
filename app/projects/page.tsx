@@ -8,7 +8,7 @@ import { projects } from "@/lib/content";
 export const metadata: Metadata = {
   title: "Projects — Residential, Commercial & Industrial Construction in Tamil Nadu",
   description:
-    "Selected construction projects by RPC Constructions across Erode, Coimbatore, Perundurai and Chennai — apartments, villas, office buildings, factories and mixed-use developments.",
+    "Selected construction projects by RPC Constructions across Erode, Coimbatore, Perundurai and Chennai — apartments, villas, office buildings, factories and mixed-use developments, each waterproofed from land to roof.",
   alternates: { canonical: "/projects" },
   openGraph: { url: "/projects", images: ["/images/project-01.jpg"] },
 };

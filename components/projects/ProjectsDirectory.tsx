@@ -131,6 +131,12 @@ export function ProjectsDirectory() {
                         <dd className="mt-1.5 text-sm leading-relaxed text-ink-2">{p.materials}</dd>
                       </div>
                     )}
+                    {p.waterproofing && (
+                      <div className="sm:col-span-2">
+                        <dt className="eyebrow text-rpc">Waterproofing</dt>
+                        <dd className="mt-1.5 text-sm leading-relaxed text-ink-2">{p.waterproofing}</dd>
+                      </div>
+                    )}
                   </dl>
                 </div>
 

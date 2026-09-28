@@ -35,7 +35,7 @@ export function About({ index = "05", link = true }: { index?: string; link?: bo
             </Reveal>
             <Reveal delay={0.1} className="mt-6">
               <p className="max-w-xl text-base leading-relaxed text-ink-2">
-                RPC Constructions is an Erode-based design-and-build practice delivering homes, commercial buildings and industrial facilities across Tamil Nadu. The engineers who plan a project are the ones who stay on its site — from soil test to handover.
+                RPC Constructions is an Erode-based design-and-build practice delivering homes, commercial buildings and industrial facilities across Tamil Nadu. Every building is waterproofed from land to roof, and the engineers who plan a project are the ones who stay on its site — from soil test to handover.
               </p>
               <dl className="mt-6 grid max-w-xl grid-cols-3 gap-6 border-t border-ink/15 pt-5">
                 {stats.slice(0, 3).map((st) => (

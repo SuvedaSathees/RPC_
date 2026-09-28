@@ -38,7 +38,7 @@ export function Services({ index = "04", heading = true }: { index?: string; hea
         <div className="md:hidden">
           {heading && (
             <h2 className="display mt-6 leading-[0.98]" style={{ fontSize: "2.6rem" }}>
-              One team, <em>every discipline.</em>
+              One team, <em>built watertight.</em>
             </h2>
           )}
           <p className="mt-3 text-[14px] leading-relaxed text-ink-2">Swipe to see what we build — from soil test to handover.</p>
@@ -91,7 +91,7 @@ export function Services({ index = "04", heading = true }: { index?: string; hea
             {heading && (
               <Reveal>
                 <h2 className="display text-5xl leading-[0.98] sm:text-6xl lg:text-[clamp(2.6rem,3.6vw,4rem)]">
-                  One team, <em>every discipline.</em>
+                  One team, <em>built watertight.</em>
                 </h2>
               </Reveal>
             )}
