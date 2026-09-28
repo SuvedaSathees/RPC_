@@ -400,3 +400,85 @@ export const anatomy = [
 export const manifesto =
   "A building is a promise made in concrete and kept for generations. We plan it with care, engineer it with rigour and build it to outlast us.";
 
+
+/**
+ * Homepage hero — "Land to Roof" waterproofing story. 8 scroll steps:
+ * intro, the six waterproofing stages, finale. One film clip per step.
+ */
+export type WaterproofStep = {
+  key: string;
+  rail: string;
+  eyebrow: string;
+  title: string;
+  titleEm?: string;
+  technique?: string;
+  process?: readonly string[];
+  body?: string;
+};
+
+export const waterproofSteps: readonly WaterproofStep[] = [
+  {
+    key: "intro",
+    rail: "Site",
+    eyebrow: "Waterproofing · Land to Roof",
+    title: "Waterproofed from",
+    titleEm: "land to roof.",
+    body: "Six stages of protection built into the construction itself — not patched on later. Scroll to see how.",
+  },
+  {
+    key: "land",
+    rail: "Excavation",
+    eyebrow: "Land & excavation",
+    title: "Protection starts before the first brick",
+    technique: "Anti-termite treatment + HDPE membrane under the raft",
+    process: ["Excavate & compact the base", "PCC levelling course", "Anti-termite soil treatment", "HDPE sheets — sealed 100 mm overlaps, turned up the sides"],
+  },
+  {
+    key: "foundation",
+    rail: "Foundation",
+    eyebrow: "Foundation & basement",
+    title: "Blocks groundwater for good",
+    technique: "Crystalline waterproofing + PVC waterstops at joints",
+    process: ["PVC waterstops at every construction joint", "Raft & walls poured with crystalline admixture", "Crystalline slurry coat on exposed faces", "Protected backfill against basement walls"],
+  },
+  {
+    key: "plinth",
+    rail: "Plinth",
+    eyebrow: "Plinth",
+    title: "Stops rising damp at ground level",
+    technique: "DPC — Damp Proof Course",
+    process: ["Level & clean the plinth beam top", "40 mm DPC concrete with waterproofing compound", "Bitumen coat over the DPC", "Cure fully before masonry starts"],
+  },
+  {
+    key: "structure",
+    rail: "Structure",
+    eyebrow: "Walls & slabs",
+    title: "Waterproofing built into the structure",
+    technique: "Integral waterproofing admixture in concrete & plaster",
+    process: ["Admixture dosed at batching", "Dense, low-permeability columns, beams & slabs", "Waterproof plaster mix on walls", "Controlled curing for crack-free concrete"],
+  },
+  {
+    key: "wet",
+    rail: "Wet areas",
+    eyebrow: "Bathrooms, kitchen & tanks",
+    title: "Leak-free wet areas",
+    technique: "2-component cementitious coating + epoxy grout",
+    process: ["Seal pipe penetrations & round the corners", "2 coats — 300 mm up walls, 1.8 m in showers", "24–48 h pond test before tiling", "Epoxy-grouted tiles · tanks & sump coated inside"],
+  },
+  {
+    key: "roof",
+    rail: "Roof & façade",
+    eyebrow: "Terrace & exterior",
+    title: "The final shield against rain and sun",
+    technique: "PU liquid membrane on the roof + elastomeric façade coating",
+    process: ["Prime, reinforce cracks & parapet corners", "2-coat PU membrane with parapet upturn", "Heat-reflective white top coat", "Crack-bridging elastomeric paint on the façade"],
+  },
+  {
+    key: "finale",
+    rail: "Monsoon",
+    eyebrow: "Monsoon-proof",
+    title: "Built to stay",
+    titleEm: "dry.",
+    body: "Six layers of protection, one accountable team. Get a stage-wise waterproofing plan for your site.",
+  },
+];
