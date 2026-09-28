@@ -326,7 +326,8 @@ function FilmHero({ ready, low, mobile }: { ready: boolean; low: boolean; mobile
  * Phone hero: the waterproofing film plays as a muted, inline, autoplaying video
  * (public/film/hero-wp-mobile.mp4 — 10 s total: 8 steps of 1.25 s each,
  * intro still + 7 sped-up clips, built from the same Flow clips; shown full-frame 16:9, no crop). The copy below follows the video's time; tapping a segment
- * jumps to that stage. It plays once and rests on the finale with the CTAs.
+ * jumps to that stage. It waits for the loading card to lift, then plays
+ * once, straight through (10 s), and rests on the finale with the CTAs.
  */
 const MOBILE_VIDEO = "/film/hero-wp-mobile.mp4";
 const MOBILE_POSTER = "/film/hero-wp-mobile-poster.jpg";
@@ -353,7 +354,8 @@ function MobileVideoHero() {
   const [ended, setEnded] = useState(false);
 
   useEffect(() => {
-    sceneState.filmLoaded = 1;
+    // the loading card waits on this: it only lifts once the whole 10 s video is buffered
+    sceneState.filmLoaded = 0;
     if (!sceneState.ready) {
       sceneState.ready = true;
       window.dispatchEvent(new Event("rpc:ready"));
@@ -367,13 +369,33 @@ function MobileVideoHero() {
     v.defaultMuted = true;
     v.setAttribute("muted", "");
     v.setAttribute("playsinline", "");
-    const tryPlay = () => {
-      if (!v.paused || v.ended) return;
+    v.load();
+
+    const onProgress = () => {
+      if (!v.duration || !v.buffered.length) return;
+      const got = v.buffered.end(v.buffered.length - 1) / v.duration;
+      // the card treats 0.3 as "enough": hold just under it until the whole file is in
+      sceneState.filmLoaded = Math.max(sceneState.filmLoaded, Math.min(0.29, got * 0.3));
+      if (got >= 0.999) sceneState.filmLoaded = 1;
+    };
+    const onBuffered = () => { sceneState.filmLoaded = 1; };
+    v.addEventListener("progress", onProgress);
+    v.addEventListener("canplaythrough", onBuffered);
+
+    // start from 0 only after the loading page has fully lifted
+    let started = false;
+    const start = () => {
+      if (started) return;
+      started = true;
+      v.currentTime = 0;
       v.play().then(() => setBlocked(false)).catch(() => setBlocked(true));
     };
-    tryPlay();
-    v.addEventListener("canplay", tryPlay);
-    window.addEventListener("touchstart", tryPlay, { once: true, passive: true });
+    const w = window as Window & { __rpcIntroDone?: boolean };
+    if (w.__rpcIntroDone) start();
+    window.addEventListener("rpc:intro-done", start);
+    const retry = () => { if (started && v.paused && !v.ended) v.play().then(() => setBlocked(false)).catch(() => {}); };
+    window.addEventListener("touchstart", retry, { passive: true });
+
     const onTime = () => {
       const t = v.currentTime;
       let s = 0;
@@ -385,14 +407,11 @@ function MobileVideoHero() {
     v.addEventListener("timeupdate", onTime);
     v.addEventListener("ended", onEnded);
     v.addEventListener("play", onPlay);
-    const io = new IntersectionObserver(([en]) => {
-      if (!en) return;
-      if (en.isIntersecting) { if (!v.ended) v.play().catch(() => {}); } else v.pause();
-    }, { threshold: 0.25 });
-    io.observe(v);
     return () => {
-      io.disconnect();
-      v.removeEventListener("canplay", tryPlay);
+      window.removeEventListener("rpc:intro-done", start);
+      window.removeEventListener("touchstart", retry);
+      v.removeEventListener("progress", onProgress);
+      v.removeEventListener("canplaythrough", onBuffered);
       v.removeEventListener("timeupdate", onTime);
       v.removeEventListener("ended", onEnded);
       v.removeEventListener("play", onPlay);
@@ -420,7 +439,6 @@ function MobileVideoHero() {
           className="absolute inset-0 h-full w-full object-cover"
           src={MOBILE_VIDEO}
           poster={MOBILE_POSTER}
-          autoPlay
           muted
           playsInline
           preload="auto"

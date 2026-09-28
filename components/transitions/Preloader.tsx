@@ -86,9 +86,20 @@ export function Preloader() {
     }
   }, [done, lenis]);
 
+  // tell the hero the card is gone, so the phone film starts from its first frame
+  useEffect(() => {
+    if (quality !== "static") return;
+    (window as Window & { __rpcIntroDone?: boolean }).__rpcIntroDone = true;
+    window.dispatchEvent(new Event("rpc:intro-done"));
+  }, [quality]);
+  const introDone = () => {
+    (window as Window & { __rpcIntroDone?: boolean }).__rpcIntroDone = true;
+    window.dispatchEvent(new Event("rpc:intro-done"));
+  };
+
   if (quality === "static") return null;
   return (
-    <AnimatePresence>
+    <AnimatePresence onExitComplete={introDone}>
       {!done && (
         <motion.div
           key="pre"
