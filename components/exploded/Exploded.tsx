@@ -107,10 +107,11 @@ export function Exploded({ index = "03" }: { index?: string } = {}) {
               <h2 className="display mt-4 text-4xl leading-[0.95] md:mt-6 md:text-6xl lg:text-[4.4vw]">
                 Six systems.
                 <br />
-                <em className="text-paper/80">One building.</em>
+                <em className="text-paper/80">Every one waterproofed.</em>
               </h2>
-              <p className="mt-5 hidden max-w-sm text-sm leading-relaxed text-paper/65 md:block md:text-[15px]">
-                Scroll to take a finished RPC building apart — layer by layer, down to the footings that carry it.
+              <p className="mt-3 max-w-sm text-[13px] leading-relaxed text-paper/65 md:mt-5 md:text-[15px]">
+                <span className="md:hidden">Each layer sealed against water — terrace to footings.</span>
+                <span className="hidden md:inline">Scroll to take a finished RPC building apart — layer by layer — and see how each one is sealed against water, down to the footings.</span>
               </p>
             </div>
             <ol className="mt-4 flex flex-wrap gap-1.5 md:mt-6 md:block md:max-w-sm md:space-y-1">
@@ -151,7 +152,7 @@ export function Exploded({ index = "03" }: { index?: string } = {}) {
               <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-40 bg-gradient-to-t from-black/70 to-transparent" />
               <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 z-10 h-28 bg-gradient-to-b from-black/45 to-transparent" />
               <span className="eyebrow absolute left-4 top-4 z-20 !text-[9px] md:left-5 md:top-5 md:!text-[10.5px] rounded-full bg-black/40 px-3 py-1.5 text-paper/85 backdrop-blur-md">
-                Section through an RPC building
+                Waterproofed section · RPC building
               </span>
               <p data-caption className="display absolute bottom-4 left-4 z-20 text-2xl text-white md:bottom-7 md:left-7 md:text-5xl">
                 01 / 04 · Assembled
