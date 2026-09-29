@@ -99,12 +99,12 @@ export function Nav() {
     };
   }, [isHome]);
 
-  if (pathname.startsWith("/studio")) return null;
+  if (pathname?.startsWith("/studio")) return null;
 
   const visible = open || !isHome || pastHero || heroNavVisible;
   const solid = scrolled && !open; // once scrolled, the nav becomes a frosted pill
   const dark = light && !open; // dark type over light sections; the pill follows the section under it
-  const isActive = (href: string) => (href === "/" ? pathname === "/" : pathname.startsWith(href));
+  const isActive = (href: string) => (href === "/" ? pathname === "/" : Boolean(pathname?.startsWith(href)));
 
   return (
     <>

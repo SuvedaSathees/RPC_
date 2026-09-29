@@ -9,6 +9,8 @@ const cors = {
   "Access-Control-Allow-Private-Network": "true",
 };
 
+export const dynamic = "force-dynamic";
+
 export async function OPTIONS() {
   return new Response(null, { status: 204, headers: cors });
 }
