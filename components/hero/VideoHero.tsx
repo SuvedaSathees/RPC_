@@ -1,9 +1,9 @@
 "use client";
 
-import { ArrowUpRight, Droplets, RotateCcw } from "lucide-react";
+import { ArrowUpRight, Droplets, Phone, RotateCcw } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { brand } from "@/lib/content";
+import { brand, contact } from "@/lib/content";
 import { ScrollTrigger } from "@/lib/gsap";
 import { sceneState } from "@/lib/three/store";
 
@@ -290,9 +290,20 @@ function ScrollHero() {
 
 const CHAPTER_AT = [6.2, 14.2, 22.2, 30.2, 38.2];
 
+/* phone copy for each beat: intro, the five areas, then RPC Constructions */
+const PHONE_BEATS = [
+  { tag: "00", chip: "The building", eyebrow: "Construction · Waterproofing", title: "The protection you never see.", system: "Five areas · five systems", layers: "Roof → bathroom → sump → basement → pool" },
+  { tag: "01", chip: "Roof terrace", eyebrow: "Terrace & flat roof", title: "Every roof, sealed for good.", system: "Liquid-applied PU membrane", layers: "Primer → PU membrane → screed → tiles" },
+  { tag: "02", chip: "Bathroom", eyebrow: "Bathroom & wet areas", title: "Dry below every tile.", system: "Polymer cementitious coating", layers: "Mesh tape → 2 coats → screed → tiles" },
+  { tag: "03", chip: "Sump", eyebrow: "Underground water tank", title: "Groundwater kept out.", system: "Crystalline + PVC water-bars", layers: "Water-bars → crystalline concrete → slurry coat" },
+  { tag: "04", chip: "Basement", eyebrow: "Basement & retaining wall", title: "We hold back the ground.", system: "Bituminous torch-on membrane", layers: "Membrane → protection board → drainage mat" },
+  { tag: "05", chip: "Swimming pool", eyebrow: "Pool shell", title: "Every litre where it belongs.", system: "Flexible cementitious coating", layers: "Water-bars → flexible coat → mosaic tiles" },
+  { tag: "06", chip: "RPC Constructions", eyebrow: "Design & build · Erode", title: "RPC Constructions", system: "Built to last. Sealed to stay dry.", layers: "Residential · Commercial · Industrial" },
+];
+
 function PhoneHero() {
   const video = useRef<HTMLVideoElement>(null);
-  const [chapter, setChapter] = useState(-1);
+  const [beat, setBeat] = useState(0);
   const [ended, setEnded] = useState(false);
 
   useEffect(() => {
@@ -309,8 +320,11 @@ function PhoneHero() {
     v.addEventListener("canplay", tryPlay);
     window.addEventListener("touchstart", tryPlay, { once: true, passive: true });
     const retry = window.setInterval(() => { if (v.currentTime > 0.5) window.clearInterval(retry); else tryPlay(); }, 1500);
-    const onTime = () => setChapter(CHAPTER_AT.filter((s) => v.currentTime >= s).length - 1);
-    const onEnd = () => setEnded(true);
+    const onTime = () => setBeat(CHAPTER_AT.filter((t) => v.currentTime >= t).length);
+    const onEnd = () => {
+      setEnded(true);
+      setBeat(PHONE_BEATS.length - 1);
+    };
     v.addEventListener("timeupdate", onTime);
     v.addEventListener("ended", onEnd);
     return () => {
@@ -326,31 +340,58 @@ function PhoneHero() {
     if (!v) return;
     v.currentTime = 0;
     setEnded(false);
-    setChapter(-1);
+    setBeat(0);
     v.play().catch(() => {});
   };
-  const s = chapter >= 0 ? STAGES[chapter] : null;
+  const b = PHONE_BEATS[beat]!;
+  const last = beat === PHONE_BEATS.length - 1;
+  const tel = `tel:${contact.phone.replace(/[^0-9+]/g, "")}`;
 
   return (
-    <section aria-label="RPC Constructions — the protection you never see" className="relative bg-night pt-16 text-paper">
-      <div className="relative w-full overflow-hidden" style={{ aspectRatio: "16 / 9" }}>
+    <section aria-label="RPC Constructions — the protection you never see" className="relative bg-night text-paper">
+      {/* film — full width, under the transparent nav */}
+      <div className="relative w-full overflow-hidden" style={{ height: "58svh", minHeight: 360 }}>
         <video ref={video} className="absolute inset-0 h-full w-full object-cover" src="/film/hero-wp-720.mp4" poster="/film/hero-wp-poster.jpg" autoPlay muted playsInline preload="auto" aria-hidden />
+        <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-black/55 to-transparent" />
+        <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 h-40" style={{ background: "linear-gradient(to top, var(--color-night), transparent)" }} />
+        <p key={b.tag} className="absolute bottom-4 left-4 inline-flex items-center gap-2.5 rounded-full bg-black/60 px-3.5 py-2 text-[12px] font-medium uppercase tracking-[0.12em] backdrop-blur-md" style={{ animation: "fadeIn .5s ease" }}>
+          <span className="font-mono text-paper/55">{b.tag}</span>
+          {b.chip}
+        </p>
         {ended && (
-          <button type="button" onClick={replay} className="absolute bottom-2.5 right-2.5 inline-flex items-center gap-1.5 rounded-full bg-black/55 px-3 py-1.5 text-[12px] font-medium text-white backdrop-blur-md">
+          <button type="button" onClick={replay} className="absolute bottom-4 right-4 inline-flex items-center gap-1.5 rounded-full bg-black/60 px-3.5 py-2 text-[12px] font-medium text-white backdrop-blur-md">
             <RotateCcw size={13} /> Replay
           </button>
         )}
       </div>
-      <div className="gutter pb-12 pt-4">
-        <div className="mb-5 min-h-[30px]">{s && <div key={s.id} style={{ animation: "fadeIn .5s ease" }}><StageChip s={s} /></div>}</div>
-        <p className="eyebrow text-paper/70">{brand.descriptor}</p>
-        <h1 className="display mt-3 leading-[0.9]" style={{ fontSize: "15vw" }}>
-          RPC <em className="text-paper/90">Constructions</em>
-        </h1>
-        <p className="mt-4 text-[15px] leading-relaxed text-paper/80">
-          We build to last — and we seal every building where water tries to get in, from the roof to the pool.
-        </p>
-        <div className="mt-6 grid grid-cols-2 gap-2.5"><Buttons /></div>
+
+      {/* copy — follows the film */}
+      <div className="gutter pb-10 pt-2">
+        <div key={b.tag} style={{ animation: "fadeIn .5s ease", minHeight: "11.5rem" }}>
+          <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-paper/55">{b.eyebrow}</p>
+          {last ? (
+            <h1 className="display mt-3 leading-[0.92]" style={{ fontSize: "clamp(2.5rem, 11.5vw, 3.6rem)" }}>
+              RPC <em className="text-paper/90">Constructions</em>
+            </h1>
+          ) : (
+            <p className="display mt-3 leading-[0.95] text-paper/90" style={{ fontSize: "clamp(2.2rem, 10vw, 3.2rem)" }}>{b.title}</p>
+          )}
+          <p className="mt-4 text-[13px] font-medium uppercase tracking-[0.1em]" style={{ color: "#7fa6dd" }}>{b.system}</p>
+          <p className="mt-1.5 text-[15px] leading-snug text-paper/60">{b.layers}</p>
+        </div>
+        {/* hidden heading for search engines / screen readers while a stage is showing */}
+        {!last && <h1 className="sr-only">RPC Constructions — building and waterproofing contractors, Erode</h1>}
+
+        <div className="mt-6 grid grid-cols-2 gap-2.5">
+          <Link href="/contact#enquiry" className="inline-flex h-14 items-center justify-between rounded-full bg-paper pl-5 pr-1.5 text-[13px] font-medium uppercase tracking-[0.06em] text-ink">
+            Free inspection
+            <span className="grid h-11 w-11 place-items-center rounded-full bg-ink/10"><ArrowUpRight size={16} /></span>
+          </Link>
+          <a href={tel} className="inline-flex h-14 items-center justify-between rounded-full border border-white/25 bg-white/[0.04] pl-5 pr-1.5 text-[13px] font-medium uppercase tracking-[0.06em] text-paper">
+            Call us
+            <span className="grid h-11 w-11 place-items-center rounded-full bg-white/10"><Phone size={16} /></span>
+          </a>
+        </div>
       </div>
     </section>
   );
