@@ -9,6 +9,7 @@ import { Services } from "@/components/services/Services";
 import { Stats } from "@/components/stats/Stats";
 import { Preloader } from "@/components/transitions/Preloader";
 import { Marquee } from "@/components/ui/Marquee";
+import { Waterproofing } from "@/components/waterproofing/Waterproofing";
 import { services } from "@/lib/content";
 
 /**
@@ -27,9 +28,10 @@ export default function Home() {
         </div>
         <ProjectsShowcase />
         <Exploded />
-        <Services />
-        <About />
-        <Stats />
+        <Waterproofing />
+        <Services index="05" />
+        <About index="06" />
+        <Stats index="07" />
         <FinalCTA />
       </main>
       <Footer />
