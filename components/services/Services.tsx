@@ -70,7 +70,7 @@ export function Services({ index = "04", heading = true }: { index?: string; hea
                       <span className="text-[12px] text-ink-2">{sv.timeline}</span>
                       <Link
                         href={`/contact?service=${encodeURIComponent(sv.title)}#enquiry`}
-                        className="inline-flex items-center gap-1.5 rounded-full bg-ink px-3.5 py-1.5 text-[12.5px] font-medium text-paper"
+                        className="inline-flex min-h-9 items-center gap-1.5 rounded-full bg-ink px-3.5 py-1.5 text-[12.5px] font-medium text-paper"
                       >
                         Enquire <ArrowUpRight size={13} />
                       </Link>

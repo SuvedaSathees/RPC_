@@ -1,9 +1,9 @@
 /**
- * Blog — practical notes from RPC's engineers for people planning to build
- * in Tamil Nadu. Posts are plain data so they can later move to a CMS
- * without touching the pages.
+ * Blog — practical waterproofing notes from RPC's engineers for homes and
+ * buildings in Erode, Coimbatore and across Tamil Nadu. Posts are plain data
+ * so they can later move to a CMS without touching the pages.
  *
- * Figures in posts are indicative guidance, not quotes — every site differs.
+ * Advice in posts is general guidance — every building differs.
  */
 
 export interface BlogSection {
@@ -17,7 +17,7 @@ export interface BlogPost {
   slug: string;
   title: string;
   excerpt: string;
-  category: "Planning" | "Engineering" | "Materials" | "Industrial" | "Maintenance";
+  category: "Planning" | "Terraces" | "Bathrooms" | "Tanks & basements" | "Maintenance";
   date: string; // ISO
   readMinutes: number;
   cover: string;
@@ -28,172 +28,174 @@ export interface BlogPost {
 
 export const blogPosts: BlogPost[] = [
   {
-    slug: "questions-to-ask-before-hiring-a-building-contractor",
-    title: "10 questions to ask before hiring a building contractor",
+    slug: "questions-to-ask-a-waterproofing-contractor",
+    title: "10 questions to ask a waterproofing contractor",
     excerpt:
-      "The right questions at the first meeting save months of stress later. Here is the checklist our engineers would use if they were the client.",
+      "Before anyone touches your terrace or bathroom, ask these ten questions. The answers tell you whether the leak will stay fixed.",
     category: "Planning",
     date: "2026-09-18",
-    readMinutes: 6,
-    cover: "/images/projects/kaveri-residences-perundurai-road.jpg",
-    coverAlt: "Completed apartment building by RPC Constructions on Perundurai Road, Erode",
+    readMinutes: 4,
+    cover: "/images/waterproofing/house-wet-zones.jpg",
+    coverAlt: "A three-storey house with its terraces, bathrooms, sump and pool glowing where waterproofing is needed",
     author: "RPC Engineering Team",
     sections: [
       {
         paragraphs: [
-          "Choosing a contractor is the single decision that shapes cost, quality and your peace of mind for the next year or more. A polished brochure tells you very little — a short, honest conversation tells you a lot.",
-          "Take this list to your first meeting. A good contractor will be glad you asked.",
+          "Most waterproofing fails for one of two reasons: the wrong system for the surface, or the right system applied badly. Neither shows on the day the work is finished. Both show in the first heavy rain.",
+          "Take these questions to every contractor you meet, in Erode, Coimbatore or anywhere else. A good one will be glad you asked.",
         ],
       },
       {
-        heading: "Before the drawings",
+        heading: "About the diagnosis",
         list: [
-          "Who will be my single point of contact, and will the engineer who plans the job also visit the site?",
-          "Can I visit a project you have completed — and one that is under construction right now?",
-          "Do you do soil investigation before designing the foundation?",
-          "Who prepares the structural design, and is it checked against the relevant Indian Standard codes?",
+          "Will you inspect the whole building, or only the spot that is leaking?",
+          "Where do you think the water is getting in, and how will you confirm it before work starts?",
+          "Could the cause be a plumbing line, a structural crack or a blocked outlet rather than failed waterproofing?",
         ],
       },
       {
-        heading: "On cost and contract",
+        heading: "About the system",
         list: [
-          "Is the quote itemised, with the brand and grade of cement, steel and fittings named?",
-          "What is included — approvals, electrical, plumbing, compound wall, sump, painting?",
-          "How are variations priced if I change something midway?",
-          "What is the payment schedule, and is it linked to finished stages rather than dates?",
+          "Which system do you recommend for this surface, and why that one over the alternatives?",
+          "Which brand and product, how many coats, and what finished thickness?",
+          "How will corners, pipe openings, drains and joints be treated?",
         ],
       },
       {
-        heading: "On site and after handover",
+        heading: "About the work, and after it",
         list: [
-          "How often will I get progress updates, and in what form — photos, site visits, a written report?",
-          "What warranty do you give on structure and waterproofing, and who do I call if something goes wrong?",
+          "How will the surface be prepared before anything is applied?",
+          "Will bathrooms and terraces be flooded and checked before tiles or screed go over them?",
+          "Who will be on site, and how often has the team laid this system before?",
+          "What warranty do you give in writing, and what exactly does it cover?",
         ],
-        tip: "Ask for everything important in writing. A clear scope document protects both you and the contractor.",
+        tip: "Get the answers on paper. A quote that names the product, the number of coats and the test is far easier to hold a contractor to than a price per square foot.",
       },
     ],
   },
   {
-    slug: "planning-your-house-construction-budget-in-erode",
-    title: "Planning your house construction budget in Erode",
+    slug: "terrace-waterproofing-systems-erode",
+    title: "Terrace waterproofing in Erode: choosing a system that lasts",
     excerpt:
-      "What actually drives the cost of a new home — and how to set a realistic budget before you meet an architect or contractor.",
-    category: "Planning",
+      "PU, acrylic, torch-on membrane or a cementitious coat? What each one suits, and the edge details that matter more than the product.",
+    category: "Terraces",
     date: "2026-09-10",
-    readMinutes: 7,
-    cover: "/images/projects/thindal-courtyard-villa-erode.jpg",
-    coverAlt: "Two-storey villa with clay-tile roof in Thindal, Erode",
+    readMinutes: 5,
+    cover: "/images/waterproofing/terrace-parapet-outlet.jpg",
+    coverAlt: "Terrace corner with the waterproofing turned up the parapet wall and dressed into a rainwater outlet",
     author: "RPC Engineering Team",
     sections: [
       {
         paragraphs: [
-          "Almost every enquiry we receive starts with the same question: how much will it cost? The honest answer is that the built-up area is only the starting point. Specification, soil, design and site conditions move the number far more than most people expect.",
+          "A terrace in Erode or Coimbatore has a hard life. Months of strong sun make the slab expand and contract, opening hairline cracks, and then the monsoon arrives to find them. Whatever goes on top has to stay flexible, resist UV and shed water quickly.",
         ],
       },
       {
-        heading: "The five things that move your budget most",
+        heading: "Four systems, four different jobs",
         list: [
-          "Built-up area and number of floors — the obvious one, but plan for balconies, staircase and headroom too.",
-          "Foundation — weak or expansive soil can call for deeper footings or a raft, which changes the structural cost.",
-          "Specification level — flooring, windows, sanitaryware and electrical fittings can vary several times in price.",
-          "Design complexity — cantilevers, large spans and double-height spaces need more steel and formwork.",
-          "Site access and services — narrow roads, water availability and power supply affect time and labour.",
+          "Polyurethane (PU) liquid membrane: seamless and very elastic, a strong choice for exposed terraces, ideally finished with a UV-resistant or reflective top coat.",
+          "Acrylic elastomeric coating: quick to apply and easy to recoat, suited to terraces with light foot traffic and modest budgets.",
+          "APP/SBS torch-on membrane: thick bitumen sheets heat-welded at the laps, robust on large flat roofs and podiums, usually protected by screed or tiles.",
+          "Cementitious coating: rigid and economical, better under tiles or screed than left bare in the sun.",
         ],
       },
       {
-        heading: "How to set a realistic budget",
+        heading: "The edges decide it",
         paragraphs: [
-          "Start with the rooms you need rather than a square-foot figure you have heard from a friend. Then decide your specification level early — it is the biggest lever you control.",
-          "Keep a contingency of around 8–10% for changes and unknowns, and budget separately for approvals, the compound wall, sump and landscaping, which are often left out of headline rates.",
+          "Terrace leaks usually begin at an edge rather than in the middle of the slab: where the slab meets the parapet, around rainwater outlets, at pipe and solar-stand fixings, and under water tanks. Whichever system you choose, it must be turned up the parapet, coved at the corners and dressed into every outlet.",
+          "Slope matters as much as the membrane. Water that stands for days after rain will eventually find its way through almost anything.",
         ],
-        tip: "Ask for an itemised estimate. Two quotes with the same total can hide very different materials.",
+      },
+      {
+        heading: "When to do the work",
+        paragraphs: [
+          "Plan terrace work for dry weather, so each coat cures properly and the finished terrace can be flood-tested before the rains. Around Erode and Coimbatore that means finishing well before the northeast monsoon arrives in October.",
+        ],
+        tip: "A white reflective top coat earns its cost twice: it shields the membrane from UV, and it keeps the rooms below noticeably cooler in April and May.",
       },
     ],
   },
   {
-    slug: "choosing-the-right-foundation-for-your-site",
-    title: "Choosing the right foundation for your site",
+    slug: "bathroom-leakage-repair",
+    title: "Bathroom leakage: why the ceiling below gets damp",
     excerpt:
-      "Isolated footing, combined footing or raft? Why the answer starts with a soil test — and what it means for your building.",
-    category: "Engineering",
+      "A damp patch under a bathroom is rarely the tiles’ fault. How water escapes a wet area, and how it is fixed for good.",
+    category: "Bathrooms",
     date: "2026-08-28",
     readMinutes: 5,
-    cover: "/stages/03-foundation.jpg",
-    coverAlt: "Foundation footings and reinforcement being prepared on a construction site",
+    cover: "/images/waterproofing/bathroom-wet-zone.jpg",
+    coverAlt: "Bathroom with the waterproofed shower area and floor drain highlighted beneath the tiles",
     author: "RPC Engineering Team",
     sections: [
       {
         paragraphs: [
-          "The foundation is the part of your building no one will ever see — and the part everything else depends on. Getting it right is not about using more concrete; it is about matching the foundation to the ground.",
+          "A stain on the ceiling below a bathroom is one of the most common leaks in homes across Erode and Coimbatore. The tiles above usually look perfect, which is exactly why the problem lasts so long.",
         ],
       },
       {
-        heading: "Start with a soil investigation",
+        heading: "Where the water escapes",
+        list: [
+          "Through cement grout between tiles, which absorbs water and cracks with time",
+          "Around the floor trap and pipe openings, where the slab was broken for plumbing",
+          "At the junction of wall and floor, and up the wall behind the shower",
+          "From a leaking concealed pipe, which no amount of waterproofing can stop",
+        ],
+      },
+      {
+        heading: "How it is fixed properly",
         paragraphs: [
-          "A soil test tells the structural engineer how much load the ground can safely carry, how deep firm strata lies and whether the soil swells or shrinks with moisture. Without it, the foundation is a guess.",
+          "The first job is to tell waterproofing failure apart from plumbing failure. A pressure test on the supply lines and a pond test on the floor separate the two.",
+          "If the waterproofing has gone, the tiles come up. The sunken slab is cleaned, every pipe opening gets a sealing collar, and two coats go on the floor and at least 300 mm up the walls, full height inside the shower. The floor is flooded for 48 hours, and only then retiled with epoxy grout.",
         ],
       },
       {
-        heading: "Common foundation types",
-        list: [
-          "Isolated footings — a pad under each column; economical on firm, uniform soil.",
-          "Combined footings — used when columns are close together or near a boundary.",
-          "Raft foundation — one continuous slab under the building; useful on weak or variable soil.",
-          "Pile foundations — for heavy loads or where firm strata is deep below the surface.",
+        heading: "Can it be done without breaking tiles?",
+        paragraphs: [
+          "Sometimes. Where water is only getting through the grout, raking it out and regrouting with epoxy can stop it, and injection helps in particular cases. But once water is sitting in the sunken slab, only opening it up lasts.",
         ],
-      },
-      {
-        heading: "What we check on site",
-        list: [
-          "Excavation depth and bearing surface before any concrete is placed",
-          "Reinforcement size, spacing and cover against the drawings",
-          "Concrete grade, slump and curing — footings need proper curing too",
-        ],
-        tip: "Never skip the soil test to save money. It costs a small fraction of the foundation it protects.",
+        tip: "After the repair, let the stained ceiling dry out for a few weeks before repainting it. Paint over a damp slab blisters within months.",
       },
     ],
   },
   {
-    slug: "rcc-frame-vs-pre-engineered-steel-for-factories",
-    title: "RCC frame or pre-engineered steel for your factory?",
+    slug: "sump-and-water-tank-waterproofing",
+    title: "Sump and water tank waterproofing: keeping drinking water clean",
     excerpt:
-      "Both work. The right choice depends on span, speed, crane loads and how you plan to expand. A practical comparison for industrial owners.",
-    category: "Industrial",
+      "A leaking sump wastes water and can let dirty groundwater in. How tanks are sealed inside and out, and why the product must be safe for drinking water.",
+    category: "Tanks & basements",
     date: "2026-08-14",
-    readMinutes: 6,
-    cover: "/images/projects/sipcot-textile-unit-perundurai.jpg",
-    coverAlt: "Pre-engineered steel factory building under construction",
+    readMinutes: 4,
+    cover: "/images/waterproofing/sump-cutaway.jpg",
+    coverAlt: "Cutaway of an underground sump beside a house, sealed on the inside and wrapped on the outside",
     author: "RPC Engineering Team",
     sections: [
       {
         paragraphs: [
-          "For warehouses, textile units and processing plants, the structural system is one of the first decisions — and it affects cost, programme and how easily the building can grow.",
+          "Most homes in Erode and Coimbatore rely on an underground sump and an overhead tank. A sump that leaks does two kinds of damage: it loses water you have paid for, and when the ground is wet it can draw groundwater and drainage in.",
         ],
       },
       {
-        heading: "When pre-engineered steel (PEB) makes sense",
+        heading: "Inside the tank",
         list: [
-          "Large column-free spans for machinery layout or storage",
-          "Fast programmes — frames are fabricated off-site while foundations are built",
-          "Future expansion — end walls can be designed to extend",
-          "Lighter structure, which can reduce foundation sizes",
+          "A crystalline treatment on every inside face, which grows into the pores of the concrete and seals hairline cracks",
+          "Only products certified as safe for contact with drinking water",
+          "Coved corners and sealed joints where the walls meet the base",
         ],
       },
       {
-        heading: "When an RCC frame makes sense",
+        heading: "Outside, and where pipes pass through",
         list: [
-          "Multi-storey blocks, offices and amenity buildings",
-          "Heavy floor loads on upper levels",
-          "Better inherent fire resistance and thermal mass",
-          "Where local labour and materials make concrete more economical",
+          "PVC waterstops at construction joints, cast in while the tank is built",
+          "A membrane or bitumen coat on the outer walls before backfilling",
+          "Puddle flanges where the inlet, outlet and overflow pipes cross the wall",
         ],
       },
       {
-        heading: "Often the answer is both",
+        heading: "Testing before use",
         paragraphs: [
-          "Many of our industrial projects combine a PEB production shed with an RCC administrative and utility block. Deciding early — with the process layout in hand — avoids costly redesign later.",
+          "A new or repaired tank is filled and the water level marked. If the level holds over a few days, allowing for evaporation in an overhead tank, it is drained, cleaned, rinsed and put back into service.",
         ],
-        tip: "Share your machinery layout and any crane requirements before structural design begins.",
+        tip: "If the sump level drops overnight while nothing is drawing water, check the float valve and the pipe joints first. If they are sound, the tank itself needs looking at.",
       },
     ],
   },
@@ -201,87 +203,84 @@ export const blogPosts: BlogPost[] = [
     slug: "waterproofing-before-the-monsoon",
     title: "Waterproofing checklist before the monsoon",
     excerpt:
-      "Most leaks start at a few predictable places. Here is where to look — and what to fix — before the rains arrive.",
+      "Most leaks begin at a few predictable places. A walk from the terrace to the sump, and what to fix before the rains reach Erode and Coimbatore.",
     category: "Maintenance",
     date: "2026-07-30",
     readMinutes: 4,
-    cover: "/stages/08-plastering.jpg",
-    coverAlt: "Building exterior being plastered and finished",
+    cover: "/images/waterproofing/terrace-before-monsoon.jpg",
+    coverAlt: "Rooftop terrace of a villa with glass railings, seen from above",
     author: "RPC Engineering Team",
     sections: [
       {
         paragraphs: [
-          "Water always finds the weakest joint. A short inspection before the monsoon can save repainting, damp walls and damaged interiors.",
+          "Water always finds the weakest joint. An hour spent walking around the building before the monsoon can save a repaint, damp walls and spoilt furniture.",
         ],
       },
       {
-        heading: "Walk the roof",
+        heading: "On the terrace",
         list: [
-          "Clear rainwater outlets and check the slope drains towards them",
-          "Look for cracks in the terrace screed and parapet junctions",
-          "Check the waterproofing layer around water tanks and solar stands",
+          "Clear the rainwater outlets and check that water runs to them without pooling",
+          "Look for cracks in the screed or membrane, especially along the parapet",
+          "Check around the feet of water tanks, solar stands and pipe supports",
         ],
       },
       {
-        heading: "Check the walls and openings",
+        heading: "On the outside walls",
         list: [
-          "Hairline cracks in external plaster, especially near columns and beams",
-          "Sealant around window frames and AC pipe openings",
-          "Sunshade and chajja tops that hold water",
+          "Hairline cracks in plaster near columns, beams and lintels",
+          "Sealant around window frames, AC pipes and cable entries",
+          "Sunshades (chajjas) that hold water instead of shedding it",
         ],
       },
       {
-        heading: "Inside the building",
+        heading: "Inside, and below ground",
         list: [
-          "Bathroom floors and wall junctions — the most common source of damp",
-          "Kitchen sink and utility areas",
-          "Basement or ground-floor walls showing salt or peeling paint",
+          "Bathroom floor and wall junctions, and the ceilings beneath them",
+          "Skirting with salt deposits or bubbling paint, a sign of rising damp",
+          "The sump lid, and whether the sump level holds overnight",
         ],
-        tip: "Fix the cause, not just the stain. Repainting over damp only hides the problem for a season.",
+        tip: "Photograph every damp patch with the date on it. If one grows after the first rains, you know the leak is active and roughly when it started.",
       },
     ],
   },
   {
-    slug: "what-to-expect-at-each-stage-of-construction",
-    title: "What to expect at each stage of construction",
+    slug: "basement-waterproofing-coimbatore",
+    title: "Basement waterproofing for homes and offices in Coimbatore",
     excerpt:
-      "From soil test to handover — a simple guide to the stages of building, how long each takes and what you should check.",
-    category: "Planning",
+      "A basement takes water from the soil around it, not just from above. What keeps a car park or cellar dry, and why it is decided before the concrete is poured.",
+    category: "Tanks & basements",
     date: "2026-07-16",
-    readMinutes: 8,
-    cover: "/stages/06-structural-frame.jpg",
-    coverAlt: "Reinforced concrete frame of a building under construction",
+    readMinutes: 4,
+    cover: "/images/waterproofing/basement-car-park.jpg",
+    coverAlt: "Basement car park with the waterproofed joints in its walls and floor highlighted",
     author: "RPC Engineering Team",
     sections: [
       {
         paragraphs: [
-          "Knowing what happens next makes the whole process calmer. Here is how a typical RPC project moves from an empty plot to a finished building.",
+          "A car park under an office on Avinashi Road, or a cellar under a house in Erode, sits in the ground. Unlike a terrace, it is attacked from outside: by rainwater soaking through the backfill and, after a heavy monsoon, by groundwater pressing on the walls and floor.",
         ],
       },
       {
-        heading: "1. Planning and approvals",
-        paragraphs: ["Site survey, soil test, brief and concept design. Drawings are prepared and submitted for the required approvals."],
+        heading: "Planned before the pour",
+        list: [
+          "An HDPE or bituminous membrane under the raft, with welded or sealed laps",
+          "A crystalline admixture or coating for the retaining walls",
+          "PVC waterstops at every construction joint between pours",
+          "A protection board and a drainage layer before the backfill goes in",
+        ],
       },
       {
-        heading: "2. Foundation",
-        paragraphs: ["Setting out, excavation, footings or raft and plinth beam. This is where the soil report and structural design meet the ground."],
+        heading: "Repairing a basement that already leaks",
+        paragraphs: [
+          "Once a basement is built, its outside face is out of reach, so repairs work from inside. Active leaks at cracks and joints are stopped with polyurethane injection, and the inner faces are treated with crystalline or cementitious systems made to resist water pushing from behind.",
+        ],
       },
       {
-        heading: "3. Structure",
-        paragraphs: ["Columns, beams and slabs rise floor by floor. Each slab is checked for reinforcement and cover before the concrete pour."],
-      },
-      {
-        heading: "4. Masonry and services",
-        paragraphs: ["Walls go up, and electrical conduits and plumbing lines are laid before plastering so nothing is cut out later."],
-      },
-      {
-        heading: "5. Finishes",
-        paragraphs: ["Plaster, waterproofing, flooring, doors and windows, painting and fixtures — the stage where the building starts to feel like yours."],
-      },
-      {
-        heading: "6. Handover",
-        paragraphs: ["Final inspection, snag list, cleaning and handover of documents and warranties."],
-        tip: "Ask for a stage-wise schedule at the start, and link payments to completed stages.",
+        heading: "Keep water away from the walls",
+        paragraphs: [
+          "Drainage outside does half the work: storm-water drains that lead away from the building, paving sloped outwards, and downpipes that discharge well clear of the basement walls.",
+        ],
+        tip: "If you are building with a basement, ask for the waterproofing to be shown on the structural drawings. If it is not on paper, it is rarely done right on site.",
       },
     ],
   },

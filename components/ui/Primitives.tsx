@@ -8,12 +8,13 @@ export function Eyebrow({ children, className }: { children: ReactNode; classNam
   return <p className={cn("eyebrow", className)}>{children}</p>;
 }
 
-/** "(03) — Label" section marker used across the page */
+/** a section's number and name, as on the home sections: "06 —— Performance record" */
 export function SectionMarker({ index, label, className }: { index: string; label: string; className?: string }) {
+  const onDark = /text-paper|text-white/.test(className ?? "");
   return (
-    <div className={cn("eyebrow flex items-center gap-3", className)}>
-      <span className="opacity-50">({index})</span>
-      <span className="h-px w-8 bg-current opacity-30" />
+    <div className={cn("flex items-center gap-3 text-body font-medium", className)}>
+      <span className={cn("font-semibold tabular-nums", onDark ? "text-white/70" : "text-water")}>{index}</span>
+      <span className="h-px w-8 bg-current opacity-35" />
       <span>{label}</span>
     </div>
   );

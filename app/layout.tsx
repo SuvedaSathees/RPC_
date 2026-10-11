@@ -3,17 +3,26 @@ import localFont from "next/font/local";
 import { Nav } from "@/components/navigation/Nav";
 import { QualityProvider } from "@/components/providers/QualityProvider";
 import { SmoothScroll } from "@/components/providers/SmoothScroll";
-import { brand, contact } from "@/lib/content";
+import { brand, contact, services } from "@/lib/content";
+import { serviceSlug } from "@/lib/home/sections";
 import { siteUrl } from "@/lib/site";
 import "./globals.css";
 
+/** headings: Inter Tight, the text's own family, set semibold (under the variable every heading already uses), so the whole site is one family */
 const serif = localFont({
-  src: [
-    { path: "../public/fonts/instrument-serif-latin-400-normal.woff2", weight: "400", style: "normal" },
-    { path: "../public/fonts/instrument-serif-latin-400-italic.woff2", weight: "400", style: "italic" },
-  ],
+  src: "../public/fonts/inter-tight-latin-wght-normal.woff2",
+  weight: "100 900",
   variable: "--font-instrument",
   display: "swap",
+  fallback: ["Segoe UI", "system-ui", "sans-serif"],
+});
+/** the logo's "RPC" keeps its Poppins Bold */
+const logo = localFont({
+  src: "../public/fonts/poppins-latin-700-normal.woff",
+  weight: "700",
+  variable: "--font-logo",
+  display: "swap",
+  fallback: ["Segoe UI", "system-ui", "sans-serif"],
 });
 const sans = localFont({
   src: "../public/fonts/inter-tight-latin-wght-normal.woff2",
@@ -29,22 +38,25 @@ const mono = localFont({
 });
 
 const description =
-  "RPC Constructions is a design-and-build construction and waterproofing company in Erode, Tamil Nadu — residential, commercial and industrial buildings waterproofed from land to roof, leak repair, interiors and project management since 2012.";
+  "RPC Constructions is a waterproofing and construction company in Erode, Tamil Nadu: terrace, bathroom, sump and basement waterproofing, leak repair, and homes, offices and factories built to stay dry across Coimbatore, Tiruppur, Salem and Chennai since 2012.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "RPC Constructions — Building Contractors in Erode, Tamil Nadu",
+    default: "RPC Constructions — Waterproofing & Construction in Erode",
     template: `%s | ${brand.name}`,
   },
   description,
   applicationName: brand.name,
   keywords: [
-    "construction company in Erode",
     "waterproofing contractors Erode",
-    "terrace waterproofing Tamil Nadu",
-    "basement waterproofing Coimbatore",
+    "waterproofing Coimbatore",
+    "terrace waterproofing Erode",
     "bathroom leakage repair Erode",
+    "basement waterproofing Coimbatore",
+    "sump and water tank waterproofing",
+    "roof leak repair Coimbatore",
+    "construction company in Erode",
     "building contractors Erode",
     "civil contractors Tamil Nadu",
     "turnkey house construction",
@@ -63,15 +75,15 @@ export const metadata: Metadata = {
     locale: "en_IN",
     url: "/",
     siteName: brand.name,
-    title: "RPC Constructions — Waterproofed from land to roof",
+    title: "RPC Constructions — Waterproofing in Erode & Coimbatore",
     description,
-    images: [{ url: "/images/og.jpg", width: 1200, height: 630, alt: "A completed RPC Constructions building at dusk" }],
+    images: [{ url: "/images/og-rpc.png", width: 1200, height: 630, alt: "RPC Constructions: waterproofing and construction in Erode, Coimbatore and across Tamil Nadu" }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "RPC Constructions — Waterproofed from land to roof",
+    title: "RPC Constructions — Waterproofing in Erode & Coimbatore",
     description,
-    images: ["/images/og.jpg"],
+    images: ["/images/og-rpc.png"],
   },
   robots: {
     index: true,
@@ -91,7 +103,7 @@ const organizationLd = {
   name: brand.name,
   url: siteUrl,
   logo: `${siteUrl}/logo.png`,
-  image: `${siteUrl}/images/og.jpg`,
+  image: `${siteUrl}/images/og-rpc.png`,
   description,
   foundingDate: "2012",
   email: contact.email,
@@ -107,6 +119,29 @@ const organizationLd = {
   },
   geo: { "@type": "GeoCoordinates", latitude: contact.geo.lat, longitude: contact.geo.lng },
   areaServed: contact.regions.map((r) => ({ "@type": "City", name: r })),
+  hasMap: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(contact.mapQuery)}`,
+  knowsAbout: [
+    "Building construction",
+    "Turnkey house construction",
+    "Commercial construction",
+    "Industrial construction",
+    "Waterproofing",
+    "Terrace waterproofing",
+    "Bathroom waterproofing",
+    "Basement waterproofing",
+    "Water tank waterproofing",
+    "Leak repair",
+    "Interiors",
+    "Project management",
+  ],
+  hasOfferCatalog: {
+    "@type": "OfferCatalog",
+    name: "Construction and waterproofing services",
+    itemListElement: services.map((s) => ({
+      "@type": "Offer",
+      itemOffered: { "@type": "Service", name: s.title, description: s.body, url: `${siteUrl}/services#${serviceSlug(s.title)}` },
+    })),
+  },
   openingHoursSpecification: [
     {
       "@type": "OpeningHoursSpecification",
@@ -129,15 +164,17 @@ const websiteLd = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#eeeae3",
+  themeColor: "#0b2350",
   width: "device-width",
   initialScale: 1,
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en-IN" className={`${serif.variable} ${sans.variable} ${mono.variable}`}>
+    <html lang="en-IN" className={`${serif.variable} ${sans.variable} ${mono.variable} ${logo.variable}`}>
       <body>
+        {/* a refresh opens the page at the top, not where it was left (moving between pages: see SmoothScroll) */}
+        <script dangerouslySetInnerHTML={{ __html: "try{history.scrollRestoration='manual'}catch(e){}" }} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify([organizationLd, websiteLd]) }} />
         <a href="#main" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:bg-ink focus:px-4 focus:py-2 focus:text-paper">
           Skip to content

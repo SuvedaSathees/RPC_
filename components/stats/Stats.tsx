@@ -4,11 +4,11 @@ import { useEffect, useRef, useState } from "react";
 import { SectionMarker } from "@/components/ui/Primitives";
 import { stats } from "@/lib/content";
 
-const NOTES = ["Built & waterproofed", "Building across Tamil Nadu", "Families & businesses served", "Towns and cities"];
+const NOTES = ["Built & waterproofed", "Working from Erode", "Homes, firms & factories", "Erode to Chennai"];
 
 /**
- * Performance record — a compact band (about 40% of the viewport) with the
- * four headline figures counting up as it enters.
+ * Performance record: a compact band (about 40% of the viewport) on sand,
+ * with the four headline figures counting up as it enters.
  */
 export function Stats({ index = "06" }: { index?: string }) {
   const root = useRef<HTMLElement>(null);
@@ -42,30 +42,23 @@ export function Stats({ index = "06" }: { index?: string }) {
   }, []);
 
   return (
-    <section
-      ref={root}
-      aria-label="Performance record"
-      className="relative z-10 flex items-center overflow-hidden bg-night py-12 text-paper md:min-h-[40svh] md:py-16"
-    >
-      <div aria-hidden className="pointer-events-none absolute -right-40 top-1/2 h-[28rem] w-[40rem] -translate-y-1/2 rounded-full bg-rpc/15 blur-[120px]" />
-      <div className="gutter relative grid w-full gap-6 md:gap-10 lg:grid-cols-12 lg:items-center">
+    <section ref={root} aria-label="Performance record" className="relative z-10 flex items-center bg-paper py-12 text-ink md:min-h-[40svh] md:py-16">
+      <div className="gutter relative mx-auto grid w-full max-w-[1600px] gap-6 md:gap-10 lg:grid-cols-12 lg:items-center">
         <div className="lg:col-span-4">
-          <SectionMarker index={index} label="Performance record" className="text-paper/70" />
-          <h2 className="display mt-4 text-[2.3rem] leading-[1] md:mt-5 md:text-5xl">
-            Built on scale. <em className="text-paper/80">Proven by longevity.</em>
-          </h2>
+          <SectionMarker index={index} label="Performance record" className="text-mute [&>span:first-child]:text-rpc" />
+          <h2 className="display mt-4 text-title md:mt-5">One dry building at a time.</h2>
         </div>
-        <dl className="grid grid-cols-2 gap-px overflow-hidden rounded-xl bg-white/10 md:rounded-sm lg:col-span-8 lg:grid-cols-4">
+        <dl className="grid grid-cols-2 gap-px overflow-hidden rounded-[16px] bg-[rgba(18,34,59,0.12)] shadow-[inset_0_0_0_1px_rgba(18,34,59,0.12)] lg:col-span-8 lg:grid-cols-4">
           {stats.map((s, i) => {
             const v = typeof s.value === "number" ? Math.round(s.value * k) : s.value;
             return (
-              <div key={s.label} className="flex flex-col bg-night px-5 py-6 md:px-7 md:py-7">
-                <dt className="eyebrow order-2 mt-3 text-paper/90 md:mt-4">{s.label}</dt>
-                <dd className="order-1 display text-5xl leading-none tabular-nums md:text-7xl">
+              <div key={s.label} className="flex flex-col bg-card px-5 py-6 md:px-7 md:py-7">
+                <dt className="order-2 mt-3 text-body font-semibold md:mt-4">{s.label}</dt>
+                <dd className="order-1 display text-title leading-none tabular-nums text-night">
                   {v}
-                  <span className="text-[0.55em] text-rpc">{s.suffix}</span>
+                  <span className="text-rpc">{s.suffix}</span>
                 </dd>
-                <dd className="order-3 mt-1 text-[11.5px] leading-snug text-paper/50 md:mt-1.5 md:text-xs">{NOTES[i]}</dd>
+                <dd className="order-3 mt-1 text-body leading-snug text-mute md:mt-1.5">{NOTES[i]}</dd>
               </div>
             );
           })}

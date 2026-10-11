@@ -1,45 +1,46 @@
 import type { Metadata } from "next";
-import { BlogIndex } from "@/components/blog/BlogCards";
 import { Footer } from "@/components/contact/Footer";
-import { PageHeader } from "@/components/transitions/PageHeader";
+import { PageScripts } from "@/components/pages/PageScripts";
 import { blogPosts } from "@/lib/blog";
-import { siteUrl } from "@/lib/site";
+import { contact } from "@/lib/content";
+import { BLOG_CSS, blogIndexMarkup } from "@/lib/pages/articles";
+import { KIT_CSS } from "@/lib/pages/kit";
+import { ldJson, pageMeta, siteUrl } from "@/lib/site";
 
-export const metadata: Metadata = {
-  title: "Blog — Construction Advice for Homes, Offices & Factories in Tamil Nadu",
+export const metadata: Metadata = pageMeta({
+  title: "Waterproofing & Leak Repair Advice",
   description:
-    "Practical advice from RPC Constructions' engineers on planning, budgeting, foundations, waterproofing and industrial buildings in Erode and across Tamil Nadu.",
-  alternates: { canonical: "/blog" },
-  openGraph: { url: "/blog" },
-};
+    "Guides from RPC Constructions' engineers on terrace, bathroom, sump and basement waterproofing, leak repair and pre-monsoon checks for buildings in Erode and Coimbatore.",
+  path: "/blog",
+});
 
-const blogLd = {
-  "@context": "https://schema.org",
-  "@type": "Blog",
-  name: "RPC Constructions Blog",
-  url: `${siteUrl}/blog`,
-  blogPost: blogPosts.map((p) => ({
-    "@type": "BlogPosting",
-    headline: p.title,
-    url: `${siteUrl}/blog/${p.slug}`,
-    datePublished: p.date,
-    image: `${siteUrl}${p.cover}`,
-  })),
-};
+const ld = [
+  {
+    "@context": "https://schema.org",
+    "@type": "Blog",
+    name: "RPC Constructions Blog",
+    url: `${siteUrl}/blog`,
+    publisher: { "@id": `${siteUrl}/#organization` },
+    blogPost: blogPosts.map((p) => ({
+      "@type": "BlogPosting",
+      headline: p.title,
+      description: p.excerpt,
+      url: `${siteUrl}/blog/${p.slug}`,
+      datePublished: p.date,
+      image: `${siteUrl}/images/og-rpc.png`,
+    })),
+  },
+];
 
+/** Blog: a masthead, topics to narrow the list, the latest article as a dark feature and the rest as cards, then the close */
 export default function BlogPage() {
   return (
     <>
-      <main id="main" className="bg-paper">
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(blogLd) }} />
-        <PageHeader
-          index="05"
-          label="Blog"
-          variant="plain"
-          lines={["Notes from", <em key="s">the site.</em>]}
-          intro="Practical advice from our engineers on planning, building and looking after homes, offices and factories in Tamil Nadu."
-        />
-        <BlogIndex />
+      <main id="main" className="pg">
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: ldJson(ld) }} />
+        <style dangerouslySetInnerHTML={{ __html: KIT_CSS + BLOG_CSS }} />
+        <div dangerouslySetInnerHTML={{ __html: blogIndexMarkup({ posts: blogPosts, contact }) }} />
+        <PageScripts root="main" kind="blog" />
       </main>
       <Footer />
     </>

@@ -135,14 +135,14 @@ export function Preloader() {
 
           {/* the cube mark, floating and turning while the film loads */}
           <motion.div
-            className="relative flex flex-col items-center gap-8"
+            className="pre-center relative flex flex-col items-center gap-8"
             exit={{ opacity: 0, scale: 0.92, y: -24 }}
             transition={{ duration: 0.55, ease }}
           >
-            <div className="relative grid h-44 w-44 place-items-center md:h-52 md:w-52" style={{ perspective: "900px" }}>
+            <div className="pre-mark-box relative grid h-44 w-44 place-items-center md:h-52 md:w-52" style={{ perspective: "900px" }}>
               <div className="pre-float">
                 <div className="pre-turn">
-                  <LogoMark className="h-32 w-32 md:h-40 md:w-40" />
+                  <LogoMark className="pre-mark h-32 w-32 md:h-40 md:w-40" />
                 </div>
               </div>
             </div>
@@ -168,7 +168,7 @@ export function Preloader() {
           <motion.div className="relative" exit={{ opacity: 0, y: 24 }} transition={{ duration: 0.5, ease }}>
             <div className="flex items-end justify-between">
               <span className="eyebrow opacity-50">Loading the film</span>
-              <span ref={num} className="display text-7xl tabular-nums md:text-8xl">
+              <span ref={num} className="pre-count display text-7xl tabular-nums md:text-8xl">
                 000
               </span>
             </div>

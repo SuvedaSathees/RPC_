@@ -1,77 +1,92 @@
 "use client";
 import { AnimatePresence, motion } from "framer-motion";
-import { ArrowUpRight, Mail, Phone } from "lucide-react";
+import { ArrowUpRight, Clock, Mail, Phone } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { brand, contact, nav } from "@/lib/content";
 import { sceneState } from "@/lib/three/store";
 import { useLenis } from "@/components/providers/SmoothScroll";
 import { Wordmark } from "./Logo";
 
 const ease = [0.22, 1, 0.36, 1] as const;
+/** the pages in the bar; Contact has its own button at the end of it */
+const links = nav.filter((n) => n.href !== "/contact");
+const tel = `tel:${contact.phone.replace(/[^0-9+]/g, "")}`;
+/** the page's sand, for the pill behind the page you are on */
+const SAND = "#ece6da";
+/** pages that open on a dark picture, where the logo's name is drawn in white */
+const DARK_TOP = new Set(["/", "/classic"]);
+/** the bars' material: the logo's dark blue, a little lighter at the top, with a fine light edge and a soft shadow */
+const BAR = {
+  background: "linear-gradient(180deg, rgba(19,49,108,0.94), rgba(11,35,80,0.94) 60%)",
+  WebkitBackdropFilter: "blur(14px) saturate(150%)",
+  backdropFilter: "blur(14px) saturate(150%)",
+  boxShadow: "inset 0 1px 0 rgba(255,255,255,0.12), inset 0 0 0 1px rgba(255,255,255,0.06), 0 18px 36px -18px rgba(4,12,30,0.7), 0 3px 8px -3px rgba(4,12,30,0.3)",
+} as const;
+/** the header's layout and shapes (kept here rather than in utility classes, so they never depend on a stylesheet rebuild) */
+const NAV_CSS = `
+.rn-sp,.rn-bar,.rn-end{display:none}
+.rn-mini{display:flex;align-items:center;gap:4px;height:48px;padding:0 6px;border-radius:999px}
+.rn-sq{display:grid;place-items:center;width:36px;height:36px;border-radius:999px}
+.rn-link{display:inline-flex;align-items:center;height:42px;padding:0 11px;border-radius:999px;letter-spacing:.005em}
+.rn-pill{border-radius:999px;box-shadow:inset 0 -1px 0 rgba(18,34,59,.1),0 1px 2px rgba(4,12,30,.25)}
+.rn-cta{display:inline-flex;align-items:center;gap:12px;height:52px;padding:0 6px 0 22px;border-radius:999px;box-shadow:inset 0 1px 0 rgba(255,255,255,.12),inset 0 0 0 1px rgba(255,255,255,.06),0 18px 36px -18px rgba(4,12,30,.7),0 3px 8px -3px rgba(4,12,30,.3)}
+.rn-ctai{display:grid;place-items:center;width:40px;height:40px;border-radius:999px}
+.rn-cta--sm{display:none;gap:8px;height:36px;padding:0 4px 0 14px;box-shadow:none}
+.rn-cta--sm .rn-ctai{width:28px;height:28px}
+@media (min-width:768px){.rn-cta--sm{display:inline-flex}}
+@media (min-width:1024px){
+  .rn-in{display:grid;grid-template-columns:minmax(13rem,1fr) auto minmax(0,1fr);align-items:center;padding-top:12px}
+  .rn-sp{display:block}
+  .rn-mini{display:none}
+  .rn-bar{display:flex;align-items:center;height:52px;padding:0 5px;border-radius:999px}
+  .rn-end{display:flex;justify-content:flex-end}
+  .rn-logo{height:52px}
+}
+@media (min-width:1280px){.rn-link{padding:0 15px}}
+`;
 
 /**
- * Floating navigation: a single compact glass bar, centred and capped in
- * width — logo left, links centre, call to action right. No rule underneath.
+ * The header. The logo sits on the page itself, at its top left, with no box
+ * round it, and scrolls away with the page (in white on the home page's dark
+ * opening, in the logo's dark blue everywhere else). From 1024px the pages are
+ * in a rounded pill of the logo's dark blue centred at the top, and Contact is
+ * a light blue pill at the right; both float with a gap above them and stay in
+ * view. The page you are on sits in a sand pill, which slides across to the
+ * next page when you move. Phones and tablets get the logo, and a small bar at
+ * the right with the call button, Contact (from 768px) and the menu.
  *
- * On the home page the whole nav stays out of the way while the construction
+ * On the classic home the header stays out of the way while the construction
  * film plays and arrives together with the closing "RPC Constructions" reveal.
  */
 export function Nav() {
   const [open, setOpen] = useState(false);
   const [heroNavVisible, setHeroNavVisible] = useState(() => sceneState.heroNavVisible || false);
   const [pastHero, setPastHero] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
-  // what the bar is floating over: light paper sections switch it to dark type
-  const [light, setLight] = useState(false);
   const pathname = usePathname();
   const lenis = useLenis();
-  const isHome = pathname === "/";
+  const filmHome = pathname === "/classic";
 
   useEffect(() => setOpen(false), [pathname]);
 
-  useEffect(() => {
-    let raf = 0;
-    const sample = () => {
-      raf = 0;
-      setScrolled(window.scrollY > 40);
-      // look at what sits just under the bar (ignoring the header itself)
-      const y = 34;
-      const xs = [window.innerWidth * 0.25, window.innerWidth * 0.5, window.innerWidth * 0.75];
-      let lightVotes = 0;
-      for (const x of xs) {
-        const stack = document.elementsFromPoint(x, y).filter((el) => !el.closest("[data-site-nav]"));
-        let tone: "light" | "dark" = "dark";
-        for (const el of stack) {
-          const tag = el.tagName;
-          if (tag === "IMG" || tag === "CANVAS" || tag === "VIDEO" || tag === "IFRAME") break;
-          const bg = getComputedStyle(el).backgroundColor;
-          const m = bg.match(/rgba?\(([^)]+)\)/);
-          if (!m) continue;
-          const [r, g, b, a = "1"] = m[1]!.split(",").map((v) => v.trim());
-          if (Number(a) < 0.5) continue;
-          const lum = (0.2126 * Number(r) + 0.7152 * Number(g) + 0.0722 * Number(b)) / 255;
-          tone = lum > 0.6 ? "light" : "dark";
-          break;
-        }
-        if (tone === "light") lightVotes++;
-      }
-      setLight(lightVotes >= 2);
-    };
-    const onScroll = () => {
-      if (!raf) raf = requestAnimationFrame(sample);
-    };
-    sample();
-    const id = window.setInterval(onScroll, 600);
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll);
-    return () => {
-      window.clearInterval(id);
-      if (raf) cancelAnimationFrame(raf);
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onScroll);
-    };
+  // moving to another page, the sand pill slides across from the page you left (measured inside the bar, so the page's scroll never moves it)
+  const row = useRef<HTMLDivElement>(null);
+  const lastPill = useRef<{ left: number; width: number } | null>(null);
+  useLayoutEffect(() => {
+    const cur = row.current?.querySelector<HTMLElement>('a[aria-current="page"]');
+    const pill = cur?.querySelector<HTMLElement>("[data-pill]");
+    const from = lastPill.current;
+    lastPill.current = cur ? { left: cur.offsetLeft, width: cur.offsetWidth } : null;
+    if (!cur || !pill || !from || !pill.animate || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (from.left === cur.offsetLeft) return;
+    pill.animate(
+      [
+        { left: `${from.left - cur.offsetLeft}px`, width: `${from.width}px` },
+        { left: "0px", width: `${cur.offsetWidth}px` },
+      ],
+      { duration: 460, easing: "cubic-bezier(0.3, 1.2, 0.5, 1)" },
+    );
   }, [pathname]);
 
   useEffect(() => {
@@ -81,7 +96,7 @@ export function Nav() {
   }, [open, lenis]);
 
   useEffect(() => {
-    if (!isHome) return;
+    if (!filmHome) return;
     const check = () => {
       const hero = document.querySelector("section[aria-label*='RPC Constructions']");
       setPastHero(hero ? hero.getBoundingClientRect().bottom <= 120 : window.scrollY > window.innerHeight * 4);
@@ -97,101 +112,116 @@ export function Nav() {
       window.removeEventListener("scroll", check);
       window.removeEventListener("rpc:hero-nav", onHeroNav);
     };
-  }, [isHome]);
+  }, [filmHome]);
 
   if (pathname?.startsWith("/studio")) return null;
 
-  const visible = open || !isHome || pastHero || heroNavVisible;
-  const solid = scrolled && !open; // once scrolled, the nav becomes a frosted pill
-  const dark = light && !open; // dark type over light sections; the pill follows the section under it
+  const visible = open || !filmHome || pastHero || heroNavVisible;
+  const darkTop = DARK_TOP.has(pathname ?? "");
   const isActive = (href: string) => (href === "/" ? pathname === "/" : Boolean(pathname?.startsWith(href)));
+  const focus = "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-water-2";
+
+  /** a page in the bar, in plain text; the page you are on sits in the sand pill */
+  const pageLink = (n: (typeof links)[number]) => {
+    const active = isActive(n.href);
+    return (
+      <Link
+        key={n.href}
+        href={n.href}
+        tabIndex={visible ? 0 : -1}
+        aria-current={active ? "page" : undefined}
+        className={`rn-link relative text-body font-medium leading-none transition-colors duration-300 ${focus} ${
+          active ? "text-night" : "text-white/75 hover:bg-white/[0.07] hover:text-white"
+        }`}
+      >
+        {active && <span data-pill aria-hidden className="rn-pill absolute inset-y-0 left-0 w-full" style={{ background: SAND }} />}
+        <span className="relative">{n.label}</span>
+      </Link>
+    );
+  };
 
   return (
     <>
+      <style dangerouslySetInnerHTML={{ __html: NAV_CSS }} />
+      {/* the logo, on the page itself: it scrolls away with the page */}
+      <div className="pointer-events-none absolute inset-x-0 top-0 z-30 transition-opacity duration-700" style={{ opacity: visible ? 1 : 0 }} aria-hidden={!visible}>
+        {/* level with the middle of the floating bar */}
+        <div className="gutter mx-auto max-w-[1600px] pt-2 lg:pt-3">
+          <Link
+            href="/"
+            aria-label={`${brand.name} — home`}
+            tabIndex={visible ? 0 : -1}
+            className={`rn-logo pointer-events-auto inline-flex h-12 items-center rounded-[12px] ${darkTop ? "text-white" : "text-night"} ${focus}`}
+          >
+            <span className="flex lg:hidden">
+              <Wordmark size="sm" tile={darkTop} />
+            </span>
+            <span className="hidden lg:flex">
+              <Wordmark size="md" tile={darkTop} />
+            </span>
+          </Link>
+        </div>
+      </div>
+
       <header
-        className={`gutter pointer-events-none fixed inset-x-0 top-0 z-50 flex transition-[transform,opacity,padding] duration-700 ease-[var(--ease-film)] ${solid ? "pt-2.5" : "pt-3 md:pt-5"}`}
+        className="pointer-events-none fixed inset-x-0 top-0 z-50 text-white transition-[transform,opacity] duration-700 ease-[var(--ease-film)]"
         style={{ transform: visible ? "none" : "translateY(-140%)", opacity: visible ? 1 : 0 }}
         aria-hidden={!visible}
         data-site-nav
-        data-nav-tone={dark ? "light" : "dark"}
+        data-nav-tone="dark"
       >
-        {/* logo in the left corner, links centred, call to action in the right corner */}
-        <div
-          style={{ maxWidth: solid ? 1080 : 4000 }}
-          className={`pointer-events-auto relative mx-auto flex w-full items-center justify-between gap-4 rounded-full border transition-all duration-700 ease-[var(--ease-film)] ${
-            solid
-              ? dark
-                ? "h-[54px] border-ink/10 bg-[#f4f1ec]/90 pl-3 pr-1.5 text-ink shadow-[0_18px_40px_-22px_rgba(17,19,22,0.45)] backdrop-blur-xl backdrop-saturate-150"
-                : "h-[54px] border-white/10 bg-[#0b111c]/55 pl-3 pr-1.5 text-white shadow-[0_18px_40px_-22px_rgba(0,0,0,0.7)] backdrop-blur-xl backdrop-saturate-150"
-              : `h-16 border-transparent px-0 ${dark ? "text-ink" : "text-white [text-shadow:0_1px_10px_rgba(0,0,0,0.35)]"}`
-          }`}
-        >
-          <Link href="/" aria-label={`${brand.name} — home`} tabIndex={visible ? 0 : -1} className="-ml-1 shrink-0 rounded-full py-1 pl-1 pr-2">
-            <Wordmark size="sm" />
-          </Link>
-
-          <nav aria-label="Primary" className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-1 lg:flex">
-            {nav.map((n) => {
-              const active = isActive(n.href);
-              return (
-                <Link
-                  key={n.href}
-                  href={n.href}
-                  tabIndex={visible ? 0 : -1}
-                  aria-current={active ? "page" : undefined}
-                  className={`group relative rounded-full px-3.5 py-1.5 text-[13.5px] font-medium tracking-[0.01em] transition-all duration-300 ${
-                    solid
-                      ? dark
-                        ? active
-                          ? "bg-ink text-paper"
-                          : "text-ink/70 hover:bg-ink/[0.06] hover:text-ink"
-                        : active
-                          ? "bg-white text-ink"
-                          : "text-white/70 hover:bg-white/10 hover:text-white"
-                      : active
-                        ? "opacity-100"
-                        : "opacity-70 hover:opacity-100"
-                  }`}
-                >
-                  {n.label}
-                  <span
-                    aria-hidden
-                    className={`absolute -bottom-0.5 left-1/2 h-[3px] w-[3px] -translate-x-1/2 rounded-full bg-[#5b8cff] transition-opacity duration-300 ${
-                      solid ? "opacity-0" : active ? "opacity-100" : "opacity-0 group-hover:opacity-60"
-                    }`}
-                  />
-                </Link>
-              );
-            })}
+        <div className="rn-in gutter mx-auto flex max-w-[1600px] justify-end pt-2">
+          {/* from 1024px: room for the logo, the pages in a pill centred at the top, and Contact at the right */}
+          <span aria-hidden className="rn-sp" />
+          <nav aria-label="Primary" className="rn-bar pointer-events-auto" style={BAR}>
+            <div ref={row} className="relative flex items-center gap-0.5">
+              {links.map((n) => pageLink(n))}
+            </div>
           </nav>
-
-          <div className="flex shrink-0 items-center gap-2">
+          <div className="rn-end">
             <Link
-              href="/contact#enquiry"
+              href="/contact"
               tabIndex={visible ? 0 : -1}
-              className={`group hidden h-10 items-center gap-2 rounded-full pl-4 pr-1 text-[13px] font-semibold transition-colors duration-300 [text-shadow:none] md:inline-flex ${
-                dark ? "bg-ink text-white hover:bg-rpc" : "bg-white text-ink hover:bg-[#eef2ff]"
-              }`}
+              aria-current={isActive("/contact") ? "page" : undefined}
+              className={`rn-cta group pointer-events-auto bg-night text-body font-semibold text-white transition-colors duration-300 hover:bg-rpc ${focus}`}
             >
-              <span>Start a project</span>
-              <span className={`grid h-8 w-8 place-items-center rounded-full transition-transform duration-300 group-hover:rotate-45 ${dark ? "bg-white text-ink" : "bg-ink text-white"}`}>
+              Contact
+              <span className="rn-ctai bg-card text-night transition-transform duration-300 group-hover:rotate-45">
+                <ArrowUpRight size={16} strokeWidth={1.8} />
+              </span>
+            </Link>
+          </div>
+
+          {/* phones and tablets: a small bar at the right with the call button, Contact (from 768px) and the menu */}
+          <nav aria-label="Primary" className="rn-mini pointer-events-auto" style={BAR}>
+            <a href={tel} tabIndex={visible ? 0 : -1} aria-label={`Call ${contact.phone}`} className={`rn-sq bg-white/[0.08] text-white transition-colors hover:bg-white/[0.16] ${focus}`}>
+              <Phone size={16} aria-hidden />
+            </a>
+            <Link
+              href="/contact"
+              tabIndex={visible ? 0 : -1}
+              aria-current={isActive("/contact") ? "page" : undefined}
+              className={`rn-cta rn-cta--sm group bg-card text-body font-semibold text-night transition-colors duration-300 hover:bg-paper ${focus}`}
+            >
+              Contact
+              <span className="rn-ctai bg-night text-white transition-transform duration-300 group-hover:rotate-45">
                 <ArrowUpRight size={14} strokeWidth={1.8} />
               </span>
             </Link>
             <button
               type="button"
-              className={`flex h-10 w-10 items-center justify-center rounded-full transition-colors lg:hidden ${dark ? "bg-ink/10 hover:bg-ink/20" : "bg-white/15 hover:bg-white/25"}`}
+              className={`rn-sq transition-colors ${focus} ${open ? "bg-white/15" : "bg-white/[0.08] hover:bg-white/[0.16]"}`}
               aria-expanded={open}
               aria-controls="mobile-menu"
               aria-label={open ? "Close menu" : "Open menu"}
               onClick={() => setOpen((o) => !o)}
             >
-              <span className="relative block h-2.5 w-5">
-                <span className="absolute left-0 top-0 h-[1.5px] w-full rounded bg-current transition-transform duration-500" style={{ transform: open ? "translateY(4.5px) rotate(45deg)" : "none" }} />
-                <span className="absolute bottom-0 left-0 h-[1.5px] w-full rounded bg-current transition-transform duration-500" style={{ transform: open ? "translateY(-4.5px) rotate(-45deg)" : "none" }} />
+              <span className="relative block h-3 w-5">
+                <span className="absolute left-0 top-0 h-[2px] w-full rounded bg-current transition-transform duration-500" style={{ transform: open ? "translateY(5px) rotate(45deg)" : "none" }} />
+                <span className="absolute bottom-0 left-0 h-[2px] w-full rounded bg-current transition-transform duration-500" style={{ transform: open ? "translateY(-5px) rotate(-45deg)" : "none" }} />
               </span>
             </button>
-          </div>
+          </nav>
         </div>
       </header>
 
@@ -202,35 +232,45 @@ export function Nav() {
             role="dialog"
             aria-modal="true"
             aria-label="Menu"
-            className="gutter fixed inset-0 z-40 flex flex-col bg-night pb-10 pt-32 text-paper lg:hidden"
+            className="gutter fixed inset-0 z-40 flex flex-col overflow-y-auto bg-night pb-8 pt-24 text-white lg:hidden"
             initial={{ clipPath: "inset(0 0 100% 0)" }}
             animate={{ clipPath: "inset(0 0 0% 0)" }}
             exit={{ clipPath: "inset(0 0 100% 0)" }}
-            transition={{ duration: 0.9, ease }}
+            transition={{ duration: 0.8, ease }}
           >
-            <nav aria-label="Mobile" className="flex flex-1 flex-col justify-center gap-1">
-              {nav.map((n, i) => (
-                <div key={n.href} className="overflow-hidden">
-                  <motion.div initial={{ y: "105%" }} animate={{ y: 0 }} exit={{ y: "105%" }} transition={{ duration: 0.9, ease, delay: 0.15 + i * 0.06 }}>
-                    <Link href={n.href} className="display flex items-baseline gap-4 py-1 text-[13vw] sm:text-[9vw]" onClick={() => setOpen(false)}>
-                      <span className="eyebrow !text-[10px] opacity-50">0{i + 1}</span>
-                      <span className={isActive(n.href) ? "italic" : ""}>{n.label}</span>
+            <Link href="/" aria-label={`${brand.name} — home`} onClick={() => setOpen(false)} className={`absolute left-[var(--gutter)] top-2 inline-flex h-12 items-center rounded-[12px] ${focus}`}>
+              <Wordmark size="sm" />
+            </Link>
+            <nav aria-label="Mobile" className="flex flex-1 flex-col justify-center">
+              {[...links, { label: "Contact", href: "/contact" }].map((n, i) => (
+                <div key={n.href} className="overflow-hidden border-b border-white/10">
+                  <motion.div initial={{ y: "105%" }} animate={{ y: 0 }} exit={{ y: "105%" }} transition={{ duration: 0.8, ease, delay: 0.12 + i * 0.05 }}>
+                    <Link
+                      href={n.href}
+                      aria-current={isActive(n.href) ? "page" : undefined}
+                      className="flex items-center justify-between py-3.5 text-sub font-semibold"
+                      style={{ fontFamily: "var(--font-display)" }}
+                      onClick={() => setOpen(false)}
+                    >
+                      <span className={isActive(n.href) ? "text-water-2" : ""}>{n.label}</span>
+                      <ArrowUpRight size={18} className="opacity-50" aria-hidden />
                     </Link>
                   </motion.div>
                 </div>
               ))}
             </nav>
-            <Link
-              href="/contact#enquiry"
-              onClick={() => setOpen(false)}
-              className="mb-6 inline-flex h-12 items-center justify-between gap-3 self-start rounded-full bg-paper pl-5 pr-1.5 text-sm font-semibold text-ink"
-            >
-              Start a project
-              <span className="grid h-9 w-9 place-items-center rounded-full bg-ink text-paper"><ArrowUpRight size={15} /></span>
-            </Link>
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ delay: 0.5, duration: 0.6 }} className="grid gap-4 border-t border-white/15 pt-6 text-sm sm:grid-cols-2">
-              <a href={`mailto:${contact.email}`} className="flex items-center gap-3"><Mail size={16} className="opacity-60" />{contact.email}</a>
-              <a href={`tel:${contact.phone.replace(/[^0-9+]/g, "")}`} className="flex items-center gap-3"><Phone size={16} className="opacity-60" />{contact.phone}</a>
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ delay: 0.45, duration: 0.5 }} className="mt-8 grid gap-3 text-body">
+              <Link
+                href="/contact"
+                onClick={() => setOpen(false)}
+                className="inline-flex h-12 items-center justify-between rounded-[10px] bg-water-2 pl-5 pr-1.5 font-semibold text-night"
+              >
+                Book a free inspection
+                <span className="grid h-9 w-9 place-items-center rounded-[8px] bg-night text-white"><ArrowUpRight size={16} /></span>
+              </Link>
+              <a href={tel} className="flex items-center gap-3 text-white/85"><Phone size={16} className="text-water-2" />{contact.phone}</a>
+              <a href={`mailto:${contact.email}`} className="flex items-center gap-3 text-white/85"><Mail size={16} className="text-water-2" />{contact.email}</a>
+              <p className="flex items-center gap-3 text-white/60"><Clock size={16} className="text-water-2" />{contact.hours}</p>
             </motion.div>
           </motion.div>
         )}

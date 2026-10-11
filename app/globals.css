@@ -2,18 +2,32 @@
 
 /* ───────────────────────── RPC design tokens ───────────────────────── */
 @theme {
-  --color-paper: #eeeae3;
-  --color-paper-2: #e3ddd2;
-  --color-stone: #cfc7ba;
-  --color-ink: #111316;
-  --color-ink-2: #2a2d32;
-  --color-mute: #77746e;
-  --color-rpc: #27559e;
+  /* dry sand and stone grounds (no white anywhere), the logo's deep blue for the
+     nav bar and footer only, navy ink, the logo blue for actions, water teal for
+     water, and an amber kept for small highlights */
+  --color-paper: #ece6da;
+  --color-paper-2: #e2d9c9;
+  --color-card: #f5f0e6;
+  --color-stone: #d3c8b5;
+  --color-ink: #12223b;
+  --color-ink-2: #2a3a52;
+  --color-mute: #5e6472;
+  --color-rpc: #2756a0;
   --color-rpc-deep: #0b2350;
-  --color-night: #0d1420;
+  --color-night: #0b2350;
+  --color-water: #0b6e80;
+  --color-water-2: #f5f0e6;
+  --color-amber: #e8a215;
   --color-bronze: #8a6a4c;
 
-  --font-serif: var(--font-instrument), "Times New Roman", serif;
+  /* three sizes only: a title, a subtitle and the paragraph size */
+  --text-title: clamp(1.9rem, 1.3rem + 1.9vw, 3rem);
+  --text-sub: clamp(1.2rem, 1.08rem + 0.4vw, 1.5rem);
+  --text-body: 1rem;
+
+  /* one family for the whole site: Inter Tight, semibold for headings (loaded under the old serif's variable name, so every heading takes it) */
+  --font-display: var(--font-instrument), "Segoe UI", system-ui, sans-serif;
+  --font-serif: var(--font-instrument), "Segoe UI", system-ui, sans-serif;
   --font-sans: var(--font-inter-tight), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, monospace;
 
@@ -25,6 +39,19 @@
   :root {
     color-scheme: light;
     --gutter: clamp(1rem, 3.2vw, 3rem);
+    /* the whole site uses three type sizes */
+    --fs-title: clamp(1.9rem, 1.3rem + 1.9vw, 3rem);
+    --fs-sub: clamp(1.2rem, 1.08rem + 0.4vw, 1.5rem);
+    --fs-body: 1rem;
+    /* room at the top for the big logo (on the page) and the small floating bar of pages: 60px on phones and tablets, 64px from 1024px */
+    --nav-h: 60px;
+    --nav-bar: 60px;
+  }
+  @media (min-width: 1024px) {
+    :root {
+      --nav-h: 64px;
+      --nav-bar: 64px;
+    }
   }
   html {
     -webkit-font-smoothing: antialiased;
@@ -41,6 +68,10 @@
   .lenis.lenis-stopped {
     overflow: hidden;
   }
+  html {
+    /* keep room for the scrollbar, so pausing scroll (loading screens, the menu) never shifts the page */
+    scrollbar-gutter: stable;
+  }
   body {
     background: var(--color-paper);
     color: var(--color-ink);
@@ -50,7 +81,7 @@
   }
   ::selection {
     background: var(--color-rpc);
-    color: #fff;
+    color: #f5f0e6;
   }
   :focus-visible {
     outline: 1px solid currentColor;
@@ -58,23 +89,38 @@
   }
 }
 
+/* the leak helper's button: a ring goes out from the drop a few times when it first comes in */
+@keyframes leak-ping {
+  0% { transform: scale(1); opacity: 0.75; }
+  70%, 100% { transform: scale(1.6); opacity: 0; }
+}
+
+/* the missing page's drop, falling through the gap in the pipe */
+@keyframes nf-drop {
+  0% { transform: translateY(-12px) scale(0.55); opacity: 0; }
+  14% { transform: translateY(0) scale(1); opacity: 1; }
+  78% { transform: translateY(68px) scale(1); opacity: 1; }
+  100% { transform: translateY(76px) scale(1.15, 0.55); opacity: 0; }
+}
+
 @layer components {
+  /* the side margin the nav bar, every page and the footer line up with */
   .gutter {
     padding-inline: var(--gutter);
   }
   .display {
-    font-family: var(--font-serif);
-    font-weight: 400;
-    line-height: 0.9;
-    letter-spacing: -0.025em;
+    font-family: var(--font-display);
+    font-weight: 600;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
   }
   .display em {
-    font-style: italic;
-    letter-spacing: -0.035em;
+    font-style: normal;
+    color: var(--color-rpc);
   }
   .eyebrow {
     font-family: var(--font-mono);
-    font-size: 10.5px;
+    font-size: var(--fs-body);
     line-height: 1.4;
     letter-spacing: 0.22em;
     text-transform: uppercase;
@@ -96,7 +142,7 @@
   /* 3D labels (drei <Html>) */
   .bp-label {
     font-family: var(--font-mono);
-    font-size: 10px;
+    font-size: var(--fs-body);
     letter-spacing: 0.18em;
     color: #eaf0ff;
     white-space: nowrap;
@@ -106,7 +152,7 @@
     display: flex;
     align-items: center;
     gap: 10px;
-    color: #111316;
+    color: #101a22;
     transform: translateY(-50%);
   }
   .anatomy-line {
@@ -135,7 +181,7 @@
     height: 3.25rem;
     padding: 0 1.4rem 0 1.6rem;
     border-radius: 999px;
-    font-size: 0.8rem;
+    font-size: var(--fs-body);
     letter-spacing: 0.08em;
     text-transform: uppercase;
     transition: background-color 0.5s var(--ease-film), color 0.5s var(--ease-film), border-color 0.5s var(--ease-film);
@@ -145,7 +191,7 @@
     color: var(--color-paper);
   }
   .btn-solid:hover {
-    background: var(--color-rpc);
+    background: var(--color-water);
   }
   .btn-light {
     background: var(--color-paper);
@@ -249,7 +295,37 @@
   100% { transform: translateY(200%); }
 }
 
+/* ───────────── short screens (a phone turned sideways, under ~520px tall) ─────────────
+   Full-screen scroll sections keep their layout but tighten spacing and type so nothing
+   falls off the bottom of the screen. */
+@media (max-height: 520px) {
+  .hero-intro { bottom: 9svh !important; }
+  .hero-intro h1 { font-size: var(--fs-title) !important; }
+  .hero-cue { display: none !important; }
+  .hero-caption { bottom: 1rem !important; }
+  .hero-caption h2 { font-size: var(--fs-title) !important; }
+  .hero-caption p:last-child { display: none; }
+  .hero-reveal { padding-top: 4.5rem !important; padding-bottom: 1rem !important; }
+  .hero-reveal h2 { font-size: var(--fs-title) !important; }
+  .hero-reveal p { margin-top: 0.75rem !important; }
+  .hero-reveal .mt-7 { margin-top: 1rem !important; }
+  [data-wp-overlay] { padding-top: 4.5rem !important; padding-bottom: 1rem !important; }
+  [data-wp-overlay] h2 { font-size: var(--fs-title) !important; }
+  [data-wp-overlay] p { margin-top: 0.75rem !important; }
+  .wp-cue { display: none !important; }
+  .anat-wrap { padding-top: 4.5rem !important; gap: 0.75rem !important; }
+  .anat-wrap h2 { font-size: var(--fs-title) !important; margin-top: 0.5rem !important; }
+  .anat-wrap h2 + p { display: none; }
+}
+
 /* ───────────── preloader: the cube mark floats and turns in space ───────────── */
+/* short screens (a phone turned sideways): a smaller mark and counter so the card fits */
+@media (max-height: 520px) {
+  .pre-center { gap: 0.75rem !important; }
+  .pre-mark-box { width: 6.5rem !important; height: 6.5rem !important; }
+  .pre-mark { width: 5.25rem !important; height: 5.25rem !important; }
+  .pre-count { font-size: var(--fs-title) !important; }
+}
 @keyframes pre-float {
   0%, 100% { transform: translateY(-5px); }
   50% { transform: translateY(6px); }
@@ -301,7 +377,7 @@
     background: linear-gradient(to bottom, transparent, var(--color-night));
   }
   #contact-cta .cta-content { min-height: 0; margin-top: -4.5rem; padding-top: 0; padding-bottom: 2.75rem; }
-  #contact-cta .cta-content h2 { font-size: 13vw; }
+  #contact-cta .cta-content h2 { font-size: var(--fs-title); }
 }
 
 /* mobile hero: copy swaps as the video moves to the next stage */

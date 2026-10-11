@@ -29,7 +29,8 @@ export function ProjectsShowcase() {
     const tr = track.current;
     if (!el || !tr) return;
     const mm = gsap.matchMedia();
-    mm.add("(min-width: 768px) and (prefers-reduced-motion: no-preference)", () => {
+    // the pinned presentation needs a wide screen; tablets in portrait and phones swipe instead
+    mm.add("(min-width: 1024px) and (prefers-reduced-motion: no-preference)", () => {
       let last = -1;
       const layout = () => {
         const vw = window.innerWidth;
@@ -86,7 +87,7 @@ export function ProjectsShowcase() {
   return (
     <section ref={root} id="projects" aria-label="Selected projects" className="grain relative z-10 overflow-hidden bg-night text-paper">
       {/* Desktop presentation */}
-      <div className="hidden h-[100svh] md:flex">
+      <div className="hidden h-[100svh] lg:flex">
         <div className="gutter relative z-10 flex w-[36vw] shrink-0 flex-col justify-between bg-night py-28">
           <SectionMarker index="02" label="Selected projects" />
           <div>
@@ -167,19 +168,19 @@ export function ProjectsShowcase() {
         </div>
       </div>
 
-      {/* Mobile: native swipe with snap */}
-      <div className="py-20 md:hidden">
+      {/* Phones and tablets in portrait: native swipe with snap */}
+      <div className="py-20 md:py-24 lg:hidden">
         <div className="gutter mb-10">
           <SectionMarker index="02" label="Selected projects" />
         </div>
         <div className="flex snap-x snap-mandatory gap-4 overflow-x-auto px-[var(--gutter)] pb-4 [scrollbar-width:none]">
           {projects.map((pr, i) => (
-            <article key={pr.slug} className="w-[82vw] shrink-0 snap-center">
-              <div className="relative aspect-[4/5] overflow-hidden bg-ink-2">
+            <article key={pr.slug} className="w-[82vw] shrink-0 snap-center sm:w-[58vw] md:w-[52vw]">
+              <div className="relative aspect-[4/5] max-h-[68svh] w-full overflow-hidden bg-ink-2">
                 <Image src={pr.image} alt={`${pr.name} — ${pr.type}`} fill sizes="82vw" className="object-cover" />
               </div>
               <p className="eyebrow mt-5 text-paper/50">{String(i + 1).padStart(2, "0")} — {pr.type}</p>
-              <h3 className="display mt-2 text-5xl">{pr.name}</h3>
+              <h3 className="display mt-2 text-5xl md:text-6xl">{pr.name}</h3>
               <p className="eyebrow mt-3 text-paper/60">{pr.location} · {pr.year} · {pr.status}</p>
               {pr.waterproofing && (
                 <p className="mt-3 text-[13px] leading-relaxed text-paper/75">

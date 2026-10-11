@@ -1,0 +1,105 @@
+/**
+ * The contact page's enquiry form, in the browser. Enquiries go to the office
+ * inbox through FormSubmit (https://formsubmit.co), as before: no server or
+ * key needed; the first submission sends a one-time activation email to the
+ * office address. WhatsApp is offered alongside, with the details filled in.
+ *
+ * /contact?service=Interiors picks the project type; /contact?project=Name
+ * starts the message with that project.
+ */
+export function mountContactForm(root: HTMLElement): () => void {
+  const form = root.querySelector<HTMLFormElement>("form[data-enquiry]");
+  const done = root.querySelector<HTMLElement>(".ct-done");
+  if (!form || !done) return () => {};
+  const send = form.querySelector<HTMLButtonElement>("[data-send]");
+  const label = form.querySelector<HTMLElement>("[data-label]");
+  const alert = form.querySelector<HTMLElement>(".ct-alert");
+  const wa = form.querySelector<HTMLButtonElement>("[data-wa]");
+  const again = done.querySelector<HTMLButtonElement>("[data-again]");
+  const type = form.elements.namedItem("type") as HTMLSelectElement | null;
+  const message = form.elements.namedItem("message") as HTMLTextAreaElement | null;
+
+  const q = new URLSearchParams(window.location.search);
+  const service = q.get("service");
+  if (service && type && Array.from(type.options).some((o) => o.value === service)) type.value = service;
+  const project = q.get("project");
+  if (project && message && !message.value) message.value = `About a project like ${project}: `;
+
+  const val = (f: FormData, k: string) => String(f.get(k) ?? "").trim();
+  const summary = (f: FormData) =>
+    [
+      `Project enquiry — ${val(f, "type")}`,
+      `Name: ${val(f, "name")}`,
+      `Phone: ${val(f, "phone")}`,
+      `Email: ${val(f, "email")}`,
+      `Site location: ${val(f, "location")}`,
+      `Budget: ${val(f, "budget")}`,
+      "",
+      val(f, "message"),
+    ].join("\n");
+
+  const busy = (on: boolean) => {
+    if (send) send.disabled = on;
+    if (label) label.textContent = on ? "Sending…" : "Send enquiry";
+  };
+
+  const onSubmit = async (e: SubmitEvent) => {
+    e.preventDefault();
+    if (!form.reportValidity()) return;
+    const f = new FormData(form);
+    if (val(f, "_honey")) return; // a bot filled the hidden field
+    if (alert) alert.hidden = true;
+    busy(true);
+    try {
+      const res = await fetch(form.dataset.endpoint!, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({
+          _subject: `New project enquiry — ${val(f, "type")} (${val(f, "location")})`,
+          _template: "table",
+          _captcha: "false",
+          _replyto: val(f, "email"),
+          Name: val(f, "name"),
+          Phone: val(f, "phone"),
+          Email: val(f, "email"),
+          "Site location": val(f, "location"),
+          "Project type": val(f, "type"),
+          Budget: val(f, "budget"),
+          Message: val(f, "message"),
+        }),
+      });
+      const data = (await res.json().catch(() => ({}))) as { success?: string | boolean };
+      if (!res.ok || String(data.success) === "false") throw new Error("send failed");
+      const first = val(f, "name").split(/\s+/)[0] ?? "";
+      const name = done.querySelector<HTMLElement>("[data-name]");
+      if (name) name.textContent = first ? `, ${first}` : "";
+      form.reset();
+      form.hidden = true;
+      done.hidden = false;
+      done.focus();
+    } catch {
+      if (alert) alert.hidden = false;
+    } finally {
+      busy(false);
+    }
+  };
+
+  const onWhatsApp = () => {
+    const text = summary(new FormData(form));
+    window.open(`${form.dataset.whatsapp}?text=${encodeURIComponent(text)}`, "_blank", "noopener,noreferrer");
+  };
+  const onAgain = () => {
+    done.hidden = true;
+    form.hidden = false;
+    form.querySelector<HTMLElement>("input:not([type=hidden]):not(.ct-trap)")?.focus();
+  };
+
+  form.addEventListener("submit", onSubmit);
+  wa?.addEventListener("click", onWhatsApp);
+  again?.addEventListener("click", onAgain);
+  return () => {
+    form.removeEventListener("submit", onSubmit);
+    wa?.removeEventListener("click", onWhatsApp);
+    again?.removeEventListener("click", onAgain);
+  };
+}

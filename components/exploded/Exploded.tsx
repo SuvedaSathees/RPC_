@@ -134,9 +134,9 @@ export function Exploded({ index = "03" }: { index?: string } = {}) {
     <section ref={root} id="anatomy" aria-label="Anatomy of a building" className="relative z-10 h-[600vh] bg-night text-paper">
       <div className="sticky top-0 flex h-[100svh] flex-col overflow-hidden">
         <div aria-hidden className="pointer-events-none absolute -left-40 top-1/3 h-[30rem] w-[36rem] rounded-full bg-rpc/15 blur-[130px]" />
-        <div className="gutter relative flex h-full min-h-0 flex-col gap-5 pb-6 pt-24 md:grid md:grid-cols-12 md:grid-rows-[minmax(0,1fr)] md:gap-10 md:pb-10 md:pt-28">
+        <div className="anat-wrap gutter relative flex h-full min-h-0 flex-col gap-5 pb-6 pt-24 md:gap-6 md:pb-10 md:pt-28 lg:grid lg:grid-cols-12 lg:grid-rows-[minmax(0,1fr)] lg:gap-10">
           {/* Copy + systems list */}
-          <div className="flex min-h-0 shrink-0 flex-col justify-between md:col-span-4">
+          <div className="flex min-h-0 shrink-0 flex-col justify-between lg:col-span-4">
             <div>
               <SectionMarker index={index} label="Anatomy" className="text-paper/70" />
               <h2 className="display mt-4 text-4xl leading-[0.95] md:mt-5 md:text-5xl lg:text-[3.4vw]">
@@ -149,18 +149,18 @@ export function Exploded({ index = "03" }: { index?: string } = {}) {
                 <span className="hidden md:inline">Scroll through a finished RPC building — each layer sealed against water, down to the footings.</span>
               </p>
             </div>
-            <ol className="mt-4 flex flex-wrap gap-1.5 md:mt-4 md:block md:max-w-sm md:space-y-0.5">
+            <ol className="mt-4 flex flex-wrap gap-1.5 md:mt-5 md:gap-2 lg:mt-4 lg:block lg:max-w-sm lg:space-y-0.5">
               {anatomy.map((a, i) => (
                 <li
                   key={a.key}
                   data-sys
-                  className="group relative flex items-center gap-2 rounded-full border border-white/10 px-2.5 py-1 text-paper/40 md:gap-4 md:rounded-sm md:border-0 md:px-3 md:py-1.5 transition-all duration-500 data-[active]:bg-white/[0.07] data-[active]:text-paper data-[done]:text-paper/70"
+                  className="group relative flex items-center gap-2 rounded-full border border-white/10 px-2.5 py-1 text-paper/40 md:px-3.5 md:py-1.5 lg:gap-4 lg:rounded-sm lg:border-0 lg:px-3 transition-all duration-500 data-[active]:bg-white/[0.07] data-[active]:text-paper data-[done]:text-paper/70"
                 >
-                  <span className="absolute inset-y-2 left-0 hidden w-0.5 scale-y-0 md:block bg-rpc transition-transform duration-500 group-data-[active]:scale-y-100" />
+                  <span className="absolute inset-y-2 left-0 hidden w-0.5 scale-y-0 lg:block bg-rpc transition-transform duration-500 group-data-[active]:scale-y-100" />
                   <span className="font-mono text-[10px] md:text-[11px]">0{i + 1}</span>
                   <span className="flex flex-col">
                     <span className="text-[13px] font-medium md:text-[14px]">{a.label}</span>
-                    <span className="hidden text-[11px] text-paper/50 group-data-[active]:text-paper/70 md:inline">{a.note}</span>
+                    <span className="hidden text-[11px] text-paper/50 group-data-[active]:text-paper/70 lg:inline">{a.note}</span>
                   </span>
                 </li>
               ))}
@@ -168,7 +168,7 @@ export function Exploded({ index = "03" }: { index?: string } = {}) {
           </div>
 
           {/* Plates */}
-          <div className="relative min-h-0 flex-1 md:col-span-8 md:h-full">
+          <div className="relative min-h-0 flex-1 lg:col-span-8 lg:h-full">
             <div className="relative h-full overflow-hidden rounded-sm border border-white/10 bg-ink shadow-[0_40px_80px_-30px_rgba(0,0,0,0.8)]">
               <div data-stage className="absolute inset-0 origin-center will-change-transform">
                 {PLATES.map((p, i) => (

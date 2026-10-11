@@ -1,38 +1,26 @@
 import type { Metadata } from "next";
 import { Footer } from "@/components/contact/Footer";
-import { PageHeader } from "@/components/transitions/PageHeader";
-import { ProjectsDirectory } from "@/components/projects/ProjectsDirectory";
-import { ArrowLink } from "@/components/ui/Primitives";
-import { projects } from "@/lib/content";
+import { PageScripts } from "@/components/pages/PageScripts";
+import { contact, projects } from "@/lib/content";
+import { KIT_CSS } from "@/lib/pages/kit";
+import { PROJECTS_CSS, projectsPageMarkup } from "@/lib/pages/projects";
+import { pageMeta } from "@/lib/site";
 
-export const metadata: Metadata = {
-  title: "Projects — Residential, Commercial & Industrial Construction in Tamil Nadu",
+export const metadata: Metadata = pageMeta({
+  title: "Waterproofed Building Projects, Erode & Coimbatore",
   description:
-    "Selected construction projects by RPC Constructions across Erode, Coimbatore, Perundurai and Chennai — apartments, villas, office buildings, factories and mixed-use developments, each waterproofed from land to roof.",
-  alternates: { canonical: "/projects" },
-  openGraph: { url: "/projects", images: ["/images/project-01.jpg"] },
-};
+    "Apartments, villas, offices and factories by RPC Constructions in Erode, Coimbatore, Perundurai and Chennai, with the waterproofing specified for each one.",
+  path: "/projects",
+});
 
+/** Projects: the opening with filters by status and town, a deck of project boards, the full view of each, and the close */
 export default function ProjectsPage() {
-  const cities = new Set(projects.map((p) => p.location.split(",").pop()?.trim()));
   return (
     <>
-      <main id="main" className="bg-paper">
-        <PageHeader
-          index="02"
-          label="Projects"
-          lines={["Selected", <em key="w">work.</em>]}
-          intro="A curated collection of residential, commercial, industrial and mixed-use architecture — each engineered with technical rigour, honest materials, and built to endure."
-          aside={<ArrowLink href="/contact#enquiry" variant="solid">Discuss your project</ArrowLink>}
-          variant="plain"
-          facts={[
-            ["Featured projects", String(projects.length).padStart(2, "0")],
-            ["Typologies", "05"],
-            ["Cities", String(cities.size).padStart(2, "0")],
-            ["Region", "Tamil Nadu"],
-          ]}
-        />
-        <ProjectsDirectory />
+      <main id="main" className="pg">
+        <style dangerouslySetInnerHTML={{ __html: KIT_CSS + PROJECTS_CSS }} />
+        <div dangerouslySetInnerHTML={{ __html: projectsPageMarkup({ projects, contact }) }} />
+        <PageScripts root="main" kind="projects" />
       </main>
       <Footer />
     </>

@@ -131,7 +131,7 @@ export function FinalCTA() {
                       <span className="block text-[10px] uppercase tracking-[0.12em] text-paper/80 sm:tracking-[0.2em] sm:text-paper/50">{label}</span>
                       <span className="hidden truncate text-[13px] text-paper sm:block">{value}</span>
                     </span>
-                    <ArrowUpRight size={14} className="hidden shrink-0 text-paper/50 sm:block transition-transform duration-500 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-paper" />
+                    <ArrowUpRight size={14} className="hidden shrink-0 text-paper/50 sm:block lg:hidden xl:block transition-transform duration-500 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-paper" />
                   </a>
                 </li>
               ))}

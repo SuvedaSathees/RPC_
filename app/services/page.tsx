@@ -1,49 +1,55 @@
 import type { Metadata } from "next";
 import { Footer } from "@/components/contact/Footer";
-import { ServicesDirectory } from "@/components/services/ServicesDirectory";
-import { TechnicalCapabilities } from "@/components/services/TechnicalCapabilities";
-import { PageHeader } from "@/components/transitions/PageHeader";
-import { ArrowLink } from "@/components/ui/Primitives";
+import { PageScripts } from "@/components/pages/PageScripts";
+import { contact, engagementModels, process, services } from "@/lib/content";
+import { AREA_PURPOSE, SERVICE_CATEGORIES } from "@/lib/methods/doc";
+import { KIT_CSS, serviceSlug } from "@/lib/pages/kit";
+import { SERVICES_CSS, serviceFaq, servicesPageMarkup } from "@/lib/pages/services";
+import { ldJson, pageMeta, siteUrl } from "@/lib/site";
 
-export const metadata: Metadata = {
-  title: "Services — Waterproofing, Residential, Commercial & Industrial Construction",
+export const metadata: Metadata = pageMeta({
+  title: "Waterproofing Services in Erode, Coimbatore & Tiruppur",
   description:
-    "Land-to-roof waterproofing, leak repair and turnkey residential, commercial and industrial construction, interiors and project management in Erode, Coimbatore and across Tamil Nadu.",
-  alternates: { canonical: "/services" },
-  openGraph: { url: "/services" },
-};
+    "Terrace, bathroom, water tank, basement, balcony, external wall, podium and crack waterproofing, leak repair, and homes, offices and factories built to stay dry, in Erode, Coimbatore, Tiruppur, Salem and Chennai. Free site inspection.",
+  path: "/services",
+});
 
+const areaServed = contact.regions.map((r) => ({ "@type": "City", name: r }));
+const provider = { "@id": `${siteUrl}/#organization` };
+const items = [
+  ...SERVICE_CATEGORIES.map((s) => ({ name: s.title, description: AREA_PURPOSE[s.area] ?? "" })),
+  ...services.slice(1).map((s) => ({ name: s.title, description: s.body })),
+];
+
+const faq = serviceFaq({ services, process, contact });
+
+const ld = [
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faq.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })),
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: "Waterproofing and construction services by RPC Constructions",
+    itemListElement: items.map((s, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      item: { "@type": "Service", name: s.name, description: s.description, url: `${siteUrl}/services#${serviceSlug(s.name)}`, provider, areaServed },
+    })),
+  },
+];
+
+/** Services: the opening, the eight waterproofing services, the six building services, how a job runs, three ways to work with us, the questions people ask, and the close */
 export default function ServicesPage() {
   return (
     <>
-      <main id="main" className="bg-paper">
-        <PageHeader
-          variant="plain"
-          index="03"
-          label="Services"
-          lines={["What we", <em key="b">build.</em>]}
-          intro="From soil test and structural design to finishes and handover — six disciplines delivered by one accountable team."
-          aside={<ArrowLink href="/contact#enquiry" variant="solid">Get a consultation</ArrowLink>}
-          facts={[
-            ["Disciplines", "06"],
-            ["Delivery", "Turnkey"],
-            ["Standards", "IS codes"],
-            ["Region", "Tamil Nadu"],
-          ]}
-        />
-        <ServicesDirectory />
-        <div className="h-16 md:h-24" />
-        <TechnicalCapabilities index="04" />
-
-        <div className="bg-paper py-12 md:py-20">
-          <div className="gutter flex flex-col items-start justify-between gap-6 md:flex-row md:items-center">
-            <div>
-              <p className="display text-4xl md:text-5xl">Have a project brief ready?</p>
-              <p className="mt-2 text-sm text-ink-2">Discuss scope, budget and programme with our engineers.</p>
-            </div>
-            <ArrowLink href="/contact" variant="solid">Talk to RPC</ArrowLink>
-          </div>
-        </div>
+      <main id="main" className="pg">
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: ldJson(ld) }} />
+        <style dangerouslySetInnerHTML={{ __html: KIT_CSS + SERVICES_CSS }} />
+        <div dangerouslySetInnerHTML={{ __html: servicesPageMarkup({ services, engagement: engagementModels, process, contact }) }} />
+        <PageScripts root="main" kind="services" />
       </main>
       <Footer />
     </>

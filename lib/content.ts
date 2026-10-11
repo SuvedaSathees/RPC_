@@ -18,8 +18,10 @@ export const brand = {
 
 export const nav = [
   { label: "Home", href: "/" },
-  { label: "Projects", href: "/projects" },
   { label: "About", href: "/about" },
+  { label: "Products", href: "/products" },
+  { label: "Waterproofing", href: "/waterproofing" },
+  { label: "Projects", href: "/projects" },
   { label: "Services", href: "/services" },
   { label: "Blog", href: "/blog" },
   { label: "Contact", href: "/contact" },
@@ -71,8 +73,10 @@ export interface Project {
   structuralSystem?: string;
   materials?: string;
   clientType?: string;
-  /** the waterproofing system built into the project, land to roof */
+  /** the waterproofing system built into the project, layer by layer ("·" between layers) */
   waterproofing?: string;
+  /** the full view's text: the water risk on this site and how it was handled */
+  story?: string;
 }
 
 /**
@@ -90,7 +94,8 @@ export const projects: Project[] = [
     year: "[2024]",
     status: "Completed",
     image: "/images/projects/kaveri-residences-perundurai-road.jpg",
-    summary: "A six-storey apartment block of three-bedroom homes with deep shaded balconies, rooftop solar and a landscaped front court — waterproofed from the raft to the terrace.",
+    summary: "Six storeys of three-bedroom homes with deep shaded balconies, rooftop solar and a landscaped front court.",
+    story: "The rooftop solar stands are fixed through the terrace, so every bolt and cable entry was sleeved and sealed into the terrace membrane before the panels went up.",
     structuralSystem: "RCC framed structure on isolated footings",
     materials: "Fly-ash brick masonry, cement plaster, aluminium glazing, vitrified tile",
     clientType: "[Private Developer]",
@@ -105,7 +110,8 @@ export const projects: Project[] = [
     year: "[2023]",
     status: "Completed",
     image: "/images/projects/avinashi-corporate-centre-coimbatore.jpg",
-    summary: "A G+8 office building with a double-glazed façade, a fully waterproofed basement and a column-free floor plate for flexible tenancies.",
+    summary: "A G+8 office building with a double-glazed façade and column-free floors for flexible tenancies.",
+    story: "The basement car park sits below the level of the road outside, so it was built like a tank in reverse: sealed on every side to keep groundwater and road run-off out.",
     structuralSystem: "RCC core with flat-slab floors",
     materials: "Double-glazed unitised curtain wall, ACP cladding, granite flooring",
     clientType: "[Commercial Developer]",
@@ -120,7 +126,8 @@ export const projects: Project[] = [
     year: "[2024]",
     status: "Completed",
     image: "/images/projects/thindal-courtyard-villa-erode.jpg",
-    summary: "A family home arranged around an open-to-sky courtyard, with sloped clay-tile roofs laid over a waterproof membrane, teak joinery and a garden verandah.",
+    summary: "A family home arranged around an open-to-sky courtyard, with teak joinery and a garden verandah.",
+    story: "Clay tiles shed most of the rain but not all of it, so the slab beneath them carries its own protection, and the open courtyard is graded so water runs away from every threshold.",
     structuralSystem: "Load-bearing RCC frame with sloped RCC roof",
     materials: "Mangalore clay tile, Athangudi tile, teak wood, lime plaster",
     clientType: "[Private Client]",
@@ -135,7 +142,8 @@ export const projects: Project[] = [
     year: "[2025]",
     status: "Under construction",
     image: "/images/projects/sipcot-textile-unit-perundurai.jpg",
-    summary: "A textile processing and warehousing facility with long-span steel sheds, leak-proof roofing, waterproofed trimix floors and rooftop solar.",
+    summary: "A textile processing and warehousing unit with long-span steel sheds and rooftop solar.",
+    story: "Textile processing runs on water, so the floors that carry it and the roof that keeps the monsoon off the machines were the first things to be detailed.",
     structuralSystem: "Pre-engineered steel buildings on RCC pedestals",
     materials: "Colour-coated roof sheeting, precast compound wall, trimix flooring",
     clientType: "[Industrial Client]",
@@ -150,7 +158,8 @@ export const projects: Project[] = [
     year: "[2026]",
     status: "In design",
     image: "/images/projects/anna-nagar-mixed-use-chennai.jpg",
-    summary: "Street-level retail with offices and apartments above, over a waterproofed basement and planned around a shaded central courtyard.",
+    summary: "Street-level shops with offices and apartments above, planned around a shaded central courtyard.",
+    story: "Chennai’s heavy northeast-monsoon rain shaped the design: the basement, the podium and the street-facing façade were detailed against water before anything else.",
     structuralSystem: "RCC frame with post-tensioned transfer slab",
     materials: "Exposed concrete, terracotta jaali screens, glazing",
     clientType: "[Joint Development]",
@@ -161,6 +170,10 @@ export const projects: Project[] = [
 export interface ServiceItem {
   id: string;
   title: string;
+  /** a short line over the title on the services page */
+  short?: string;
+  /** one short line for the home page's services index */
+  line?: string;
   body: string;
   image: string;
   deliverables: string[];
@@ -172,26 +185,30 @@ export const services: ServiceItem[] = [
   {
     id: "01",
     title: "Waterproofing",
-    body: "Six stages of protection built into the construction itself — from the soil under the raft to the roof above — plus leak repair for existing buildings.",
+    short: "Our core service",
+    line: "Terraces, bathrooms, sumps and basements",
+    body: "Terrace, bathroom, sump, basement and external-wall waterproofing in Erode and Coimbatore, for houses and apartments, offices and factories: repairs to buildings in use, and protection designed into new ones.",
     image: "/film/wp-final.jpg",
     deliverables: [
-      "Anti-termite + HDPE membrane under the raft",
-      "Crystalline basements, PVC waterstops & DPC",
-      "Pond-tested bathrooms, kitchens & tanks",
-      "PU roof membrane & elastomeric façade coating",
+      "Terraces & roofs: PU or torch-on membranes",
+      "External walls: waterproof plaster & elastomeric paint",
+      "Bathrooms & kitchens: two coats, pond-tested",
+      "Sumps, tanks & basements: crystalline and HDPE",
     ],
-    timeline: "Every stage of the build",
-    scale: "Homes to industrial sheds",
+    timeline: "Days for a repair; built in for new work",
+    scale: "One bathroom to a factory roof",
   },
   {
     id: "02",
     title: "Residential Construction",
-    body: "Independent houses, villas and apartment blocks delivered turnkey — from soil test to handover, waterproofed from land to roof.",
-    image: "/images/projects/kaveri-residences-perundurai-road.jpg",
+    short: "Homes in Erode & Coimbatore",
+    line: "Leak-free houses, villas and apartments",
+    body: "Independent houses, villas and apartment blocks delivered turnkey, with every terrace, bathroom and sump sealed while the building goes up rather than after the first leak.",
+    image: "/images/waterproofing/villa-with-pool.jpg",
     deliverables: [
-      "Soil investigation & foundation design",
-      "RCC frame & masonry with land-to-roof waterproofing",
-      "Electrical, plumbing & HVAC services",
+      "Soil test & foundation design",
+      "RCC frame, masonry & damp-proof course",
+      "Electrical, plumbing & HVAC",
       "Flooring, joinery, painting & landscaping",
     ],
     timeline: "8 – 24 months",
@@ -200,13 +217,15 @@ export const services: ServiceItem[] = [
   {
     id: "03",
     title: "Commercial Construction",
-    body: "Offices, showrooms, hospitals and hotels built for heavy daily use — waterproofed basements, sealed façades and services coordinated from day one.",
+    short: "Offices, retail & healthcare",
+    line: "Offices and showrooms with dry basements",
+    body: "Offices, showrooms, hospitals and hotels on busy roads such as Avinashi Road, built for heavy daily use, with basement car parks that stay dry and façades sealed against driving rain.",
     image: "/images/projects/avinashi-corporate-centre-coimbatore.jpg",
     deliverables: [
       "Flat-slab & long-span RCC structures",
       "Basement & podium waterproofing",
       "Fire safety, lifts & MEP coordination",
-      "Shell-and-core or full fit-out delivery",
+      "Shell-and-core or full fit-out",
     ],
     timeline: "12 – 30 months",
     scale: "10,000 – 2,50,000 sq ft",
@@ -214,13 +233,15 @@ export const services: ServiceItem[] = [
   {
     id: "04",
     title: "Industrial Construction",
-    body: "Factories, warehouses and processing units for SIPCOT and private industrial parks — engineered for load, logistics and fast commissioning.",
+    short: "SIPCOT & private industrial parks",
+    line: "Factories and PEB sheds with sealed roofs",
+    body: "Factories, warehouses and processing units around Perundurai, Tiruppur and Coimbatore, with roofs, gutters and floors detailed to keep machinery and stock dry through the monsoon.",
     image: "/images/projects/sipcot-textile-unit-perundurai.jpg",
     deliverables: [
       "Pre-engineered steel buildings (PEB)",
-      "Heavy-duty trimix & VDF flooring",
+      "Trimix & VDF floors with integral waterproofing",
       "Machine foundations & pits",
-      "Leak-proof roofs, drainage & compound walls",
+      "Leak-proof roof sheeting, gutters & drainage",
     ],
     timeline: "6 – 18 months",
     scale: "20,000 – 4,00,000 sq ft",
@@ -228,13 +249,15 @@ export const services: ServiceItem[] = [
   {
     id: "05",
     title: "Renovation & Leak Repair",
-    body: "Leakage and dampness fixed at the source, structural strengthening and extensions of occupied buildings — planned to keep disruption to a minimum.",
+    short: "For buildings in use",
+    line: "Ceiling leaks, damp walls and cracks fixed",
+    body: "Ceiling leaks, seepage, damp walls and cracks traced to where the water actually enters, with structural strengthening and extensions planned around the people still using the building.",
     image: "/stages/08-plastering.jpg",
     deliverables: [
-      "Leak & dampness survey, crack repair",
-      "Jacketing, micro-concrete & retrofitting",
-      "Terrace waterproofing & re-plastering",
-      "Vertical & horizontal extensions",
+      "Leak & dampness survey",
+      "Crack injection & re-plastering",
+      "Terrace & bathroom re-waterproofing",
+      "Jacketing, micro-concrete & extensions",
     ],
     timeline: "2 – 10 months",
     scale: "Single floors to full buildings",
@@ -242,13 +265,15 @@ export const services: ServiceItem[] = [
   {
     id: "06",
     title: "Interiors",
-    body: "Homes, offices and showrooms fitted out to the same drawings as the building — joinery, ceilings, lighting and finishes under one team.",
+    short: "Drawn with the building",
+    line: "Kitchens and wardrobes over sealed wet areas",
+    body: "Kitchens, wardrobes and ceilings fitted to the same drawings as the building, with sinks, bathrooms and utility areas sealed and tested before tiles and cabinets cover them.",
     image: "/images/interior-joinery.jpg",
     deliverables: [
       "Modular kitchens & wardrobes",
-      "False ceilings & lighting design",
+      "False ceilings & lighting",
       "Custom joinery & wall panelling",
-      "Waterproofed wet areas, stone & tile flooring",
+      "Stone & tile floors over tested wet areas",
     ],
     timeline: "1 – 6 months",
     scale: "Single rooms to full buildings",
@@ -256,51 +281,101 @@ export const services: ServiceItem[] = [
   {
     id: "07",
     title: "Project Management",
-    body: "Independent management of cost, programme and quality for owners and developers — one accountable team from approvals to handover.",
+    short: "For owners & developers",
+    line: "Approvals, costs and stage-by-stage checks",
+    body: "Independent control of cost, programme and quality for owners and developers, including an inspection of each waterproofing layer before the next trade covers it.",
     image: "/images/process-01.jpg",
     deliverables: [
-      "DTCP / local-body plan approvals",
+      "DTCP & local-body approvals",
       "BOQ, tendering & cost control",
-      "Programme scheduling & site supervision",
-      "Pond tests, quality checks & handover documents",
+      "Programme & site supervision",
+      "Pond-test records & handover documents",
     ],
     timeline: "Full project lifecycle",
     scale: "All project sizes",
   },
 ];
 
+/**
+ * How we waterproof (About page): six steps on every job, each with a still
+ * from RPC's own waterproofing film. `alt` describes the picture itself.
+ */
 export const process = [
-  { id: "01", title: "Planning", body: "Feasibility, soil and water-table survey and a clear brief — waterproofing is planned before anything is drawn.", image: "/images/process-01.jpg" },
-  { id: "02", title: "Design", body: "Architecture and engineering resolved together, with every waterproofing layer detailed on the drawings.", image: "/images/process-02.jpg" },
-  { id: "03", title: "Foundation", body: "Excavation, anti-termite, HDPE membrane and crystalline concrete — sealed before the pour.", image: "/images/process-03.jpg" },
-  { id: "04", title: "Structure", body: "Columns, beams and slabs rise floor by floor — every pour with integral waterproofing.", image: "/images/process-04.jpg" },
-  { id: "05", title: "Finishing", body: "Wet areas pond-tested, PU roof membrane and façade coating — then interiors.", image: "/images/process-05.jpg" },
-  { id: "06", title: "Handover", body: "Inspected, leak-tested and documented — delivered dry and ready to live in.", image: "/images/process-06.jpg" },
+  {
+    id: "01",
+    title: "Inspect the whole building",
+    body: "We start on the terrace and work down to the sump, noting every damp patch, crack, failed joint and blocked outlet. The visit is free.",
+    image: "/images/waterproofing/villa-upper-floors.jpg",
+    alt: "Upper floors and terraces of a three-storey villa at dusk",
+  },
+  {
+    id: "02",
+    title: "Trace the water to its source",
+    body: "A stain on a ceiling is rarely where water gets in. We follow it back through the slab, the pipes or the joints, so the repair lands where the leak begins.",
+    image: "/images/waterproofing/terrace-slab-cutaway.jpg",
+    alt: "Cutaway of a terrace slab showing the concrete, the waterproofing layers and a rainwater outlet",
+  },
+  {
+    id: "03",
+    title: "Choose one system, in writing",
+    body: "Every surface needs its own method. You get one recommendation, the reason for it and an itemised quote before any work begins.",
+    image: "/images/waterproofing/basement-wall-cutaway.jpg",
+    alt: "Cutaway of a basement wrapped in a waterproofing membrane, with groundwater held outside the wall",
+  },
+  {
+    id: "04",
+    title: "Prepare, then apply",
+    body: "Loose plaster comes off, cracks are opened and filled and pipe openings are sealed. Only then does the coating go on, coat by coat, up every wall it meets.",
+    image: "/images/waterproofing/bathroom-membrane-under-tiles.jpg",
+    alt: "Bathroom with its floor tiles lifted to show the waterproofing coat under the shower and up the walls",
+  },
+  {
+    id: "05",
+    title: "Test it with water",
+    body: "Bathrooms and terraces are flooded and tanks filled, then left to stand before anything covers them. If the level drops, we find out why before moving on.",
+    image: "/images/waterproofing/water-tank-cutaway.jpg",
+    alt: "Cutaway of an underground water tank filled for a leak test, with a sealed pipe through its wall",
+  },
+  {
+    id: "06",
+    title: "Hand over, dry",
+    body: "You receive the finished work with its test records, and advice on keeping outlets and joints in order through the next monsoon.",
+    image: "/images/waterproofing/villa-pool-deck.jpg",
+    alt: "A finished villa with its pool deck, the waterproofed structure just visible beneath the paving",
+  },
 ] as const;
 
+/** About page: the six values, each with its own drawn mark (lib/pages/about.ts) */
 export const principles = [
-  { title: "Trust", body: "Open books on cost, programme and site decisions — clients always know where their project stands." },
-  { title: "Experience", body: "More than a decade of building across Erode, Coimbatore and Chennai, on tight urban plots and open industrial land." },
-  { title: "Craftsmanship", body: "Straight lines, true levels and clean finishes — checked by our own engineers before any handover." },
-  { title: "Engineering", body: "Structures designed and built to Indian Standards, with every drawing checked before it reaches site." },
-  { title: "Quality", body: "Cube tests, pond tests and stage-wise inspections logged for every pour, every floor and every wet area." },
-  { title: "On-time delivery", body: "Disciplined sequencing and weekly reporting so milestones are met without cutting corners." },
+  { title: "Honesty", body: "A straight diagnosis, even when the fix turns out smaller than you feared." },
+  { title: "Engineering", body: "Systems chosen on technical grounds: the surface, the exposure and the movement each must take." },
+  { title: "Craftsmanship", body: "Laps sealed, corners coved and outlets dressed by hand. Leaks live in the details." },
+  { title: "Materials", body: "Tested, branded products, stored and mixed exactly as their makers specify." },
+  { title: "Respect", body: "Your home treated with care: furniture covered, work areas cleared and disruption kept small." },
+  { title: "Timing", body: "Terraces finished before the rains, and bathrooms out of use for as few days as possible." },
 ] as const;
 
-/** Company story, vision and mission (About page). Review wording before launch. */
+/** Home page, About: four short facts about the company */
+export const highlights = [
+  { title: "Engineer-led", body: "Every problem diagnosed by an engineer, not guessed at." },
+  { title: "Every surface, in-house", body: "Terraces to sumps, by our own site teams." },
+  { title: "One contract", body: "No gaps between waterproofing and building trades." },
+  { title: "Close to your site", body: "From Erode to Coimbatore, Tiruppur and Salem." },
+] as const;
+
+/** Company story, vision and commitments (About page). Review wording before launch. */
 export const company = {
   story: [
-    "RPC Constructions was founded in Erode in 2012 with a simple idea: a building should be planned with care, engineered with rigour and built to outlast the people who made it.",
-    "From our first independent homes we have grown into a design-and-build practice delivering residences, commercial buildings and industrial facilities across Tamil Nadu — with the same engineers following every project from soil test to handover.",
-    "In a monsoon climate, most building failures start with water. So we waterproof every project in six stages — from the soil under the raft to the roof above — as part of the construction, not as an afterthought.",
+    "RPC Constructions was founded in Erode in 2012 on a simple idea: a building should be planned with care, engineered with rigour and kept dry for as long as it stands.",
+    "Today we waterproof and build for families, businesses and industry, on anything from a single flat to a factory shed. The engineer who first visits a job follows it through to the final test.",
+    "Hard summers followed by heavy monsoons mean that water is what damages most buildings here first. So new buildings get their protection in six stages as they rise, and in existing ones we repair a leak where it enters, not where it shows.",
   ],
-  vision: "To be Tamil Nadu’s most trusted name in construction — known for buildings that stand dry for generations and a way of working clients recommend to their families.",
+  vision: "To be the first call in western Tamil Nadu when water gets into a building, and the builder trusted to keep it out from the start.",
   mission: [
-    "Deliver every project safely, on schedule and to the agreed budget.",
-    "Build to Indian Standards with tested materials and inspected workmanship.",
-    "Waterproof every building from land to roof, and leak-test it before handover.",
-    "Keep clients informed with transparent costs and weekly progress reporting.",
-    "Invest in our engineers, site teams and the communities we build in.",
+    "Hold to the price we quote, and agree any change in writing before it happens.",
+    "Finish when we say we will, with a progress update every week we are on site.",
+    "Work safely at height, inside tanks and around torch-applied membranes.",
+    "Keep investing in our engineers and site teams, and in the towns where we work.",
   ],
 } as const;
 
@@ -363,18 +438,18 @@ export const technicalCapabilities = [
 export const engagementModels = [
   {
     model: "Design & Build (Turnkey)",
-    description: "One contract covering architecture, engineering, approvals and construction — a single team accountable for everything.",
+    description: "One contract for architecture, engineering, approvals, waterproofing and construction, with a single team answerable for all of it.",
     benefit: "Fixed scope, single point of responsibility.",
   },
   {
     model: "Construction Only",
-    description: "You bring the approved drawings; we build them with our site teams, materials and quality systems.",
+    description: "You bring approved drawings; we build them with our own site teams, and detail the waterproofing wherever the drawings leave it out.",
     benefit: "Competitive pricing on a clear BOQ.",
   },
   {
-    model: "Project Management",
-    description: "RPC manages the contractors, programme and cost on your behalf, reporting directly to you.",
-    benefit: "Independent oversight and full cost transparency.",
+    model: "Waterproofing & Repair",
+    description: "For buildings that already stand: we inspect, repair and re-waterproof just the surfaces that need it, however big the building.",
+    benefit: "Scope limited to the problem you have.",
   },
 ] as const;
 

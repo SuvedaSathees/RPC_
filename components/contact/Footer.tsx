@@ -1,162 +1,132 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight, ArrowUp, ArrowUpRight, Clock, Mail, MapPin, Phone } from "lucide-react";
+import { ArrowUp, Clock, Mail, MapPin, Phone } from "lucide-react";
 import { Wordmark } from "@/components/navigation/Logo";
 import { SocialIcon } from "@/components/ui/SocialIcons";
-import { brand, contact, nav, services } from "@/lib/content";
+import { brand, contact, nav } from "@/lib/content";
+import { SERVICE_CATEGORIES } from "@/lib/methods/doc";
 
-/** Compact footer — one dense band of brand, links, contact and social. */
+/** a service's place on the services page */
+const slug = (t: string) => t.toLowerCase().replace(/&/g, "and").replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+/** "a, b and c" */
+const listed = (xs: readonly string[]) => (xs.length < 2 ? xs.join("") : `${xs.slice(0, -1).join(", ")} and ${xs[xs.length - 1]}`);
+
+/**
+ * The footer, about half a screen on a laptop, in the logo's dark blue like
+ * the nav bar, rising into the page above with a waterline. On laptops four
+ * columns: the logo with a line on what we do, the pages, the waterproofing
+ * services and how to reach us, each list one link to a line (on a tablet the
+ * logo runs across the top; on a phone the two lists sit side by side). Then
+ * the small print.
+ */
 export function Footer() {
   const toTop = () => window.scrollTo({ top: 0, behavior: "smooth" });
   const tel = `tel:${contact.phone.replace(/[^0-9+]/g, "")}`;
+  const maps = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(contact.mapQuery)}`;
+  const focus = "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-water-2";
+  const head = "mb-3 text-body font-semibold text-water-2";
+  const link = `rounded text-body text-white/72 transition-colors hover:text-white ${focus}`;
+  const socials = contact.socials.filter((s) => s.label !== "WhatsApp");
 
   return (
-    <footer className="relative z-10 overflow-hidden bg-night text-paper">
-      <div aria-hidden className="pointer-events-none absolute -bottom-40 left-1/3 h-80 w-[40rem] rounded-full bg-rpc/10 blur-[120px]" />
-      {/* phones: one compact band (well under half a screen) */}
-      <div className="gutter relative py-8 md:hidden">
-        <div className="flex items-start justify-between gap-4">
-          <div>
-            <Link href="/" aria-label={`${brand.name} — home`}>
-              <Wordmark size="sm" />
-            </Link>
-            <p className="mt-3 max-w-[16rem] text-[12.5px] leading-relaxed text-paper/60">
-              Design-and-build construction and waterproofing across Tamil Nadu.
-            </p>
-          </div>
-          <button type="button" onClick={toTop} aria-label="Back to top" className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-white/10 text-paper/80">
-            <ArrowUp size={15} />
-          </button>
-        </div>
+    <footer data-site-footer className="relative z-10 -mt-8 text-[#f5f0e6] md:-mt-10">
+      {/* the waterline: the footer's blue rises into the page above */}
+      <svg aria-hidden="true" focusable="false" className="pointer-events-none block h-8 w-full text-night md:h-10" viewBox="0 0 1440 40" preserveAspectRatio="none">
+        <path d="M0 24C160 10 320 8 480 18s320 20 480 12 320-22 480-14V40H0Z" fill="currentColor" />
+        <path d="M0 24C160 10 320 8 480 18s320 20 480 12 320-22 480-14" fill="none" stroke="#f5f0e6" strokeOpacity=".25" strokeWidth="1.5" vectorEffect="non-scaling-stroke" />
+      </svg>
 
-        <div className="mt-5 grid grid-cols-2 gap-2 text-[12.5px]">
-          <a href={tel} className="flex items-center gap-2 rounded-xl bg-white/[0.06] px-3 py-2.5 text-paper/85">
-            <Phone size={14} className="shrink-0 text-paper/50" /> {contact.phone}
-          </a>
-          <a href={`mailto:${contact.email}`} className="flex items-center gap-2 rounded-xl bg-white/[0.06] px-3 py-2.5 text-paper/85">
-            <Mail size={14} className="shrink-0 text-paper/50" /> Email us
-          </a>
-        </div>
-        <p className="mt-3 flex items-center gap-2 text-[11.5px] text-paper/50">
-          <Clock size={12} className="text-paper/35" /> {contact.hours}
-        </p>
+      <div className="bg-night">
+        <div className="gutter mx-auto max-w-[1600px]">
+          <div className="grid grid-cols-2 gap-x-6 gap-y-8 pb-8 pt-3 md:grid-cols-[auto_auto_minmax(0,1fr)] md:gap-x-10 md:pb-10 md:pt-5 lg:grid-cols-[minmax(0,1.2fr)_auto_auto_minmax(15.5rem,1fr)] xl:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)_minmax(0,1fr)_minmax(0,1.25fr)] xl:gap-x-12">
+            {/* who we are: logo and socials side by side on a phone; a strip above the columns on a tablet; the first column on laptops */}
+            <div className="col-span-2 flex flex-wrap items-center justify-between gap-4 md:col-span-3 md:flex-nowrap md:justify-start md:gap-10 lg:col-span-1 lg:block">
+              <Link href="/" aria-label={`${brand.name} — home`} className={`inline-block shrink-0 rounded-[12px] ${focus}`}>
+                <span className="block md:hidden"><Wordmark size="sm" /></span>
+                <span className="hidden md:block"><Wordmark size="lg" /></span>
+              </Link>
+              <p className="hidden max-w-[26rem] text-body leading-relaxed text-white/70 md:block lg:mt-4">
+                Waterproofing contractors and builders in Erode since 2012, working across {listed(contact.regions.slice(1))}.
+              </p>
+              <ul className="flex shrink-0 items-center gap-1.5 md:ml-auto lg:ml-0 lg:mt-5" aria-label="Follow us">
+                {socials.map((s) => (
+                  <li key={s.label}>
+                    <a
+                      href={s.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={s.label}
+                      title={s.label}
+                      className={`grid h-9 w-9 place-items-center rounded-[10px] bg-white/[0.07] text-white/80 transition-colors hover:bg-water-2 hover:text-night md:h-10 md:w-10 ${focus}`}
+                    >
+                      <SocialIcon name={s.label} size={16} />
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
 
-        <div className="mt-5 flex items-center justify-between border-t border-white/10 pt-4">
-          <p className="text-[11px] text-paper/40">© {new Date().getFullYear()} {brand.name}</p>
-          <ul className="flex items-center gap-1.5">
-            {contact.socials.map((so) => (
-              <li key={so.label}>
-                <a
-                  href={so.href}
-                  aria-label={so.label}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="grid h-8 w-8 place-items-center rounded-full text-paper/60"
-                >
-                  <SocialIcon name={so.label} size={14} />
-                </a>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </div>
+            {/* pages */}
+            <nav aria-label="Footer">
+              <p className={head}>Explore</p>
+              <ul className="flex flex-col items-start gap-2">
+                {nav.map((n) => (
+                  <li key={n.href}>
+                    <Link href={n.href} className={link}>
+                      {n.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </nav>
 
-      <div className="gutter relative hidden md:block">
-        <div className="grid gap-10 py-14 md:grid-cols-2 lg:grid-cols-12 lg:gap-8">
-          {/* brand */}
-          <div className="lg:col-span-4">
-            <Link href="/" aria-label={`${brand.name} — home`} className="inline-block">
-              <Wordmark size="lg" />
-            </Link>
-            <p className="mt-5 max-w-sm text-sm leading-relaxed text-paper/65">
-              {brand.descriptor}. Design-and-build construction for homes, commercial and industrial projects across Tamil Nadu.
-            </p>
-            <p className="mt-5 flex items-center gap-2 text-xs text-paper/55">
-              <Clock size={14} className="text-paper/40" /> {contact.hours}
-            </p>
-          </div>
+            {/* waterproofing services */}
+            <div>
+              <p className={head}>Waterproofing</p>
+              <ul className="flex flex-col items-start gap-2">
+                {SERVICE_CATEGORIES.map((s) => (
+                  <li key={s.title}>
+                    <Link href={`/services#${slug(s.title)}`} className={link}>
+                      {s.title.replace(" waterproofing", "").replace(" treatment", "")}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
 
-          {/* directory */}
-          <nav aria-label="Footer" className="lg:col-span-2">
-            <p className="eyebrow mb-4 text-paper/40">Directory</p>
-            <ul className="space-y-2.5">
-              {nav.map((n) => (
-                <li key={n.href}>
-                  <Link href={n.href} className="group inline-flex items-center gap-2 text-sm text-paper/80 transition-colors hover:text-paper">
-                    <ArrowRight size={13} className="text-paper/35 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:text-rpc" />
-                    {n.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </nav>
-
-          {/* services */}
-          <div className="lg:col-span-2">
-            <p className="eyebrow mb-4 text-paper/40">Services</p>
-            <ul className="space-y-2.5">
-              {services.map((s) => (
-                <li key={s.id}>
-                  <Link href="/services" className="text-sm text-paper/70 transition-colors hover:text-paper">
-                    {s.title.replace(" Construction", "")}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* contact + social */}
-          <div className="lg:col-span-4">
-            <p className="eyebrow mb-4 text-paper/40">Get in touch</p>
-            <address className="space-y-3 not-italic text-sm">
-              <a href={`mailto:${contact.email}`} className="group flex items-center gap-3 text-paper/80 hover:text-paper">
-                <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full border border-white/15 group-hover:border-rpc group-hover:bg-rpc"><Mail size={14} /></span>
-                {contact.email}
-              </a>
-              <a href={tel} className="group flex items-center gap-3 text-paper/80 hover:text-paper">
-                <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full border border-white/15 group-hover:border-rpc group-hover:bg-rpc"><Phone size={14} /></span>
-                {contact.phone}
-              </a>
-              <a
-                href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(contact.mapQuery)}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group flex items-start gap-3 text-paper/70 hover:text-paper"
-              >
-                <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full border border-white/15 group-hover:border-rpc group-hover:bg-rpc"><MapPin size={14} /></span>
-                <span className="pt-1.5 text-xs leading-relaxed">{contact.address}</span>
-              </a>
-            </address>
-            <ul className="mt-6 flex items-center gap-2">
-              {contact.socials.map((s) => (
-                <li key={s.label}>
-                  <a
-                    href={s.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={s.label}
-                    title={s.label}
-                    className="grid h-10 w-10 place-items-center rounded-full border border-white/15 text-paper/75 transition-colors hover:border-white hover:bg-white hover:text-ink"
-                  >
-                    <SocialIcon name={s.label} size={15} />
+            {/* how to reach us */}
+            <address className="col-span-2 not-italic md:col-span-1">
+              <p className={head}>Get in touch</p>
+              <ul className="space-y-2 text-body text-white/72">
+                <li>
+                  <a href={tel} className={`flex w-fit items-center gap-2 rounded transition-colors hover:text-white ${focus}`}>
+                    <Phone size={15} aria-hidden className="shrink-0 text-water-2" /> {contact.phone}
                   </a>
                 </li>
-              ))}
-            </ul>
+                <li>
+                  <a href={`mailto:${contact.email}`} className={`flex w-fit items-center gap-2 rounded transition-colors hover:text-white ${focus}`}>
+                    <Mail size={15} aria-hidden className="shrink-0 text-water-2" /> <span className="min-w-0 break-all">{contact.email}</span>
+                  </a>
+                </li>
+                <li>
+                  <a href={maps} target="_blank" rel="noopener noreferrer" className={`flex w-fit items-center gap-2 rounded transition-colors hover:text-white ${focus}`}>
+                    <MapPin size={15} aria-hidden className="shrink-0 text-water-2" /> 142 Perundurai Road, Erode
+                  </a>
+                </li>
+                <li className="flex items-center gap-2">
+                  <Clock size={15} aria-hidden className="shrink-0 text-water-2" /> {contact.hours.replace(" IST", "")}
+                </li>
+              </ul>
+            </address>
           </div>
-        </div>
 
-        <div className="flex flex-col gap-3 border-t border-white/10 py-6 text-xs text-paper/45 md:flex-row md:items-center md:justify-between">
-          <p>
-            © {new Date().getFullYear()} {brand.name}. All rights reserved. · Erode · Coimbatore · Chennai
-          </p>
-          <div className="flex items-center gap-5">
-            <Link href="/contact" className="inline-flex items-center gap-1 hover:text-paper">
-              Start a project <ArrowUpRight size={12} />
-            </Link>
-            <button type="button" onClick={toTop} className="inline-flex items-center gap-1.5 hover:text-paper">
-              Back to top <ArrowUp size={12} />
+          <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 border-t border-white/10 py-4 text-body text-white/50">
+            <p>
+              © {new Date().getFullYear()} {brand.name}.<span className="hidden sm:inline"> All rights reserved.</span>
+            </p>
+            <button type="button" onClick={toTop} className={`inline-flex items-center gap-1.5 rounded transition-colors hover:text-white ${focus}`}>
+              Back to top <ArrowUp size={14} aria-hidden />
             </button>
           </div>
         </div>

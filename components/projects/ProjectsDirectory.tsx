@@ -56,7 +56,7 @@ export function ProjectsDirectory() {
               </div>
               <div className="flex flex-1 flex-col p-3">
                 <p className="line-clamp-2 text-[14px] font-medium leading-snug" style={{ minHeight: "2.6em" }}>{p.name}</p>
-                <p className="mt-1 truncate text-[11.5px] text-mute">{p.location}</p>
+                <p className="mt-1 line-clamp-2 text-[11.5px] leading-snug text-mute">{p.location}</p>
               </div>
             </Link>
           </li>

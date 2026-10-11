@@ -211,7 +211,7 @@ function DesktopFilm() {
             {waterproofIntro.headline}
           </h2>
           <p className="mt-6 max-w-md text-[15px] leading-relaxed text-paper/75">{waterproofIntro.body}</p>
-          <p className="mt-8 flex items-center gap-2 text-[12px] uppercase tracking-[0.16em] text-paper/60">
+          <p className="wp-cue mt-8 flex items-center gap-2 text-[12px] uppercase tracking-[0.16em] text-paper/60">
             <span className="h-px w-8 bg-paper/40" /> Scroll to reveal
           </p>
         </div>

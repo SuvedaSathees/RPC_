@@ -272,7 +272,7 @@ function FilmHero({ ready, low }: { ready: boolean; low: boolean }) {
 
         {/* ── Stage 01: minimal opening ───────────────────────── */}
         <div ref={fore} className="absolute inset-0 will-change-transform">
-          <div ref={intro} className="gutter absolute inset-x-0 bottom-[14svh] flex flex-col items-end text-right will-change-transform">
+          <div ref={intro} className="hero-intro gutter absolute inset-x-0 bottom-[14svh] flex flex-col items-end text-right will-change-transform">
             <p className="eyebrow mb-6 opacity-70">{brand.descriptor}</p>
             <h1 className="display leading-[0.82]" style={{ fontSize: "clamp(4rem, 8.5vw, 10.5rem)" }}>
               <span className="block pr-[6vw]">{brand.taglineA}</span>
@@ -281,7 +281,7 @@ function FilmHero({ ready, low }: { ready: boolean; low: boolean }) {
           </div>
         </div>
 
-        <div ref={cue} className="pointer-events-none absolute bottom-7 left-1/2 flex -translate-x-1/2 flex-col items-center gap-3 text-paper opacity-90">
+        <div ref={cue} className="hero-cue pointer-events-none absolute bottom-7 left-1/2 flex -translate-x-1/2 flex-col items-center gap-3 text-paper opacity-90">
           {/* mouse with a scrolling wheel — "scroll down" at a glance */}
           <span aria-hidden className="relative block h-10 w-6 rounded-full border-2" style={{ borderColor: "rgba(255,255,255,0.85)" }}>
             <span
@@ -298,7 +298,7 @@ function FilmHero({ ready, low }: { ready: boolean; low: boolean }) {
             <div
               key={s.id}
               ref={(el) => { captions.current[i] = el; }}
-              className="gutter absolute bottom-10 right-0 flex max-w-[36rem] flex-col items-end text-right will-change-transform md:bottom-14"
+              className="hero-caption gutter absolute bottom-10 right-0 flex max-w-[36rem] flex-col items-end text-right will-change-transform md:bottom-14"
               style={{ opacity: 0, visibility: "hidden" }}
             >
               <p className="eyebrow mb-4 flex items-center gap-3 opacity-80">
@@ -313,7 +313,7 @@ function FilmHero({ ready, low }: { ready: boolean; low: boolean }) {
         </div>
 
         {/* ── Hero reveal: the handover ───────────────────────── */}
-        <div ref={reveal} className="gutter absolute inset-0 flex items-start justify-start pb-8 pt-28 text-paper md:pt-32" style={{ opacity: 0, pointerEvents: "none" }}>
+        <div ref={reveal} className="hero-reveal gutter absolute inset-0 flex items-start justify-start pb-8 pt-28 text-paper md:pt-32" style={{ opacity: 0, pointerEvents: "none" }}>
           <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-3/5 bg-gradient-to-b from-black/55 to-transparent" />
           <div aria-hidden className="pointer-events-none absolute inset-y-0 left-0 w-3/5 bg-gradient-to-r from-black/50 via-black/15 to-transparent" />
 
