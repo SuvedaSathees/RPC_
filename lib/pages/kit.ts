@@ -89,8 +89,9 @@ export interface Crumb {
   href: string;
 }
 
-/** the small label over a section's heading (the number some pages pass is no longer shown) */
-export const mark = (_n: string, label: string) => `<p class="pg-mark">${esc(label)}</p>`;
+/** the small label over a section's heading: "03 — About RPC" */
+export const mark = (n: string, label: string, extra = "") =>
+  `<p class="pg-mark" data-rv>${n ? `<span class="pg-idx">${n}</span><span class="pg-rule" aria-hidden="true"></span>` : ""}<span>${esc(label)}</span>${extra}</p>`;
 
 export const serviceSlug = (title: string) => title.toLowerCase().replace(/&/g, "and").replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 
@@ -156,7 +157,7 @@ export function ctaBand(c: ContactInfo, t: { title: string; steps: readonly CtaS
 }
 
 export const KIT_CSS = `
-.pg{--sand:#ece6da;--sand-2:#e2d9c9;--card:#f5f0e6;--sky:#d9e2ee;--paper:var(--sand);--stone:var(--sand-2);--ink:#12223b;--ink2:rgba(18,34,59,.82);--mute:#5b6271;--line:rgba(18,34,59,.14);--accent:#2756a0;--water:#0b6e80;--navy:#0b2350;--night:#0b2350;--display:var(--font-instrument),"Segoe UI",system-ui,sans-serif;--serif:var(--display);--sans:var(--font-inter-tight),ui-sans-serif,system-ui,sans-serif;--nav-room:var(--nav-h,80px);position:relative;z-index:10;background:var(--sand);color:var(--ink);font-family:var(--sans)}
+.pg{--sand:#ece6da;--sand-2:#e2d9c9;--card:#f5f0e6;--sky:#d9e2ee;--paper:var(--sand);--stone:var(--sand-2);--ink:#12223b;--ink2:rgba(18,34,59,.82);--mute:#5b6271;--line:rgba(18,34,59,.14);--accent:#2756a0;--water:#0b6e80;--navy:#0b2350;--night:#0b2350;--display:var(--font-inter-tight),"Segoe UI",system-ui,sans-serif;--serif:var(--display);--sans:var(--font-inter-tight),ui-sans-serif,system-ui,sans-serif;--nav-room:var(--nav-h,80px);position:relative;z-index:10;background:var(--sand);color:var(--ink);font-family:var(--sans)}
 .pg *,.pg *::before,.pg *::after{box-sizing:border-box}
 .pg-wrap{width:100%;max-width:1360px;margin:0 auto;padding-inline:var(--gutter,3rem)}
 .pg img{display:block;width:100%;height:100%;object-fit:cover}
@@ -183,11 +184,11 @@ export const KIT_CSS = `
 .pg-headgrid{display:grid;grid-template-columns:minmax(0,1fr);gap:2.2rem clamp(2rem,5vw,5rem);align-items:end}
 .pg-head--aside .pg-headgrid{grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);align-items:center}
 .pg-h1{margin:0;font-family:var(--display);font-weight:600;font-size:var(--fs-title);line-height:1.12;letter-spacing:-.02em;text-wrap:balance;max-width:24ch}
-.pg-intro{margin:1.1rem 0 0;max-width:40rem;font-size:var(--fs-body);line-height:1.65;color:var(--ink2);text-wrap:pretty}
+.pg-intro{margin:1.1rem 0 0;max-width:40rem;font-size:var(--fs-body);line-height:1.65;color:rgba(18,34,59,.8);text-wrap:pretty}
 .pg-actions{display:flex;flex-wrap:wrap;align-items:center;gap:.75rem;margin-top:clamp(1.4rem,3vh,2rem)}
 
 /* buttons and links */
-.pg-btn{display:inline-flex;align-items:center;justify-content:center;gap:.6rem;height:3rem;padding:0 1.35rem;border-radius:6px;font-size:var(--fs-body);font-weight:600;text-decoration:none;white-space:nowrap;cursor:pointer;transition:background-color .3s,color .3s,border-color .3s}
+.pg-btn{display:inline-flex;align-items:center;justify-content:center;gap:.6rem;height:min(3.25rem,6.4svh);min-height:2.75rem;padding:0 1.5rem;border-radius:10px;font-size:var(--fs-body);font-weight:600;text-decoration:none;box-sizing:border-box;white-space:nowrap;cursor:pointer;transition:background-color .3s,color .3s,border-color .3s}
 .pg-btn:hover .pg-ar,.pg-link:hover .pg-ar{transform:translate(2px,-2px)}
 .pg-btn--ink{background:var(--navy);color:#f5f0e6}
 .pg-btn--ink:hover{background:var(--accent)}
@@ -212,12 +213,14 @@ export const KIT_CSS = `
 .pg a:focus-visible,.pg button:focus-visible,.pg select:focus-visible,.pg input:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
 
 /* section heads: a small label, the heading, an optional line */
-.pg-mark{margin:0;font-size:var(--fs-body);font-weight:600;color:var(--accent)}
+.pg-mark{display:flex;align-items:center;gap:.75rem;margin:0;font-size:var(--fs-body);font-weight:500;color:var(--mute)}
+.pg-idx{font-variant-numeric:tabular-nums;font-weight:600;color:var(--accent)}
+.pg-rule{width:2rem;height:1px;background:currentColor;opacity:.35}
 .pg-shead{display:flex;flex-direction:column;align-items:flex-start;gap:.7rem;margin-bottom:clamp(2rem,5vh,3.2rem);padding-top:1.25rem;border-top:1px solid rgba(18,34,59,.28)}
 .pg-shead--center{align-items:center;text-align:center}
 .pg-shead--center .pg-h2,.pg-shead--center .pg-lede{margin-inline:auto}
-.pg-h2{margin:0;font-family:var(--display);font-weight:600;font-size:var(--fs-title);line-height:1.14;letter-spacing:-.02em;text-wrap:balance;max-width:26ch}
-.pg-h3{margin:0;font-family:var(--display);font-weight:600;font-size:var(--fs-sub);line-height:1.3;letter-spacing:-.01em}
+.pg-h2{margin:0;font-family:var(--display);font-weight:600;font-size:var(--fs-title);line-height:1.12;letter-spacing:-.02em;text-wrap:balance;max-width:26ch}
+.pg-h3{margin:0;font-family:var(--display);font-weight:600;font-size:var(--fs-sub);line-height:1.25;letter-spacing:-.015em}
 .pg-lede{margin:.5rem 0 0;max-width:44rem;font-size:var(--fs-body);line-height:1.65;color:var(--ink2);text-wrap:pretty}
 .pg-sextra{margin-top:.4rem}
 .pg-card{border-radius:8px;background:var(--card);box-shadow:inset 0 0 0 1px var(--line)}

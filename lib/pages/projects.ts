@@ -7,7 +7,7 @@
  * ask about something similar. /projects#slug lands on that project (the home
  * page links so).
  */
-import { arrow, ctaBand, esc, words, type ContactInfo, type PageOptions } from "./kit";
+import { arrow, ctaBand, esc, mark, words, type ContactInfo, type PageOptions } from "./kit";
 import { SEARCH_BAR_CSS, searchBar } from "./search-bar";
 
 export interface ProjectData {
@@ -80,7 +80,7 @@ export function projectsPageMarkup(d: ProjectsData, o: PageOptions = {}) {
   return `<header class="pg-head pj-hero">
   <div class="pg-wrap">
     <div class="pj-herogrid">
-      <div><p class="pg-mark">Projects</p><h1 class="pj-h1" data-rv="words">${words("Projects built to stay&nbsp;dry.")}</h1></div>
+      <div>${mark("01", "Projects")}<h1 class="pj-h1" data-rv="words">${words("Projects built to stay&nbsp;dry.")}</h1></div>
       <div class="pj-heroside">
         ${bar}
         <p class="pj-showing" aria-live="polite">Showing all ${ps.length} projects</p>

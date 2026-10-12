@@ -13,8 +13,8 @@ export function TechnicalCapabilities({ index = "04" }: { index?: string }) {
         <div className="mb-6 grid gap-3 md:mb-12 md:gap-6 lg:grid-cols-12 lg:items-end">
           <div className="lg:col-span-7">
             <SectionMarker index={index} label="Engineering" className="text-paper/70" />
-            <h2 className="display mt-5 text-4xl leading-[1] md:mt-8 md:text-6xl">
-              Engineered before <em className="text-paper/80">it is built.</em>
+            <h2 className="display mt-5 text-4xl leading-[1.12] tracking-[-0.02em] font-semibold md:mt-8 md:text-6xl">
+              Engineered before <em className="text-rpc">it is built.</em>
             </h2>
           </div>
           <p className="hidden text-lg leading-relaxed text-paper/65 md:block lg:col-span-5">
@@ -44,10 +44,10 @@ export function TechnicalCapabilities({ index = "04" }: { index?: string }) {
           </div>
           <div className="grid gap-4 md:grid-cols-3">
             {engagementModels.map((m, i) => (
-              <Reveal key={m.model} delay={i * 0.08} className="flex flex-col justify-between rounded-sm bg-paper p-8 text-ink">
+              <Reveal key={m.model} delay={i * 0.08} className="flex flex-col justify-between rounded-lg bg-paper p-8 text-ink">
                 <div>
-                  <span className="font-mono text-xs text-mute">0{i + 1}</span>
-                  <h4 className="display mt-4 text-3xl">{m.model}</h4>
+                  <span className="font-sans font-semibold text-sm tabular-nums text-rpc">0{i + 1}</span>
+                  <h4 className="display mt-4 text-2xl md:text-3xl font-semibold tracking-[-0.015em]">{m.model}</h4>
                   <p className="mt-4 text-[15px] leading-relaxed text-ink-2">{m.description}</p>
                 </div>
                 <p className="mt-8 border-t border-ink/10 pt-4 text-sm font-medium">{m.benefit}</p>

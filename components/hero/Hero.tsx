@@ -301,13 +301,13 @@ function FilmHero({ ready, low }: { ready: boolean; low: boolean }) {
               className="hero-caption gutter absolute bottom-10 right-0 flex max-w-[36rem] flex-col items-end text-right will-change-transform md:bottom-14"
               style={{ opacity: 0, visibility: "hidden" }}
             >
-              <p className="eyebrow mb-4 flex items-center gap-3 opacity-80">
-                <span>Stage {s.id}</span>
-                <span className="h-px w-10 bg-current opacity-40" />
+              <p className="flex items-center gap-3 text-body font-medium text-paper/80 mb-4">
+                <span className="font-semibold tabular-nums text-rpc">Stage {s.id}</span>
+                <span className="h-px w-8 bg-current opacity-35" />
                 <span>{s.key}</span>
               </p>
-              <h2 className="display text-6xl md:text-8xl">{s.title}</h2>
-              <p className="mt-5 max-w-sm text-[15px] leading-relaxed opacity-80">{s.line}</p>
+              <h2 className="display text-4xl sm:text-5xl md:text-6xl lg:text-[clamp(2.6rem,4vw,4.5rem)] leading-[1.12] tracking-[-0.02em] font-semibold">{s.title}</h2>
+              <p className="mt-4 max-w-sm text-body leading-relaxed opacity-80">{s.line}</p>
             </div>
           ))}
         </div>

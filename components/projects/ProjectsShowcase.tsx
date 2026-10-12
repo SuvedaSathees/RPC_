@@ -91,14 +91,14 @@ export function ProjectsShowcase() {
         <div className="gutter relative z-10 flex w-[36vw] shrink-0 flex-col justify-between bg-night py-28">
           <SectionMarker index="02" label="Selected projects" />
           <div>
-            <p className="eyebrow mb-5 tabular-nums text-paper/60">
-              {String(active + 1).padStart(2, "0")} <span className="opacity-50">/ {String(projects.length).padStart(2, "0")}</span>
+            <p className="text-sm font-semibold tabular-nums text-rpc mb-5">
+              {String(active + 1).padStart(2, "0")} <span className="opacity-50 text-paper/60">/ {String(projects.length).padStart(2, "0")}</span>
             </p>
             <div className="relative min-h-[6.5rem] md:min-h-[8rem] lg:min-h-[9.5rem] flex flex-col justify-start">
               <AnimatePresence mode="wait" initial={false}>
                 <motion.h3
                   key={p.slug}
-                  className="display text-4xl sm:text-5xl md:text-5xl lg:text-[3.8vw] leading-[1.05] tracking-tight"
+                  className="display text-4xl sm:text-5xl md:text-5xl lg:text-[3.2vw] leading-[1.12] tracking-[-0.02em] font-semibold"
                   initial={{ opacity: 0, y: 14 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -14 }}

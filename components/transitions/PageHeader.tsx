@@ -36,13 +36,13 @@ export function PageHeader({
       <header className="relative z-10 bg-paper">
         <div className="gutter grid min-h-[50svh] gap-8 pb-10 pt-28 md:pt-32 lg:grid-cols-12 lg:items-center lg:gap-14">
           <div className="lg:col-span-6">
-            <p className="flex items-center gap-3 text-[11px] uppercase tracking-[0.24em] text-mute">
-              <span className="font-mono">({index})</span>
-              <span className="h-px w-8 bg-current opacity-50" />
+            <p className="flex items-center gap-3 text-body font-medium text-mute">
+              <span className="font-semibold tabular-nums text-rpc">{index}</span>
+              <span className="h-px w-8 bg-current opacity-35" />
               <span className="text-ink">{label}</span>
             </p>
-            <div className="mt-5" style={{ fontSize: "clamp(3rem, 5.4vw, 6.25rem)" }}>
-              <RevealLines as="h1" className="display leading-[0.9]" lines={lines} />
+            <div className="mt-5">
+              <RevealLines as="h1" className="display text-4xl sm:text-5xl lg:text-[clamp(2.5rem,3.8vw,4.2rem)] leading-[1.12] tracking-[-0.02em] font-semibold" lines={lines} />
             </div>
             {intro && <div className="mt-5 max-w-lg text-[15px] leading-relaxed text-ink-2 md:text-base">{intro}</div>}
             {aside && <div className="mt-6">{aside}</div>}
@@ -78,13 +78,13 @@ export function PageHeader({
         />
         <div aria-hidden className="absolute left-1/2 top-1/2 h-[30rem] w-[50rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-rpc/25 blur-[140px]" />
         <div className="gutter relative flex min-h-[50svh] flex-col items-center justify-center pb-12 pt-28 text-center md:pt-32">
-          <p className="flex items-center gap-3 text-[11px] uppercase tracking-[0.24em] text-paper/60">
-            <span className="h-px w-8 bg-current" />
-            <span className="font-mono">({index})</span> {label}
-            <span className="h-px w-8 bg-current" />
+          <p className="flex items-center gap-3 text-body font-medium text-paper/70">
+            <span className="font-semibold tabular-nums text-rpc">{index}</span>
+            <span className="h-px w-8 bg-current opacity-35" />
+            <span>{label}</span>
           </p>
-          <div className="mt-5" style={{ fontSize: "clamp(3.2rem, 6vw, 7rem)" }}>
-            <RevealLines as="h1" className="display leading-[0.9]" lines={lines} />
+          <div className="mt-5">
+            <RevealLines as="h1" className="display text-4xl sm:text-5xl lg:text-[clamp(2.5rem,4.2vw,4.5rem)] leading-[1.12] tracking-[-0.02em] font-semibold text-paper" lines={lines} />
           </div>
           {intro && <div className="mt-5 max-w-xl text-[15px] leading-relaxed text-paper/75 md:text-base">{intro}</div>}
           {facts && (
@@ -114,16 +114,16 @@ export function PageHeader({
       )}
 
       <div className="gutter relative flex flex-col justify-end pb-7 pt-28 md:min-h-[50svh] md:pb-10 md:pt-32">
-        <p className={`flex items-center gap-3 text-[11px] uppercase tracking-[0.24em] ${plain ? "text-mute" : "text-paper/70"}`}>
-          <span className="font-mono opacity-70">({index})</span>
-          <span className="h-px w-8 bg-current opacity-50" />
-          <span className={plain ? "text-ink" : ""}>{label}</span>
-          <span className="ml-auto hidden opacity-70 sm:inline">RPC Constructions · Erode, Tamil Nadu</span>
+        <p className={`flex items-center gap-3 text-body font-medium ${plain ? "text-mute" : "text-paper/70"}`}>
+          <span className={`font-semibold tabular-nums ${plain ? "text-rpc" : "text-white"}`}>{index}</span>
+          <span className="h-px w-8 bg-current opacity-35" />
+          <span className={plain ? "text-ink" : "text-paper/90"}>{label}</span>
+          <span className="ml-auto hidden text-sm font-normal opacity-70 sm:inline">RPC Constructions · Erode, Tamil Nadu</span>
         </p>
 
         <div className="mt-4 grid gap-4 md:mt-6 md:gap-6 lg:grid-cols-12 lg:items-end lg:gap-12">
-          <div className="lg:col-span-7" style={{ fontSize: "clamp(3rem, 5.6vw, 6.5rem)" }}>
-            <RevealLines as="h1" className="display leading-[0.9]" lines={lines} />
+          <div className="lg:col-span-7">
+            <RevealLines as="h1" className="display text-4xl sm:text-5xl lg:text-[clamp(2.5rem,3.8vw,4.2rem)] leading-[1.12] tracking-[-0.02em] font-semibold" lines={lines} />
           </div>
           <div className="lg:col-span-5">
             {intro && <div className={`max-w-lg text-[14px] leading-relaxed md:text-base ${plain ? "text-ink-2" : "text-paper/80"}`}>{intro}</div>}

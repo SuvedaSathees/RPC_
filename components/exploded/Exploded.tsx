@@ -139,10 +139,10 @@ export function Exploded({ index = "03" }: { index?: string } = {}) {
           <div className="flex min-h-0 shrink-0 flex-col justify-between lg:col-span-4">
             <div>
               <SectionMarker index={index} label="Anatomy" className="text-paper/70" />
-              <h2 className="display mt-4 text-4xl leading-[0.95] md:mt-5 md:text-5xl lg:text-[3.4vw]">
+              <h2 className="display mt-4 text-4xl leading-[1.12] tracking-[-0.02em] font-semibold md:mt-5 md:text-5xl lg:text-[clamp(2.4rem,3.4vw,3.8rem)]">
                 Six systems.
                 <br />
-                <em className="text-paper/80">All waterproofed.</em>
+                <em className="text-rpc">All waterproofed.</em>
               </h2>
               <p className="mt-3 max-w-sm text-[13px] leading-relaxed text-paper/65 md:mt-4 md:text-[14px]">
                 <span className="md:hidden">Each layer sealed against water — terrace to footings.</span>
@@ -157,7 +157,7 @@ export function Exploded({ index = "03" }: { index?: string } = {}) {
                   className="group relative flex items-center gap-2 rounded-full border border-white/10 px-2.5 py-1 text-paper/40 md:px-3.5 md:py-1.5 lg:gap-4 lg:rounded-sm lg:border-0 lg:px-3 transition-all duration-500 data-[active]:bg-white/[0.07] data-[active]:text-paper data-[done]:text-paper/70"
                 >
                   <span className="absolute inset-y-2 left-0 hidden w-0.5 scale-y-0 lg:block bg-rpc transition-transform duration-500 group-data-[active]:scale-y-100" />
-                  <span className="font-mono text-[10px] md:text-[11px]">0{i + 1}</span>
+                  <span className="font-sans font-semibold tabular-nums text-[11px] text-rpc">0{i + 1}</span>
                   <span className="flex flex-col">
                     <span className="text-[13px] font-medium md:text-[14px]">{a.label}</span>
                     <span className="hidden text-[11px] text-paper/50 group-data-[active]:text-paper/70 lg:inline">{a.note}</span>

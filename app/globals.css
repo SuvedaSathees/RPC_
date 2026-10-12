@@ -25,9 +25,9 @@
   --text-sub: clamp(1.2rem, 1.08rem + 0.4vw, 1.5rem);
   --text-body: 1rem;
 
-  /* one family for the whole site: Inter Tight, semibold for headings (loaded under the old serif's variable name, so every heading takes it) */
-  --font-display: var(--font-instrument), "Segoe UI", system-ui, sans-serif;
-  --font-serif: var(--font-instrument), "Segoe UI", system-ui, sans-serif;
+  /* one family for the whole site: Inter Tight, semibold for headings, tight tracking */
+  --font-display: var(--font-inter-tight), "Segoe UI", system-ui, sans-serif;
+  --font-serif: var(--font-inter-tight), "Segoe UI", system-ui, sans-serif;
   --font-sans: var(--font-inter-tight), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, monospace;
 
@@ -111,19 +111,43 @@
   .display {
     font-family: var(--font-display);
     font-weight: 600;
-    line-height: 1.1;
+    line-height: 1.12;
     letter-spacing: -0.02em;
+    text-wrap: balance;
   }
   .display em {
     font-style: normal;
     color: var(--color-rpc);
   }
   .eyebrow {
-    font-family: var(--font-mono);
+    font-family: var(--font-sans);
     font-size: var(--fs-body);
+    font-weight: 500;
     line-height: 1.4;
-    letter-spacing: 0.22em;
-    text-transform: uppercase;
+    letter-spacing: -0.01em;
+    text-transform: none;
+    color: var(--color-mute);
+  }
+  .section-mark {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin: 0;
+    font-family: var(--font-sans);
+    font-size: var(--fs-body);
+    font-weight: 500;
+    color: var(--color-mute);
+  }
+  .section-mark .mark-idx {
+    font-variant-numeric: tabular-nums;
+    font-weight: 600;
+    color: var(--color-rpc);
+  }
+  .section-mark .mark-rule {
+    width: 2rem;
+    height: 1px;
+    background: currentColor;
+    opacity: 0.35;
   }
   .hairline {
     height: 1px;

@@ -23,6 +23,7 @@
  * Photographs: none of the generated pictures are shown. Each place a
  * photograph belongs keeps an empty frame, ready for RPC's own.
  */
+import { brandsMarqueeHtml, BRANDS_MARQUEE_CSS } from "../methods/brand-logos";
 
 export interface HomeProject {
   slug: string;
@@ -229,6 +230,13 @@ function productsMarkup(d: HomeData) {
       </div>
     </div>
     <div class="hm-teaser" data-rv>${pr.teaser}</div>
+    <div class="hm-pbrands" data-rv>
+      <header class="hm-pbhead">
+        <p class="hm-pbmark">Brands</p>
+        <h3 class="hm-pbh">The brands in our methods guide.</h3>
+      </header>
+      ${brandsMarqueeHtml()}
+    </div>
   </div>
 </section>`;
 }
@@ -298,7 +306,11 @@ export function homeSectionsMarkup(d: HomeData, o: HomeOptions = {}, parts: read
 
 /* ---------------------------------------------------------------- CSS */
 /** the products section's brand tiles (lib/products/home.ts) */
-export const HOME_PRODUCTS_CSS = `
+export const HOME_PRODUCTS_CSS = BRANDS_MARQUEE_CSS + `
+.hm-pbrands{margin-top:clamp(2rem,4vh,3rem);padding-top:clamp(1.5rem,3vh,2.2rem);border-top:1px solid rgba(18,34,59,.1)}
+.hm-pbhead{margin-bottom:1.2rem}
+.hm-pbmark{display:inline-flex;align-items:center;gap:.6rem;font-size:var(--fs-caption);font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--water);margin:0 0 .4rem}
+.hm-pbh{margin:0;font-family:var(--font-heading,var(--font-inter-tight,var(--display))),sans-serif;font-weight:600;font-size:clamp(1.5rem,2.4vw,2.2rem);line-height:1.2;letter-spacing:-.02em;color:var(--ink)}
 .hl{display:flex;flex-direction:column;gap:1rem}
 .hl-vh{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
 .hl-card{overflow:hidden;border-radius:20px;background:#f7f3eb;box-shadow:0 0 0 1px rgba(18,34,59,.1),0 34px 70px -56px rgba(18,34,59,.55)}
@@ -368,7 +380,7 @@ export const HOME_CSS = `
  * upright): the headline and text keep their size, and the photographs and
  * lists stretch or shrink to fill what is left under the navigation bar.
  */
-.hm{--paper:#ece6da;--stone:#e2d9c9;--sky:#d9e2ee;--card:#f5f0e6;--navy:#0b2350;--ink:#12223b;--mute:#5b6271;--line:rgba(18,34,59,.14);--accent:#2756a0;--water:#0b6e80;--serif:var(--font-instrument),"Segoe UI",system-ui,sans-serif;--sans:var(--font-inter-tight),ui-sans-serif,system-ui,sans-serif;--nav-room:var(--nav-h,80px);color:var(--ink);font-family:var(--sans)}
+.hm{--paper:#ece6da;--stone:#e2d9c9;--sky:#d9e2ee;--card:#f5f0e6;--navy:#0b2350;--ink:#12223b;--mute:#5b6271;--line:rgba(18,34,59,.14);--accent:#2756a0;--water:#0b6e80;--serif:var(--font-inter-tight),"Segoe UI",system-ui,sans-serif;--sans:var(--font-inter-tight),ui-sans-serif,system-ui,sans-serif;--nav-room:var(--nav-h,80px);color:var(--ink);font-family:var(--sans)}
 .hm-sec{position:relative;z-index:10;display:flex;flex-direction:column;justify-content:center;box-sizing:border-box;min-height:100vh;min-height:100svh;padding:calc(var(--nav-room) + clamp(.4rem,2.6svh,2.2rem)) 0 clamp(1.4rem,4.6svh,3.2rem)}
 .hm-wrap{box-sizing:border-box;width:100%;padding-inline:var(--gutter,3rem);max-width:1600px;margin:0 auto}
 .hm img{display:block;width:100%;height:100%;object-fit:cover}

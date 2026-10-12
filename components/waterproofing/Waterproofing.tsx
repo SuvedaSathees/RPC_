@@ -207,7 +207,7 @@ function DesktopFilm() {
         {/* intro */}
         <div data-wp-overlay className="gutter absolute inset-x-0 top-0 flex flex-col items-start pt-28 md:pt-32">
           <SectionMarker index="04" label={waterproofIntro.eyebrow} className="text-paper/75" />
-          <h2 className="display mt-5 max-w-[14ch] leading-[0.92]" style={{ fontSize: "clamp(3rem, 6vw, 7.2rem)" }}>
+          <h2 className="display mt-5 max-w-[14ch] text-4xl sm:text-5xl lg:text-[clamp(2.5rem,4.2vw,4.5rem)] leading-[1.12] tracking-[-0.02em] font-semibold">
             {waterproofIntro.headline}
           </h2>
           <p className="mt-6 max-w-md text-[15px] leading-relaxed text-paper/75">{waterproofIntro.body}</p>
@@ -220,12 +220,12 @@ function DesktopFilm() {
         {waterproofStops.map((s, i) => (
           <div key={s.key} data-wp-overlay className="gutter invisible absolute inset-x-0 top-0 flex h-full flex-col justify-between pb-24 pt-28 opacity-0 md:pt-32">
             <div>
-              <p className="eyebrow flex items-center gap-3 text-paper/70">
-                <span className="font-mono">0{i + 1} / 0{CLIPS}</span>
+              <p className="flex items-center gap-3 text-body font-medium text-paper/75">
+                <span className="font-semibold tabular-nums text-white">0{i + 1} / 0{CLIPS}</span>
                 <span className="h-px w-8 bg-current opacity-40" />
-                {s.area}
+                <span>{s.area}</span>
               </p>
-              <h3 className="display mt-4 max-w-[13ch] leading-[0.95]" style={{ fontSize: "clamp(2.6rem, 5vw, 6rem)" }}>
+              <h3 className="display mt-4 max-w-[14ch] text-3xl sm:text-4xl lg:text-[clamp(2.2rem,3.4vw,3.8rem)] leading-[1.12] tracking-[-0.02em] font-semibold">
                 {s.headline}
               </h3>
             </div>

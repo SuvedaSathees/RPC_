@@ -48,7 +48,7 @@ export function Manifesto() {
         <div className="flex items-center justify-between border-b border-ink/10 pb-6 md:pb-8">
           <SectionMarker index="01" label="The practice" />
           {[brand.established, brand.city].filter(Boolean).length > 0 && (
-            <p className="eyebrow text-mute">
+            <p className="text-body font-medium text-mute">
               {[brand.established, brand.city].filter(Boolean).join(" · ")}
             </p>
           )}
@@ -58,7 +58,7 @@ export function Manifesto() {
         <div className="my-auto py-2 md:py-10">
           <p
             data-statement
-            className="display text-[7.5vw] sm:text-[6.2vw] md:text-[5vw] lg:text-[4.5vw] leading-[1.08] tracking-tight text-ink w-full"
+            className="display text-[7.5vw] sm:text-[6.2vw] md:text-[5vw] lg:text-[4.5vw] leading-[1.08] tracking-[-0.02em] text-ink w-full"
           >
             {words.map((w, i) => (
               <span key={i} data-word className="inline-block pr-[0.22em]">

@@ -22,9 +22,9 @@ import { FANCY_SELECT_CSS } from "./fancy-select";
 import { PRODUCT_COUNT, rateLink, type Product } from "../products";
 import { brandInfo, brandMark, jobGroup, jobs, type JobView } from "../products/brands";
 import { cap, fullName, shortName, useTerms, usesNote } from "../products/compare";
-import { packIcon } from "../products/packs";
-import { arrow, ctaBand, esc, listing, type ContactInfo } from "./kit";
+import { arrow, ctaBand, esc, listing, mark, secHead, type ContactInfo } from "./kit";
 import { enquiryMarkup, FINDER_CSS, finderMarkup } from "./products-finder";
+import { brandsMarqueeHtml, BRANDS_MARQUEE_CSS } from "../methods/brand-logos";
 
 export interface ProductsData {
   products: readonly Product[];
@@ -172,16 +172,23 @@ export function productsPageMarkup(d: ProductsData) {
   <div class="pg-wrap">
     <div class="pr-headgrid">
       <div>
-        <p class="pg-mark">Products</p>
+        ${mark("01", "Products")}
         <h1 class="pg-h1">Waterproofing products and construction chemicals, by&nbsp;brand.</h1>
       </div>
       <div class="pr-headside">
-        <div class="pg-actions"><a class="pg-btn pg-btn--ink" href="#find">Find a product${arrow}</a><a class="pg-btn pg-btn--line" href="#by-job">Compare brands by job</a></div>
+        <div class="pg-actions"><a class="pg-btn pg-btn--ink" href="#find">Find a product${arrow}</a><a class="pg-btn pg-btn--line" href="#brands">Brands</a><a class="pg-btn pg-btn--line" href="#by-job">Compare brands by job</a></div>
       </div>
     </div>
   </div>
 </header>`;
+  const brands = `<section class="pg-sec pg-sec--stone pr-bsec" id="brands" aria-labelledby="pr-b-h">
+  <div class="pg-wrap">
+    ${secHead({ label: "Brands", title: "The brands in our methods guide.", id: "pr-b-h" })}
+    ${brandsMarqueeHtml()}
+  </div>
+</section>`;
   return `${head}
+${brands}
 ${finderMarkup(bs, d.contact, js, PRODUCT_COUNT)}
 ${byJobMarkup(js, d.contact)}
 ${ctaBand(d.contact, {
@@ -195,8 +202,10 @@ ${ctaBand(d.contact, {
 ${enquiryMarkup(d.contact)}`;
 }
 
-export const PRODUCTS_CSS = FINDER_CSS + FANCY_SELECT_CSS + `
+export const PRODUCTS_CSS = FINDER_CSS + FANCY_SELECT_CSS + BRANDS_MARQUEE_CSS + `
 .pr-head{border-bottom:0;padding-bottom:clamp(1rem,2.6vh,1.8rem)}
+.pr-bsec{padding-block:clamp(2rem,5vh,3.5rem);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.pr-bsec .pg-shead{margin-bottom:1.4rem}
 .pr-headgrid{display:grid;grid-template-columns:minmax(0,1.2fr) auto;align-items:end;gap:1.4rem clamp(2rem,6vw,7rem)}
 .pr-headgrid .pg-mark{margin-bottom:.9rem}
 .pr-headgrid .pg-h1{max-width:20ch}

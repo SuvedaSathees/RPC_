@@ -6,7 +6,7 @@
  * the kind of project, where the site is, and a message), sent by email or on
  * WhatsApp. The form sends through FormSubmit, as before (contact-form.ts).
  */
-import { arrow, esc, mapsLink, tel, words, type ContactInfo } from "./kit";
+import { arrow, esc, mapsLink, mark, tel, words, type ContactInfo } from "./kit";
 
 export interface ContactPageData {
   contact: ContactInfo;
@@ -98,6 +98,7 @@ export function contactPageMarkup(d: ContactPageData) {
   return `<section class="pg-dark ct-page" aria-labelledby="ct-title">
   <div class="pg-wrap ct-grid">
     <div class="ct-info">
+      ${mark("01", "Contact")}
       <h1 class="ct-h1" id="ct-title" data-rv="words">${words("Let’s keep your building dry.")}</h1>
       <p class="ct-lede" data-rv>Call, WhatsApp or write to us. An engineer replies within one working day.</p>
       ${tiles}

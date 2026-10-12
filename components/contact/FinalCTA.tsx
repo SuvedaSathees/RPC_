@@ -91,14 +91,15 @@ export function FinalCTA() {
           className="cta-content gutter relative flex min-h-[100svh] flex-col justify-end pb-10 pt-28 will-change-transform md:h-full md:min-h-0 md:pb-16 md:pt-0"
           style={{ opacity: 0 }}
         >
-          <div className="flex items-center gap-3 mb-6">
-            <span className="h-2 w-2 rounded-full bg-amber-400 animate-pulse" />
-            <p className="eyebrow opacity-80">(07) — Contact</p>
+          <div className="flex items-center gap-3 mb-6 text-paper/80">
+            <span className="font-semibold tabular-nums text-white">05</span>
+            <span className="h-px w-8 bg-current opacity-35" />
+            <span className="text-paper/85">Contact</span>
           </div>
 
-          <h2 className="display text-[16vw] leading-[0.82] md:text-[8.5vw]">
+          <h2 className="display text-5xl sm:text-6xl md:text-7xl lg:text-[clamp(3.2rem,5.5vw,5.5rem)] leading-[1.1] tracking-[-0.02em] font-semibold text-paper">
             Let&rsquo;s build<br />
-            <em className="font-serif text-paper/90">what&rsquo;s next.</em>
+            <em className="text-white">what&rsquo;s next.</em>
           </h2>
 
           <div className="mt-10 grid items-end gap-8 md:mt-12 lg:grid-cols-12">

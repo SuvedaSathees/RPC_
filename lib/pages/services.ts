@@ -13,7 +13,7 @@
  * home page and the search results can link straight to it.
  */
 import { AREA_PURPOSE, SERVICE_CATEGORIES } from "../methods/doc";
-import { arrow, ctaBand, esc, secHead, serviceSlug, type ContactInfo, type PageOptions } from "./kit";
+import { arrow, ctaBand, esc, mark, secHead, serviceSlug, type ContactInfo, type PageOptions } from "./kit";
 
 export interface ServiceData {
   id: string;
@@ -124,7 +124,7 @@ export function servicesPageMarkup(d: ServicesData, o: PageOptions = {}) {
   const head = `<header class="pg-head sv-head">
   <div class="pg-wrap sv-headgrid">
     <div>
-      <p class="pg-mark">Services</p>
+      ${mark("01", "Services")}
       <h1 class="pg-h1">Waterproofing and construction services in ${esc(hq ?? "Erode")}, Coimbatore and&nbsp;Tiruppur.</h1>
     </div>
   </div>
@@ -133,7 +133,7 @@ export function servicesPageMarkup(d: ServicesData, o: PageOptions = {}) {
   const waterproofing = wp
     ? `<section class="pg-sec sv-wsec" id="${serviceSlug(wp.title)}" aria-labelledby="sv-w-h">
   <div class="pg-wrap">
-    ${secHead({ label: "Waterproofing services", title: "From the terrace to the sump.", id: "sv-w-h" })}
+    ${secHead({ n: "02", label: "Waterproofing services", title: "From the terrace to the sump.", id: "sv-w-h" })}
     <ul class="sv-wgrid">${SERVICE_CATEGORIES.map(wpRow).join("")}</ul>
   </div>
 </section>`
@@ -141,14 +141,14 @@ export function servicesPageMarkup(d: ServicesData, o: PageOptions = {}) {
 
   const building = `<section class="pg-sec pg-sec--stone sv-bsec" id="building" aria-labelledby="sv-b-h">
   <div class="pg-wrap">
-    ${secHead({ label: "Construction services", title: "Homes, offices and factories, built to stay dry.", id: "sv-b-h" })}
+    ${secHead({ n: "03", label: "Construction services", title: "Homes, offices and factories, built to stay dry.", id: "sv-b-h" })}
     <div class="sv-blist">${build.map(buildRow).join("")}</div>
   </div>
 </section>`;
 
   const faq = `<section class="pg-sec sv-fsec" id="questions" aria-labelledby="sv-f-h">
   <div class="pg-wrap sv-fgrid">
-    ${secHead({ label: "Questions", title: "Waterproofing questions, answered.", id: "sv-f-h", lede: "What people in Erode and Coimbatore ask us before they book." })}
+    ${secHead({ n: "04", label: "Questions", title: "Waterproofing questions, answered.", id: "sv-f-h", lede: "What people in Erode and Coimbatore ask us before they book." })}
     <div class="sv-faq">${serviceFaq(d)
       .map((f, i) => `<details class="sv-q"${i === 0 ? " open" : ""}><summary><h3>${esc(f.q)}</h3><span class="sv-qi" aria-hidden="true"></span></summary><p>${esc(f.a)}</p></details>`)
       .join("")}</div>

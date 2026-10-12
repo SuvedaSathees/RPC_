@@ -20,7 +20,7 @@ export function About({ index = "05", link = true }: { index?: string; link?: bo
       <div className="gutter flex min-h-0 flex-1 flex-col">
         <div className="flex items-center justify-between border-b border-ink/10 pb-4">
           <SectionMarker index={index} label="About RPC" />
-          <span className="eyebrow hidden text-mute sm:inline">
+          <span className="text-body font-medium text-mute hidden sm:inline">
             {brand.established} · {brand.city}, Tamil Nadu
           </span>
         </div>
@@ -29,7 +29,7 @@ export function About({ index = "05", link = true }: { index?: string; link?: bo
           {/* statement + story */}
           <div className="flex flex-col justify-between lg:col-span-6">
             <Reveal>
-              <h2 className="display text-5xl leading-[1] sm:text-6xl lg:text-[clamp(2.6rem,3.8vw,4.4rem)]">
+              <h2 className="display text-4xl sm:text-5xl lg:text-[clamp(2.4rem,3.2vw,3.8rem)] leading-[1.12] tracking-[-0.02em] font-semibold">
                 We build with the <em>patience</em> of people who <em>sign their work.</em>
               </h2>
             </Reveal>
@@ -40,8 +40,8 @@ export function About({ index = "05", link = true }: { index?: string; link?: bo
               <dl className="mt-6 grid max-w-xl grid-cols-3 gap-6 border-t border-ink/15 pt-5">
                 {stats.slice(0, 3).map((st) => (
                   <div key={st.label}>
-                    <dt className="eyebrow text-mute">{st.label}</dt>
-                    <dd className="display mt-1.5 text-4xl">
+                    <dt className="text-xs font-semibold uppercase tracking-wider text-mute">{st.label}</dt>
+                    <dd className="display mt-1.5 text-3xl md:text-4xl">
                       {st.value}
                       <span className="text-rpc">{st.suffix}</span>
                     </dd>

@@ -30,14 +30,14 @@ export function Services({ index = "04", heading = true }: { index?: string; hea
         {heading && (
           <div className="flex items-center justify-between border-b border-ink/10 pb-4">
             <SectionMarker index={index} label="Services" />
-            <span className="eyebrow hidden text-mute md:inline">06 disciplines · one accountable team</span>
+            <span className="text-body font-medium text-mute hidden md:inline">06 disciplines · one accountable team</span>
           </div>
         )}
 
         {/* phones: swipe through the six disciplines as cards */}
         <div className="md:hidden">
           {heading && (
-            <h2 className="display mt-6 leading-[0.98]" style={{ fontSize: "2.6rem" }}>
+            <h2 className="display mt-6 leading-[1.12] tracking-[-0.02em] font-semibold" style={{ fontSize: "2.4rem" }}>
               One team, <em>built watertight.</em>
             </h2>
           )}
@@ -90,7 +90,7 @@ export function Services({ index = "04", heading = true }: { index?: string; hea
           <div className="flex min-h-0 flex-col lg:col-span-5">
             {heading && (
               <Reveal>
-                <h2 className="display text-5xl leading-[0.98] sm:text-6xl lg:text-[clamp(2.6rem,3.6vw,4rem)]">
+                <h2 className="display text-4xl sm:text-5xl lg:text-[clamp(2.4rem,3.4vw,3.8rem)] leading-[1.12] tracking-[-0.02em] font-semibold">
                   One team, <em>built watertight.</em>
                 </h2>
               </Reveal>

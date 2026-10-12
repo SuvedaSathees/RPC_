@@ -13,9 +13,9 @@ export function SectionMarker({ index, label, className }: { index: string; labe
   const onDark = /text-paper|text-white/.test(className ?? "");
   return (
     <div className={cn("flex items-center gap-3 text-body font-medium", className)}>
-      <span className={cn("font-semibold tabular-nums", onDark ? "text-white/70" : "text-water")}>{index}</span>
+      <span className={cn("font-semibold tabular-nums", onDark ? "text-white/85" : "text-rpc")}>{index}</span>
       <span className="h-px w-8 bg-current opacity-35" />
-      <span>{label}</span>
+      <span className={onDark ? "text-paper/85" : "text-mute"}>{label}</span>
     </div>
   );
 }

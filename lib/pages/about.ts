@@ -6,7 +6,7 @@
  *
  * The one photograph's place is an empty frame, ready for RPC's own picture.
  */
-import { arrow, ctaBand, esc, listing, ph, tick, words, type ContactInfo } from "./kit";
+import { arrow, ctaBand, esc, listing, mark, ph, tick, two, words, type ContactInfo } from "./kit";
 
 export interface AboutData {
   story: readonly string[];
@@ -98,7 +98,7 @@ export function aboutMarkup(d: AboutData) {
   <div class="pg-wrap">
     <div class="ab-headgrid">
       <div class="ab-headcopy">
-        <p class="pg-mark">About RPC Constructions</p>
+        ${mark("01", "About RPC Constructions")}
         <h1 class="pg-h1" data-rv="words">${words("Waterproofing and construction in Erode since&nbsp;2012.")}</h1>
         <p class="pg-intro" data-rv>We keep buildings dry. RPC Constructions repairs leaks in buildings already standing and builds new homes, offices and factories with their waterproofing designed in, from our office on Perundurai Road, Erode.</p>
         <div class="pg-actions" data-rv><a class="pg-btn pg-btn--ink" href="/contact#enquiry" data-internal>Book a free site inspection${arrow}</a><a class="pg-btn pg-btn--line" href="/services" data-internal>Our services</a></div>
@@ -119,7 +119,7 @@ export function aboutMarkup(d: AboutData) {
     <div class="ab-whogrid">
       <div class="ab-whoph" data-rv>${ph({ ratio: "4/3", label: "Photo: the RPC team on site" })}</div>
       <div class="ab-whocopy">
-        <p class="pg-mark">Who we are</p>
+        ${mark("02", "Who we are")}
         <h2 class="pg-h2" id="ab-who-h" data-rv>An engineer‑led waterproofing company that also builds.</h2>
         ${d.story.map((p, i) => `<p class="${i === 0 ? "ab-lead" : "ab-p"}" data-rv>${esc(p)}</p>`).join("")}
       </div>
@@ -143,11 +143,11 @@ export function aboutMarkup(d: AboutData) {
   const values = `<section class="pg-sec ab-values" aria-labelledby="ab-values-h">
   <div class="pg-wrap">
     <div class="ab-vhead">
-      <p class="pg-mark">Our values</p>
+      ${mark("03", "Our values")}
       <h2 class="pg-h2" id="ab-values-h" data-rv>Six values on every site.</h2>
     </div>
     <ul class="ab-vlist" data-rv-stagger="70">${d.principles
-      .map((p) => `<li data-rv>${markOf(p.title)}<div><h3 class="pg-h3">${esc(p.title)}</h3><p>${esc(p.body)}</p></div></li>`)
+      .map((p, i) => `<li data-rv style="--d:${i * 50}ms"><span class="ab-vno">${two(i + 1)}</span><div><h3 class="pg-h3">${esc(p.title)}</h3><p>${esc(p.body)}</p></div></li>`)
       .join("")}</ul>
   </div>
 </section>`;
@@ -156,7 +156,7 @@ export function aboutMarkup(d: AboutData) {
   <div class="pg-wrap">
     <div class="ab-wgrid">
       <div class="ab-wcopy">
-        <p class="pg-mark">Where we work</p>
+        ${mark("04", "Where we work")}
         <h2 class="pg-h2" id="ab-where-h">Waterproofing contractors in ${esc(listing(c.regions))}.</h2>
       </div>
     </div>
@@ -203,8 +203,8 @@ export const ABOUT_CSS = `
 .ab-vhead{margin-bottom:clamp(1.8rem,4vh,2.6rem)}
 .ab-vhead .pg-h2{margin-top:.7rem}
 .ab-vlist{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0 clamp(1.4rem,3vw,3rem);margin:0;padding:0;list-style:none}
-.ab-vlist li{display:block;padding:1.3rem 0;border-top:1px solid var(--line)}
-.ab-mk{display:none}
+.ab-vlist li{display:grid;grid-template-columns:2rem 1fr;align-content:start;column-gap:.2rem;padding:1.3rem 0;border-top:1px solid var(--line)}
+.ab-vno{grid-row:1/3;padding-top:.12rem;font-size:var(--fs-body);font-weight:600;font-variant-numeric:tabular-nums;color:var(--accent)}
 .ab-vlist p{margin:.4rem 0 0;font-size:var(--fs-body);line-height:1.6;color:var(--ink2)}
 
 /* where we work: the office as a dark card, the towns as cards with a compass each */

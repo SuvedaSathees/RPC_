@@ -103,7 +103,7 @@ export const MONSOON_CSS = `
 .mh-kicker{display:block;margin:0 0 1.1rem;font-family:var(--font-inter-tight),system-ui,sans-serif;font-size:var(--fs-body,1rem);font-weight:500;line-height:1.4;letter-spacing:0;color:var(--mh-mute)}
 .mh-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
 .mh-h1 .mh-title{display:block}
-.mh-title{margin:0;font-family:var(--font-instrument),"Segoe UI",system-ui,sans-serif;font-weight:600;font-size:var(--fs-title,3rem);line-height:1.12;letter-spacing:-.02em;text-wrap:balance;color:#f6f9fa}
+.mh-title{margin:0;font-family:var(--font-inter-tight),"Segoe UI",system-ui,sans-serif;font-weight:600;font-size:var(--fs-title,3rem);line-height:1.12;letter-spacing:-.02em;text-wrap:balance;color:#f6f9fa}
 .mh-lede{margin:1.15rem 0 0;font-size:var(--fs-body,1rem);line-height:1.65;color:var(--mh-mute);max-width:29rem;text-wrap:pretty}
 .mh-body{margin:1rem 0 0;font-size:var(--fs-body,1rem);line-height:1.65;color:var(--mh-mute);max-width:29rem;text-wrap:pretty}
 .mh-ctas{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:1.7rem}
